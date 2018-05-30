@@ -1,0 +1,55 @@
+package greencode.ir.pillcci.objects;
+
+/**
+ * Created by alireza on 5/11/18.
+ */
+
+public class RegisterRequest {
+    String userName;
+    String pass;
+    String retryPass;
+    String moarefCode;
+
+    public RegisterRequest(String userName, String pass, String retryPass, String moarefCode) {
+        this.userName = userName;
+        this.pass = pass;
+        this.retryPass = retryPass;
+        this.moarefCode = moarefCode;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public String getPass() {
+        return pass;
+    }
+
+    public String getRetryPass() {
+        return retryPass;
+    }
+
+    public String getMoarefCode() {
+        return moarefCode;
+    }
+
+    public int checkValidation(){
+
+        // 1 valid
+        //2 pass empty
+        //3 pass wrong
+        //4 pass and repass not equal
+        if(pass.length()>=6 && pass.equals(retryPass)){
+            return 1;
+        }else {
+            if(pass.length()==0){
+                return 2;
+            }else if (pass.length()<6) {
+                return 3;
+            }else {
+                return 4;
+            }
+
+        }
+    }
+}

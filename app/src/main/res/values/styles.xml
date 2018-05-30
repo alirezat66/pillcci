@@ -1,0 +1,89 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="SmallText" parent="android:Widget.TextView">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">14sp</item>
+
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style><style name="SmallTextGray" parent="android:Widget.TextView">
+        <item name="android:textColor">@color/grayText</item>
+        <item name="android:textSize">14sp</item>
+
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+    <style name="NormalTextBlack" parent="android:Widget.TextView">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/Onyx</item>
+
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+    <style name="AccentTextNormal" parent="android:Widget.TextView">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/colorAccent</item>
+
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+    <style name="NormalText" parent="android:Widget.TextView">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/white</item>
+
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+    <style name="BigText" parent="android:Widget.TextView">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/white</item>
+
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+    <style name="BigBlue_18" parent="android:Widget.TextView">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/VioletBlue</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style><style name="BigGray" parent="android:Widget.TextView">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">#FF646464</item>
+
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+    <style name="smallGray" parent="android:Widget.TextView">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">#FFD3D3D3</item>
+
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+    <style name="BigBlue" parent="android:Widget.TextView">
+        <item name="android:textSize">22sp</item>
+        <item name="android:textColor">@color/VioletBlue</item>
+
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="MyEditText" parent="Theme.AppCompat.Light">
+        <item name="colorControlNormal">@color/grayLiteText</item>
+        <item name="colorControlActivated">@color/grayText</item>
+        <item name="android:textColorHint">@color/grayLiteText</item>
+        <!-- Label color in TRUE state and bar color FALSE and TRUE State -->
+        <item name="colorAccent">@color/grayLiteText</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <color name="Onyx">#101011</color>
+</resources>

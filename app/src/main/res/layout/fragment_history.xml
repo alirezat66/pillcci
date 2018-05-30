@@ -1,0 +1,14 @@
+<ScrollView android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:isScrollContainer="true"
+    android:background="@color/backColor"
+    android:fillViewport="true"
+
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="24sp"
+        android:text="history page"
+        android:gravity="center_horizontal|center_vertical"/>
+</ScrollView>

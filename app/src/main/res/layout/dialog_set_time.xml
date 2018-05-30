@@ -1,0 +1,234 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@color/white"
+    android:id="@+id/root"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_margin="16dp"
+        >
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/txtInfo"
+            android:text="برای انتخاب ساعت های شب؛ روی خورشید کلیک کنید تا شب شود."
+            />
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="right">
+        <com.mahfa.dnswitch.DayNightSwitch
+            android:id="@+id/day_night_switch"
+            android:layout_width="76dp"
+            android:layout_height="40dp"
+            android:layout_alignParentRight="true"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@id/day_night_switch"
+            android:text="روز(از ساعت ۶  تا ۱۷)"
+            android:textColor="@color/grayText"
+            android:textSize="16sp"
+            android:layout_marginRight="8dp"
+            android:id="@+id/txtTitle"
+            android:layout_centerVertical="true"
+           />
+        </RelativeLayout>
+
+            <com.nex3z.togglebuttongroup.SingleSelectToggleGroup
+                android:id="@+id/group_choices"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:tbgCheckedButton="@+id/choice_6"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_gravity="center_horizontal"
+                app:tbgRowSpacing="16dp">
+
+                <com.nex3z.togglebuttongroup.button.CircularToggle
+                    android:id="@+id/choice_6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp"
+                    app:tbgMarkerColor="@color/roze"
+                    android:text="6"/>
+
+                <com.nex3z.togglebuttongroup.button.CircularToggle
+                    android:id="@+id/choice_7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    app:tbgMarkerColor="@color/roze"
+
+                    android:text="7"/>
+
+                <com.nex3z.togglebuttongroup.button.CircularToggle
+                    android:id="@+id/choice_8"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    app:tbgMarkerColor="@color/roze"
+
+                    android:text="8"/>
+
+                <com.nex3z.togglebuttongroup.button.CircularToggle
+                    android:id="@+id/choice_9"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    app:tbgMarkerColor="@color/roze"
+
+                    android:text="9"/>
+                <com.nex3z.togglebuttongroup.button.CircularToggle
+                    android:id="@+id/choice_10"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    app:tbgMarkerColor="@color/roze"
+
+                    android:text="10"/>
+                <com.nex3z.togglebuttongroup.button.CircularToggle
+                    android:id="@+id/choice_11"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    app:tbgMarkerColor="@color/roze"
+
+                    android:text="11"/>
+                <com.nex3z.togglebuttongroup.button.CircularToggle
+                    android:id="@+id/choice_12"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    app:tbgMarkerColor="@color/roze"
+
+                    android:text="12"/>
+                <com.nex3z.togglebuttongroup.button.CircularToggle
+                    android:id="@+id/choice_13"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    app:tbgMarkerColor="@color/roze"
+
+                    android:text="13"/>
+                <com.nex3z.togglebuttongroup.button.CircularToggle
+                    android:id="@+id/choice_14"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    app:tbgMarkerColor="@color/roze"
+
+                    android:text="14"/>
+                <com.nex3z.togglebuttongroup.button.CircularToggle
+                    android:id="@+id/choice_15"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    app:tbgMarkerColor="@color/roze"
+
+                    android:text="15"/>
+                <com.nex3z.togglebuttongroup.button.CircularToggle
+                    android:id="@+id/choice_16"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    app:tbgMarkerColor="@color/roze"
+
+                    android:text="16"/>
+                <com.nex3z.togglebuttongroup.button.CircularToggle
+                    android:id="@+id/choice_17"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    app:tbgMarkerColor="@color/roze"
+
+                    android:text="17"/>
+            </com.nex3z.togglebuttongroup.SingleSelectToggleGroup>
+
+
+        <com.nex3z.togglebuttongroup.SingleSelectToggleGroup
+            android:id="@+id/group_choices_min"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:tbgCheckedButton="@+id/choice_00"
+            android:layout_marginTop="8dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginLeft="16dp"
+            app:tbgRowSpacing="16dp">
+
+
+            <com.nex3z.togglebuttongroup.button.CircularToggle
+            android:id="@+id/choice_00"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+                app:tbgMarkerColor="@color/roze"
+                android:text=":00"/>
+            <com.nex3z.togglebuttongroup.button.CircularToggle
+            android:id="@+id/choice_015"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+                app:tbgMarkerColor="@color/roze"
+                android:text=":15"/>
+            <com.nex3z.togglebuttongroup.button.CircularToggle
+                android:id="@+id/choice_030"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                app:tbgMarkerColor="@color/roze"
+                android:text=":30"/>
+            <com.nex3z.togglebuttongroup.button.CircularToggle
+                android:id="@+id/choice_045"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                app:tbgMarkerColor="@color/roze"
+                android:text=":45"/>
+        </com.nex3z.togglebuttongroup.SingleSelectToggleGroup>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_centerHorizontal="true">
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:background="@drawable/ripple_red"
+                    android:textSize="16sp"
+                    android:id="@+id/btnCancel"
+                    android:layout_marginRight="8dp"
+                    android:textColor="@color/white"
+                    android:text="لفو"
+                    />
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:textColor="@color/white"
+                    android:text="تایید"
+                    android:id="@+id/btnOk"
+                    android:layout_marginLeft="8dp"
+                    android:background="@drawable/ripple_green_dark"
+                    />
+            </LinearLayout>
+        </RelativeLayout>
+
+    </LinearLayout>
+</LinearLayout>

@@ -1,0 +1,238 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@color/white"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginLeft="16dp"
+                android:orientation="vertical">
+            <RadioGroup
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:id="@+id/rgOne"
+                android:layoutDirection="rtl">
+                <me.omidh.liquidradiobutton.LiquidRadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:lrb_strokeWidth="1dp"
+                    app:lrb_explodeCount="3"
+                    app:lrb_outterPadding="8dp"
+                    app:lrb_strokeRadius="10dp"
+                    app:lrb_inAnimDuration="500"
+                    app:lrb_outAnimDuration="500"
+                    android:id="@+id/radio0"
+                    app:lrb_checkedColor="@color/colorPrimary"
+                    app:lrb_unCheckedColor="@color/grayText"
+                    android:text="1  نوبت در روز (هر ۲۴ ساعت)"
+                    android:textSize="18sp"
+                    android:textColor="@color/grayText"
+                    />
+                <me.omidh.liquidradiobutton.LiquidRadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:lrb_strokeWidth="1dp"
+                    app:lrb_explodeCount="3"
+                    app:lrb_outterPadding="8dp"
+                    app:lrb_strokeRadius="10dp"
+                    app:lrb_inAnimDuration="500"
+                    app:lrb_outAnimDuration="500"
+                    android:id="@+id/radio1"
+
+                    app:lrb_checkedColor="@color/colorPrimary"
+                    app:lrb_unCheckedColor="@color/grayText"
+                    android:text="2  نوبت در روز (هر ۱۲ ساعت)"
+                    android:textSize="18sp"
+                    android:textColor="@color/grayText"
+                    />
+                <me.omidh.liquidradiobutton.LiquidRadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:lrb_strokeWidth="1dp"
+                    app:lrb_explodeCount="3"
+                    app:lrb_outterPadding="8dp"
+                    app:lrb_strokeRadius="10dp"
+                    app:lrb_inAnimDuration="500"
+                    app:lrb_outAnimDuration="500"
+                    android:id="@+id/radio2"
+
+                    app:lrb_checkedColor="@color/colorPrimary"
+                    app:lrb_unCheckedColor="@color/grayText"
+                    android:text="3  نوبت در روز (هر ۸ ساعت)"
+                    android:textSize="18sp"
+                    android:textColor="@color/grayText"
+                    />
+                <me.omidh.liquidradiobutton.LiquidRadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:lrb_strokeWidth="1dp"
+                    app:lrb_explodeCount="3"
+                    app:lrb_outterPadding="8dp"
+                    app:lrb_strokeRadius="10dp"
+                    app:lrb_inAnimDuration="500"
+                    app:lrb_outAnimDuration="500"
+                    app:lrb_checkedColor="@color/colorPrimary"
+                    app:lrb_unCheckedColor="@color/grayText"
+                    android:text="۴  نوبت در روز (هر ۶ ساعت)"
+                    android:textSize="18sp"
+                    android:textColor="@color/grayText"
+                    android:id="@+id/radio3"
+
+                    />
+                <me.omidh.liquidradiobutton.LiquidRadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:lrb_strokeWidth="1dp"
+                    app:lrb_explodeCount="3"
+                    app:lrb_outterPadding="8dp"
+                    app:lrb_strokeRadius="10dp"
+                    app:lrb_inAnimDuration="500"
+                    app:lrb_outAnimDuration="500"
+                    app:lrb_checkedColor="@color/colorPrimary"
+                    app:lrb_unCheckedColor="@color/grayText"
+                    android:text="۵  نوبت در روز ( هر ۵ ساعت)"
+                    android:textSize="18sp"
+                    android:textColor="@color/grayText"
+                    android:id="@+id/radio4"
+
+                    />
+                <me.omidh.liquidradiobutton.LiquidRadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:lrb_strokeWidth="1dp"
+                    app:lrb_explodeCount="3"
+                    app:lrb_outterPadding="8dp"
+                    app:lrb_strokeRadius="10dp"
+                    app:lrb_inAnimDuration="500"
+                    app:lrb_outAnimDuration="500"
+                    app:lrb_checkedColor="@color/colorPrimary"
+                    app:lrb_unCheckedColor="@color/grayText"
+                    android:text="۶  نوبت در روز (هر ۴ ساعت)"
+                    android:textSize="18sp"
+                    android:textColor="@color/grayText"
+                    android:id="@+id/radio5"
+
+                    />
+                <me.omidh.liquidradiobutton.LiquidRadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:lrb_strokeWidth="1dp"
+                    app:lrb_explodeCount="3"
+                    app:lrb_outterPadding="8dp"
+                    app:lrb_strokeRadius="10dp"
+                    app:lrb_inAnimDuration="500"
+                    app:lrb_outAnimDuration="500"
+                    app:lrb_checkedColor="@color/colorPrimary"
+                    app:lrb_unCheckedColor="@color/grayText"
+                    android:text="۷  نوبت در روز (هر ۳/۵ ساعت)"
+                    android:textSize="18sp"
+                    android:textColor="@color/grayText"
+                    android:id="@+id/radio6"
+
+                    />
+                <me.omidh.liquidradiobutton.LiquidRadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:lrb_strokeWidth="1dp"
+                    app:lrb_explodeCount="3"
+                    app:lrb_outterPadding="8dp"
+                    app:lrb_strokeRadius="10dp"
+                    app:lrb_inAnimDuration="500"
+                    app:lrb_outAnimDuration="500"
+                    app:lrb_checkedColor="@color/colorPrimary"
+                    app:lrb_unCheckedColor="@color/grayText"
+                    android:text="۸  نوبت در روز (هر ۳ ساعت)"
+                    android:textSize="18sp"
+                    android:textColor="@color/grayText"
+                    android:id="@+id/radio7"
+
+                    />
+                <me.omidh.liquidradiobutton.LiquidRadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:lrb_strokeWidth="1dp"
+                    app:lrb_explodeCount="3"
+                    app:lrb_outterPadding="8dp"
+                    app:lrb_strokeRadius="10dp"
+                    app:lrb_inAnimDuration="500"
+                    app:lrb_outAnimDuration="500"
+                    app:lrb_checkedColor="@color/colorPrimary"
+                    app:lrb_unCheckedColor="@color/grayText"
+                    android:text="۱۲ نوبت در روز (هر ۲ ساعت)"
+                    android:textSize="18sp"
+                    android:textColor="@color/grayText"
+                    android:id="@+id/radio8"
+
+                    />
+                <me.omidh.liquidradiobutton.LiquidRadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:lrb_strokeWidth="1dp"
+                    app:lrb_explodeCount="3"
+                    app:lrb_outterPadding="8dp"
+                    app:lrb_strokeRadius="10dp"
+                    app:lrb_inAnimDuration="500"
+                    app:lrb_outAnimDuration="500"
+                    app:lrb_checkedColor="@color/colorPrimary"
+                    app:lrb_unCheckedColor="@color/grayText"
+                    android:text="۲۴ نوبت در روز (هر ۱ ساعت)"
+                    android:textSize="18sp"
+                    android:textColor="@color/grayText"
+                    android:id="@+id/radio9"
+
+                    />
+            </RadioGroup>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="16dp">
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_centerHorizontal="true">
+                        <Button
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:background="@drawable/ripple_red"
+                            android:textSize="16sp"
+                            android:layout_marginRight="8dp"
+                            android:textColor="@color/white"
+                            android:id="@+id/btnCancle"
+                            android:text="لفو"
+                            />
+                        <Button
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:textColor="@color/white"
+                            android:text="تایید"
+                            android:id="@+id/btnOk"
+                            android:layout_marginLeft="8dp"
+                            android:background="@drawable/ripple_green_dark"
+                            />
+                    </LinearLayout>
+                </RelativeLayout>
+
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+
+</LinearLayout>

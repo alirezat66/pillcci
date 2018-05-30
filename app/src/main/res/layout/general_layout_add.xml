@@ -1,0 +1,129 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="16dp"
+    android:orientation="vertical"
+    android:background="@color/backColor"
+    >
+    <TextView
+        style="@style/BigBlue_18"
+        android:text="اطلاعات کلی"
+        android:layout_gravity="right"
+        android:layout_alignParentRight="true"
+        />
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/MyEditText">
+    <android.support.design.widget.TextInputEditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="نام دارو
+        (اجباری)"
+        android:maxLines="1"
+        android:inputType="text"
+        android:layoutDirection="rtl"
+        android:id="@+id/edtMedName"
+        android:maxLength="30"
+        android:textColor="@color/grayText"
+        />
+    </android.support.design.widget.TextInputLayout>
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:theme="@style/MyEditText"
+        android:layout_height="wrap_content">
+        <android.support.design.widget.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="علت مصرف"
+            android:id="@+id/edtUseRes"
+            android:layoutDirection="rtl"
+            android:maxLength="30"
+            android:maxLines="1"
+            android:inputType="text"
+            android:textColor="@color/grayText"
+            />
+    </android.support.design.widget.TextInputLayout>
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/MyEditText">
+        <android.support.design.widget.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="نام پزشک تجویز کننده"
+            android:maxLines="1"
+            android:layoutDirection="rtl"
+            android:maxLength="40"
+            android:inputType="text"
+            android:id="@+id/edtDrName"
+            android:textColor="@color/grayText"
+            />
+    </android.support.design.widget.TextInputLayout>
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/MyEditText">
+        <android.support.design.widget.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint=" نام دسته دارو (پیش فرض 'عمومی')"
+            android:maxLines="1"
+            android:layoutDirection="rtl"
+            android:maxLength="45"
+            android:id="@+id/edtcatName"
+            android:textColor="@color/grayText"
+            />
+    </android.support.design.widget.TextInputLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="10">
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="0dp"
+            android:layout_weight="4"
+            android:theme="@style/MyEditText"
+            android:layout_height="wrap_content">
+            <android.support.design.widget.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="صدای هشدار"
+                android:maxLines="1"
+                android:id="@+id/edtRing"
+                android:layoutDirection="rtl"
+                android:inputType="text"
+                android:focusable="false"
+                android:textColor="@color/grayText"
+                />
+        </android.support.design.widget.TextInputLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"></LinearLayout>
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="0dp"
+            android:layout_weight="4"
+            android:theme="@style/MyEditText"
+            android:layout_height="wrap_content">
+            <android.support.design.widget.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint=""
+                android:id="@+id/edtColor"
+                android:focusable="false"
+                android:maxLines="1"
+                android:layoutDirection="rtl"
+
+                android:textColor="@color/grayText"
+                />
+        </android.support.design.widget.TextInputLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

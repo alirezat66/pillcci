@@ -1,0 +1,129 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@color/white"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="16dp"
+        android:orientation="vertical"
+        android:layoutDirection="rtl"
+        >
+        <TextView
+            style="@style/BigBlue"
+            android:text="زمان مصرف:"/>
+       <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="10"
+        android:orientation="horizontal"
+        android:layoutDirection="rtl">
+
+        <RadioGroup
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="7"
+            android:layoutDirection="rtl"
+            android:orientation="vertical">
+            <me.omidh.liquidradiobutton.LiquidRadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:lrb_strokeWidth="1dp"
+                app:lrb_explodeCount="3"
+                app:lrb_outterPadding="8dp"
+                android:layout_gravity="right"
+                app:lrb_strokeRadius="10dp"
+                app:lrb_inAnimDuration="500"
+                android:id="@+id/radioNow"
+                app:lrb_outAnimDuration="500"
+                app:lrb_checkedColor="@color/colorPrimary"
+                app:lrb_unCheckedColor="@color/grayText"
+                android:text="همین الان"
+
+                android:textSize="18sp"
+                android:textColor="@color/grayText"
+                />
+            <me.omidh.liquidradiobutton.LiquidRadioButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:lrb_strokeWidth="1dp"
+                app:lrb_explodeCount="3"
+                app:lrb_strokeRadius="10dp"
+                app:lrb_outterPadding="8dp"
+                android:layout_gravity="bottom"
+                app:lrb_inAnimDuration="500"
+                android:id="@+id/radioSetTime"
+                app:lrb_outAnimDuration="500"
+
+                app:lrb_checkedColor="@color/colorPrimary"
+                app:lrb_unCheckedColor="@color/grayText"
+                android:text="تنظیم ساعت "
+
+                android:textSize="18sp"
+                android:textColor="@color/grayText"
+                />
+            <me.omidh.liquidradiobutton.LiquidRadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:lrb_strokeWidth="1dp"
+                app:lrb_explodeCount="3"
+                app:lrb_outterPadding="8dp"
+                app:lrb_strokeRadius="10dp"
+                app:lrb_inAnimDuration="500"
+                android:id="@+id/radioTimeUsage"
+                app:lrb_outAnimDuration="500"
+                app:lrb_checkedColor="@color/colorPrimary"
+                app:lrb_unCheckedColor="@color/grayText"
+                android:text="در زمان مشخص شده"
+
+                android:textSize="18sp"
+                android:textColor="@color/grayText"
+                />
+
+        </RadioGroup>
+
+
+
+
+
+    </LinearLayout>
+    </LinearLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_centerHorizontal="true">
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/ripple_red"
+                android:textSize="16sp"
+                android:layout_marginRight="8dp"
+                android:textColor="@color/white"
+                android:id="@+id/btnCancle"
+                android:text="لغو"
+                />
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:textColor="@color/white"
+                android:text="تایید"
+                android:id="@+id/btnOk"
+                android:layout_marginLeft="8dp"
+                android:background="@drawable/ripple_green_dark"
+                />
+        </LinearLayout>
+    </RelativeLayout>
+</LinearLayout>

@@ -1,0 +1,100 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 27
+    defaultConfig {
+        applicationId "greencode.ir.pillcci"
+        minSdkVersion 17
+        targetSdkVersion 27
+        versionCode 1
+
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        multiDexEnabled = true
+
+        vectorDrawables.useSupportLibrary = true
+
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+
+}
+repositories {
+    maven {
+        url "https://s3.amazonaws.com/repo.commonsware.com"
+    }
+}
+repositories {
+    jcenter()
+}
+allprojects {
+    repositories {
+        maven { url "https://jitpack.io" }
+    }
+    repositories {
+        google()
+        jcenter()
+    }
+    repositories {
+        jcenter()
+        maven { url "https://jitpack.io" }
+    }
+
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'com.android.support:appcompat-v7:27.1.1'
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.1'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+    compile 'com.android.support:design:27.1.1'
+    compile 'com.android.support:cardview-v7:27.1.1'
+    compile 'com.android.support:palette-v7:27.1.1'
+    compile 'com.alirezaafkar:sundatepicker:2.0.8'
+    compile 'com.github.ganfra:material-spinner:2.0.0'
+    compile 'com.google.code.gson:gson:2.5'
+    compile 'com.android.support:recyclerview-v7:27.1.1'
+    compile 'com.squareup.picasso:picasso:2.5.2'
+    compile 'de.hdodenhof:circleimageview:2.2.0'
+    compile 'me.wangyuwei:ParticleView:1.0.4'
+    compile 'com.jakewharton:butterknife:8.8.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+    implementation 'com.google.android.exoplayer:exoplayer:2.7.3'
+    compile 'uk.co.chrisjenx:calligraphy:2.3.0'
+    compile 'co.lujun:androidtagview:1.1.4'
+    compile 'com.kaopiz:kprogresshud:1.1.0'
+    compile 'in.arjsna:passcodeview:1.2.1'
+    compile 'org.xdty.preference:color-picker:0.0.5'
+    compile 'com.kevalpatel2106:ringtonepicker:1.1'
+    compile 'com.commonsware.cwac:wakeful:1.1.0'
+    implementation "android.arch.persistence.room:runtime:1.0.0"
+    annotationProcessor "android.arch.persistence.room:compiler:1.0.0"
+    compile 'com.zcw:togglebutton-library:1.0.0'
+    compile 'com.github.siczmj:passcodeview:v1.0.1'
+    compile 'com.github.jkwiecien:EasyImage:1.3.1'
+    compile 'me.omidh:liquidradiobutton:1.0.01'
+    compile 'com.github.Mahfa:DayNightSwitch:1.2'
+    compile 'com.nex3z:toggle-button-group:1.1.4'
+    compile 'co.lujun:androidtagview:1.1.4'
+    compile group: 'com.pubnub', name: 'pubnub-gson', version: '4.19.0'
+    implementation 'com.otaliastudios:autocomplete:1.1.0'
+    implementation 'com.github.apl-devs:appintro:v4.2.3'
+    implementation 'com.github.mukeshsolanki:android-otpview-pinview:1.1.0'
+    compile 'com.github.thelong1EU:SpaceTabLayout:1.0.4'
+    compile 'com.github.florent37:expansionpanel:1.1.1'
+    implementation 'com.github.samanzamani.persiandate:PersianDate:0.3'
+
+    compile 'com.jzxiang.pickerview:TimePickerDialog:1.0.1'
+    compile 'com.github.iwgang:countdownview:2.1.6'
+    compile 'com.anton46:stepsview:0.0.2'
+
+
+}

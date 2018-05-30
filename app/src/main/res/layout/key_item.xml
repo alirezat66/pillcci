@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="72dp"
+    android:layout_height="72dp"
+    android:background="@drawable/keypad_back"
+    android:layout_marginTop="5dp"
+    android:layout_marginBottom="5dp"
+    android:layout_marginLeft="8dp"
+    android:layout_marginRight="8dp">
+
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="7dp"
+        android:text="2"
+        android:textSize="36sp"
+        android:textColor="@color/VioletBlue"
+        android:typeface="sans"
+        />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/characters"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/number"
+        android:layout_marginTop="-8dp"
+        android:layout_centerHorizontal="true"
+        android:text="ABC"
+        android:textSize="11sp"
+        android:typeface="monospace"
+        android:textColor="@color/colorPrimary"
+        />
+
+</RelativeLayout>

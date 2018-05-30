@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">pillcci</string>
+    <string name="app_name_fa">پیلچی</string>
+    <string name="onboarding_page_one">اینجا شعار محصول ثبت شود در اینجا شعار محصول ثبت شود.اینجا شعار محصول ثبت می‌شود.در اینجا شعار محصول ثبت می‌شود.</string>
+    <string name="color_picker">انتخاب رنگ دسته</string>
+    <string name="menu_delete_task">حذف</string>
+    <string name="menu_cancel">کنسل</string>
+
+    <string-array name="days_list">
+        <item>شنبه</item>
+        <item>یک شنبه</item>
+        <item>دو شنبه</item>
+        <item>سه شنبه</item>
+        <item>چهار شنبه</item>
+        <item>پنج شنبه</item>
+        <item>جمعه </item>
+    </string-array>
+
+</resources>

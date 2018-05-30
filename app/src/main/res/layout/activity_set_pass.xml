@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/root"
+    tools:context="greencode.ir.pillcci.activities.MainActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:background="@color/colorAccent"
+            android:layout_alignParentTop="true"
+            android:paddingTop="10dp"
+            android:visibility="gone"
+            android:id="@+id/netError"
+
+            android:text="اتصال به اینترنت برقرار نیست"
+            android:gravity="center"
+            android:paddingBottom="10dp"/>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/netError"
+        android:isScrollContainer="true"
+        android:fillViewport="true">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <include layout="@layout/header_login"
+                android:layout_alignParentTop="true"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:id="@+id/header"/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/header">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:id="@+id/lyOne"
+                    >
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="16sp"
+                        android:id="@+id/error"
+                        android:textColor="@color/hintColor"
+                        android:gravity="center_horizontal"
+                        android:visibility="invisible"
+                        android:layout_marginTop="12dp"/>
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/VioletBlue"
+                        android:layout_marginLeft="24dp"
+                        android:layout_marginRight="24dp"
+                        android:gravity="center_horizontal"
+                        android:maxLength="11"
+                        android:enabled="false"
+                        android:textColorHint="@color/hintColor"
+                        android:textColorLink="@color/VioletBlue"
+                        android:inputType="phone"
+                        android:id="@+id/edtUser"
+                        />
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/VioletBlue"
+                        android:layout_marginLeft="24dp"
+                        android:id="@+id/edtPass"
+                        android:gravity="center_horizontal"
+                        android:textColorHint="@color/hintColor"
+                        android:hint="کلمه عبور"
+                        android:maxLength="10"
+                        android:layout_marginRight="24dp"
+                        android:textColorLink="@color/VioletBlue"
+                        android:inputType="textPassword"
+
+                        />
+
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/VioletBlue"
+                        android:layout_marginLeft="24dp"
+                        android:id="@+id/edtPassRetry"
+                        android:gravity="center_horizontal"
+                        android:textColorHint="@color/hintColor"
+                        android:hint="تکرار کلمه عبور"
+                        android:maxLength="10"
+                        android:layout_marginRight="24dp"
+                        android:textColorLink="@color/VioletBlue"
+                        android:inputType="textPassword"
+
+                        />
+                    <Button
+                        android:layout_width="140dp"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/ripple_blue"
+                        android:text="ایجاد حساب کاربری"
+                        android:id="@+id/btnRegiser"
+
+                        android:layout_marginTop="8dp"
+                        android:layout_gravity="center_horizontal"
+                        android:textColor="@color/white"
+                        />
+                </LinearLayout>
+                <Button
+                    android:layout_below="@id/lyOne"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="تغییر شماره تلفن همراه"
+                    android:textColor="@color/VioletBlue"
+                    android:layout_centerHorizontal="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginBottom="16dp"
+                    android:id="@+id/btnChangePhone"
+                    android:textSize="16.0sp"
+                    android:gravity="bottom"
+                    android:background="@color/transparent"/>
+            </RelativeLayout>
+        </RelativeLayout>
+    </ScrollView>
+    </RelativeLayout>
+</android.support.constraint.ConstraintLayout>

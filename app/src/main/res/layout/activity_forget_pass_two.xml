@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="greencode.ir.pillcci.activities.MainActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:isScrollContainer="true"
+        android:fillViewport="true">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <include layout="@layout/header_login"
+                android:layout_alignParentTop="true"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:id="@+id/header"/>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/header">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:id="@+id/lyOne"
+                    >
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="16sp"
+                        android:id="@+id/error"
+                        android:textColor="@color/hintColor"
+                        android:gravity="center_horizontal"
+                        android:visibility="invisible"
+                        android:layout_marginTop="12dp"/>
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/grayText"
+                        android:layout_marginLeft="24dp"
+                        android:layout_marginRight="24dp"
+                        android:gravity="center_horizontal"
+                        android:textColorHint="@color/grayText"
+                        android:textColorLink="@color/grayText"
+                        android:inputType="phone"
+                        android:enabled="false"
+                        android:maxLength="11"
+                        android:hint="شماره تلفن همراه"
+                        android:id="@+id/edtUser"
+                        />
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/VioletBlue"
+                        android:layout_marginLeft="24dp"
+                        android:layout_marginTop="16dp"
+                        android:id="@+id/edtCode"
+                        android:maxLength="6"
+                        android:gravity="center_horizontal"
+                        android:textColorHint="@color/hintColor"
+                        android:hint="کد بازیابی را وارد کنید"
+                        android:layout_marginRight="24dp"
+                        android:textColorLink="@color/VioletBlue"
+                        android:inputType="text"
+
+                        />
+                    <Button
+                        android:layout_width="140dp"
+                        android:layout_height="wrap_content"
+                        android:paddingRight="24dp"
+                        android:paddingLeft="24dp"
+                        android:background="@drawable/ripple_gray"
+                        android:text="ورود"
+                        android:enabled="false"
+
+                        android:id="@+id/btnGetCode"
+                        android:textSize="18.0sp"
+                        android:layout_marginTop="16dp"
+                        android:layout_gravity="center_horizontal"
+                        android:textColor="@color/white"
+                        />
+
+
+
+                </LinearLayout>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_below="@id/lyOne"
+                    android:layout_alignParentBottom="true">
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="ایجاد حساب کاربری"
+                        android:layout_alignParentBottom="true"
+                        android:textColor="@color/VioletBlue"
+                        android:layout_marginLeft="16dp"
+                        android:id="@+id/btnRegiser"
+                        android:textSize="16.0sp"
+                        android:layout_marginRight="16dp"
+                        android:layout_alignParentRight="true"
+                        android:background="@color/transparent"/>
+
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_height="wrap_content"
+                        android:text="ورود به حساب کاربری"
+                        android:textColor="@color/VioletBlue"
+                        android:layout_centerHorizontal="true"
+                        android:layout_alignParentLeft="true"
+                        android:layout_marginLeft="16dp"
+                        android:id="@+id/btnLogin"
+                        android:textSize="16.0sp"
+                        android:background="@color/transparent"/>
+                </RelativeLayout>
+
+            </RelativeLayout>
+        </RelativeLayout>
+    </ScrollView>
+</android.support.constraint.ConstraintLayout>
