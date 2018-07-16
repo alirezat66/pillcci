@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import greencode.ir.pillcci.R;
+import greencode.ir.pillcci.utils.Constants;
 
 /**
  * Created by alireza on 5/27/18.
@@ -29,13 +30,10 @@ public class PillAutoCompletePresenter extends RecyclerViewPresenter<String> {
     public PillAutoCompletePresenter(Context context) {
         super(context);
 
-        pils.add("استامینوفن");
-        pils.add("استامبولی");
-        pils.add("استالیس");
-        pils.add("استوقدوس");
-        pils.add("سرماخوردگی");
-        pils.add("آموکسی سیلین");
-        pils.add("دیفلوفناک");
+        String[] pills = Constants.allPills.split(",");
+        for(String p :pills){
+            pils.add(p);
+        }
 
 
 
@@ -65,9 +63,15 @@ public class PillAutoCompletePresenter extends RecyclerViewPresenter<String> {
             query = query.toString().toLowerCase();
             List<String> list = new ArrayList<>();
             for (String u : all) {
-                if (u.toLowerCase().contains(query) ||
-                        u.toLowerCase().contains(query)) {
+                if (u.toLowerCase().startsWith((String) query)) {
                     list.add(u);
+                }
+            }
+            for (String u : all) {
+                if (u.toLowerCase().contains((String) query)) {
+                    if(!list.contains(u)) {
+                        list.add(u);
+                    }
                 }
             }
             adapter.setData(list);

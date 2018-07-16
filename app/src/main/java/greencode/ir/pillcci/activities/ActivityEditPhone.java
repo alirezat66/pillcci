@@ -16,9 +16,12 @@ import android.support.v7.widget.AppCompatImageView;
 import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.kaopiz.kprogresshud.KProgressHUD;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
@@ -61,13 +64,17 @@ public class ActivityEditPhone extends BaseActivity {
     @BindView(R.id.btnDelete)
     Button btnDelete;
     String[] mPermission = {
-            Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.CAMERA
+            Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA
     };
+    KProgressHUD kProgressHUD;
+
     ChosePhotoTakerDialog dialog;
     private static final int REQUEST_CODE_PERMISSION = 2;
     String b64Image = "";
     String phone;
-    PhoneBook book ;
+    PhoneBook book;
+    @BindView(R.id.emptyImage)
+    ImageView emptyImage;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -75,7 +82,7 @@ public class ActivityEditPhone extends BaseActivity {
         setContentView(R.layout.activity_add_phone);
         ButterKnife.bind(this);
         Bundle bundle = getIntent().getExtras();
-        if(bundle!=null){
+        if (bundle != null) {
             phone = bundle.getString("phone");
             AppDatabase database = AppDatabase.getInMemoryDatabase(this);
 
@@ -84,20 +91,32 @@ public class ActivityEditPhone extends BaseActivity {
 
             b64Image = book.getImg();
 
-            if(book.getImg().equals("")) {
-                imgLogo.setImageResource(R.drawable.profile_boy_avatar);
-            }else {
+            if (book.getImg().equals("")) {
+                imgLogo.setVisibility(View.INVISIBLE);
+                emptyImage.setVisibility(View.VISIBLE);
+            } else {
                 byte[] decodedString = Base64.decode(b64Image, Base64.DEFAULT);
                 Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
                 imgLogo.setImageBitmap(decodedByte);
+                emptyImage.setVisibility(View.INVISIBLE);
+                imgLogo.setVisibility(View.VISIBLE);
             }
             edtPhone.setText(book.getPhone());
             edtFName.setText(book.getfName());
             edtLName.setText(book.getlName());
             edtRelation.setText(book.getRelation());
+        }else {
+            imgLogo.setVisibility(View.INVISIBLE);
+            emptyImage.setVisibility(View.VISIBLE);
         }
         btnInsert.setText("ویرایش");
         txtTitle.setText("ویرایش شماره تماس");
+        emptyImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                checkPermission();
+            }
+        });
     }
 
     @OnClick({R.id.img_back, R.id.imgLogo, R.id.btnInsert, R.id.btnDelete})
@@ -107,7 +126,7 @@ public class ActivityEditPhone extends BaseActivity {
                 finish();
                 break;
             case R.id.imgLogo:
-               checkPermission();
+                checkPermission();
                 break;
             case R.id.btnInsert:
                 insertPhone();
@@ -119,15 +138,15 @@ public class ActivityEditPhone extends BaseActivity {
     }
 
     private void insertPhone() {
-        if(edtFName.getText().toString().trim().equals("")&&edtLName.getText().toString().trim().equals("")){
-            if(edtFName.getText().toString().trim().equals("")){
+        if (edtFName.getText().toString().trim().equals("") && edtLName.getText().toString().trim().equals("")) {
+            if (edtFName.getText().toString().trim().equals("")) {
                 edtFName.setError("نام یا نام خانوادگی نمی توانند مقدار نداشته باشند.");
-            }else {
+            } else {
                 edtLName.setError("نام یا نام خانوادگی نمی توانند مقدار نداشته باشند.");
             }
             return;
         }
-        if(edtPhone.getText().toString().equals("")){
+        if (edtPhone.getText().toString().equals("")) {
             edtPhone.setError("شماره تماس وارد نشده است.");
             return;
         }
@@ -148,8 +167,8 @@ public class ActivityEditPhone extends BaseActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == REQUEST_CODE_PERMISSION) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED &&
-                    grantResults[1] == PackageManager.PERMISSION_GRANTED&&
-                    grantResults[2]==PackageManager.PERMISSION_DENIED
+                    grantResults[1] == PackageManager.PERMISSION_GRANTED &&
+                    grantResults[2] == PackageManager.PERMISSION_DENIED
                     ) {
                 showDialogForImageSelector();
 
@@ -173,12 +192,13 @@ public class ActivityEditPhone extends BaseActivity {
         EasyImage.handleActivityResult(requestCode, resultCode, data, this, new DefaultCallback() {
             @Override
             public void onImagePicked(final File imageFile, EasyImage.ImageSource source, int type) {
-
+                imgLogo.setVisibility(View.VISIBLE);
+                emptyImage.setVisibility(View.INVISIBLE);
                 Picasso.with(getApplicationContext())
                         .load(imageFile)
                         .centerCrop()
                         .resize(96, 96)
-                        .into(imgLogo, new com.squareup.picasso.Callback() {
+                        .into(imgLogo, new Callback() {
                             @Override
                             public void onSuccess() {
                                 new ConvertToB64().execute(imageFile);
@@ -219,11 +239,10 @@ public class ActivityEditPhone extends BaseActivity {
             b64Image = result;
 
 
-
-
         }
 
     }
+
     private void checkPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             try {
@@ -250,4 +269,9 @@ public class ActivityEditPhone extends BaseActivity {
             showDialogForImageSelector();
         }
     }
+
+
+
+
+
 }

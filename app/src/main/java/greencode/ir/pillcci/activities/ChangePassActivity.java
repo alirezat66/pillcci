@@ -20,7 +20,6 @@ import greencode.ir.pillcci.R;
 import greencode.ir.pillcci.interfaces.ChangePassIterface;
 import greencode.ir.pillcci.objects.ChangePassReq;
 import greencode.ir.pillcci.objects.ChangePassRes;
-import greencode.ir.pillcci.objects.RegisterRequest;
 import greencode.ir.pillcci.presenters.ChangePassPresenter;
 import greencode.ir.pillcci.utils.BaseActivity;
 import greencode.ir.pillcci.utils.Constants;
@@ -141,13 +140,26 @@ public class ChangePassActivity extends BaseActivity implements ChangePassIterfa
     @Override
     public void onErrorRegister(String error) {
         disMissWaiting();
-        Toast.makeText(this, error, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, error, Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void onSuccessRegister(ChangePassRes changePassRes) {
         disMissWaiting();
-        Toast.makeText(this, "success", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "کلمه عبور با موفقیت تغییر کرد.", Toast.LENGTH_LONG).show();
+        Intent loginIntent = new Intent(this, LoginActivity.class);
+        loginIntent.putExtra(Constants.PREF_USER_NAME, edtUser.getText().toString());
+        startActivity(loginIntent);
+        finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent loginIntent = new Intent(this, LoginActivity.class);
+        loginIntent.putExtra(Constants.PREF_USER_NAME, edtUser.getText().toString());
+        startActivity(loginIntent);
+        finish();
 
     }
 }

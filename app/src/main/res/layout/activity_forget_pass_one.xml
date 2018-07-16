@@ -43,6 +43,8 @@
                         android:layout_height="wrap_content"
                         android:textColor="@color/VioletBlue"
                         android:layout_marginLeft="24dp"
+                        android:selectAllOnFocus="true"
+
                         android:layout_marginRight="24dp"
                         android:gravity="center_horizontal"
                         android:textColorHint="@color/hintColor"

@@ -10,7 +10,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.kaopiz.kprogresshud.KProgressHUD;
 
@@ -102,7 +101,7 @@ public class ForgetPassOneActivity extends BaseActivity implements ChangePassOne
         kProgressHUD=  KProgressHUD.create(this)
                 .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
                 .setLabel("لطفا منتظر بمانید")
-                .setDetailsLabel("در حال بررسی صلاحیت ورود")
+                .setDetailsLabel("در حال بازیابی کلمه عبور")
                 .setCancellable(false)
                 .setAnimationSpeed(2)
                 .setDimAmount(0.8f)
@@ -150,10 +149,19 @@ public class ForgetPassOneActivity extends BaseActivity implements ChangePassOne
     @Override
     public void onError(String error) {
         disMissWaiting();
-        Toast.makeText(this, error, Toast.LENGTH_SHORT).show();
+        Intent forgetPassTwoIntent = new Intent(this,ForgetPassTwoActivity.class);
+        forgetPassTwoIntent.putExtra(Constants.PREF_USER_NAME,edtUser.getText().toString());
+        startActivity(forgetPassTwoIntent);
+        finish();
 
     }
 
-
-
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent loginIntent = new Intent(this,LoginActivity.class);
+        loginIntent.putExtra(Constants.PREF_USER_NAME,edtUser.getText().toString());
+        startActivity(loginIntent);
+        finish();
+    }
 }

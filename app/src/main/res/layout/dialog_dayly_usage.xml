@@ -1,319 +1,476 @@
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
     android:background="@color/white"
-    >
+    android:descendantFocusability="beforeDescendants"
+    android:focusableInTouchMode="true"
+    android:orientation="vertical">
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:isScrollContainer="false"
+        android:scrollbars="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="16dp"
-        >
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_weight="5"
-        android:layoutDirection="rtl">
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:weightSum="10">
-            <me.omidh.liquidradiobutton.LiquidRadioButton
-                android:layout_width="0dp"
-                android:layout_weight="6"
-                android:layout_height="wrap_content"
-                app:lrb_strokeWidth="1dp"
-                app:lrb_explodeCount="3"
-                app:lrb_outterPadding="8dp"
-                android:layout_gravity="bottom"
-                app:lrb_strokeRadius="10dp"
-                app:lrb_inAnimDuration="500"
-                android:id="@+id/radioEvryDay"
-                app:lrb_outAnimDuration="500"
-                app:lrb_checkedColor="@color/colorPrimary"
-                app:lrb_unCheckedColor="@color/grayText"
-                android:text="هر روز"
+        android:layout_margin="16dp">
 
-                android:textSize="18sp"
-                android:textColor="@color/grayText"
-                />
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="0dp"
-                android:layout_weight="4"
-                android:theme="@style/MyEditText"
-                android:layout_alignParentLeft="true"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="5"
+            android:layoutDirection="rtl"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-        <android.support.design.widget.TextInputEditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="شروع از"
-            android:id="@+id/edtStartEvrayDay"
-            android:focusable="false"
-            android:enabled="true"
-            android:textSize="16sp"
-            android:drawableRight="@drawable/ic_down"/>
-            </android.support.design.widget.TextInputLayout>
-            </LinearLayout>
-        </RelativeLayout>
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            >
-            <LinearLayout
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <me.omidh.liquidradiobutton.LiquidRadioButton
+                        android:id="@+id/radioEvryDay"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="true"
+                        android:layout_alignParentRight="true"
+                        android:gravity="center_vertical"
+                        android:text="هر روز"
+                        android:textColor="@color/grayText"
+                        android:textSize="18sp"
+                        app:lrb_checkedColor="@color/colorPrimary"
+                        app:lrb_explodeCount="3"
+                        app:lrb_inAnimDuration="500"
+                        app:lrb_outAnimDuration="500"
+                        app:lrb_outterPadding="8dp"
+                        app:lrb_strokeRadius="10dp"
+
+                        app:lrb_strokeWidth="1dp"
+                        app:lrb_unCheckedColor="@color/grayText" />
+
+                    <RelativeLayout
+                        android:id="@+id/lyStartEveryDay"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="8dp"
+                        android:visibility="visible"
+                        android:layout_below="@id/radioEvryDay"
+                        >
+
+                        <TextView
+                            android:id="@+id/txtStartEveryDay"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="8dp"
+                            android:layout_marginRight="8dp"
+                            android:text="شروع از"
+                            android:layout_centerVertical="true"
+                            android:layout_alignParentRight="true"
+                            android:textColor="@color/grayText"
+                            android:textSize="14sp" />
+
+                        <android.support.design.widget.TextInputEditText
+                            android:id="@+id/edtStartEvrayDay"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:drawableRight="@drawable/ic_down"
+                            android:enabled="true"
+                            android:focusable="false"
+                            android:hint="شروع از"
+                            android:paddingLeft="8dp"
+                            android:paddingRight="8dp"
+                            android:selectAllOnFocus="true"
+
+                            android:textSize="16sp"
+                            android:layout_toLeftOf="@id/txtStartEveryDay"
+                            android:visibility="visible" />
+                    </RelativeLayout>
+                </RelativeLayout>
+            </RelativeLayout>
+
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:weightSum="10">
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_weight="6">
-            <me.omidh.liquidradiobutton.LiquidRadioButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:lrb_strokeWidth="1dp"
-                app:lrb_explodeCount="3"
-                app:lrb_strokeRadius="10dp"
-                app:lrb_outterPadding="8dp"
-                android:layout_gravity="bottom"
-                app:lrb_inAnimDuration="500"
-                android:id="@+id/radioEachDay"
-                app:lrb_outAnimDuration="500"
-                app:lrb_checkedColor="@color/colorPrimary"
-                app:lrb_unCheckedColor="@color/grayText"
-                android:text="هر"
+                android:orientation="horizontal">
 
-                android:textSize="18sp"
-                android:textColor="@color/grayText"
-                />
 
-        <android.support.design.widget.TextInputEditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ems="3"
-            android:hint="از ۲ تا ۶۰"
-            android:maxLength="2"
-            android:inputType="number"
-            android:gravity="center_horizontal"
-            android:id="@+id/dayRepeat"
-            android:layout_toLeftOf="@id/radioEachDay"
-            android:textSize="18sp"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:layout_gravity="bottom"
-            android:layout_toLeftOf="@id/dayRepeat"
-            android:text="روز"/>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/lyrepeat"
+                        android:descendantFocusability="beforeDescendants"
+                        android:focusableInTouchMode="true"
+                        android:orientation="horizontal">
+                        <me.omidh.liquidradiobutton.LiquidRadioButton
+                            android:id="@+id/radioEachDay"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="bottom"
+                            android:text="هر"
+                            android:textColor="@color/grayText"
+                            android:textSize="18sp"
+                            app:lrb_checkedColor="@color/colorPrimary"
+                            app:lrb_explodeCount="3"
+                            app:lrb_inAnimDuration="500"
+                            app:lrb_outAnimDuration="500"
+                            app:lrb_outterPadding="8dp"
+                            app:lrb_strokeRadius="10dp"
+
+                            app:lrb_strokeWidth="1dp"
+                            app:lrb_unCheckedColor="@color/grayText" />
+
+                        <android.support.design.widget.TextInputEditText
+                            android:id="@+id/dayRepeat"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_toLeftOf="@id/radioEachDay"
+                            android:ems="3"
+                            android:gravity="center_horizontal"
+                            android:hint="از ۲ تا ۶۰"
+                            android:enabled="true"
+                            android:selectAllOnFocus="true"
+                            android:inputType="number"
+                            android:maxLength="2"
+                            android:textSize="18sp" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="bottom"
+                            android:layout_toLeftOf="@id/dayRepeat"
+                            android:text="روز"
+                            android:textSize="18sp" />
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:id="@+id/lyStartEachDay"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="8dp"
+                        android:visibility="gone"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="8dp"
+                            android:layout_marginRight="8dp"
+                            android:text="شروع از"
+                            android:textColor="@color/grayText"
+                            android:textSize="14sp" />
+
+                        <android.support.design.widget.TextInputEditText
+                            android:id="@+id/edtStartEachDay"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:drawableRight="@drawable/ic_down"
+                            android:enabled="true"
+                            android:focusable="false"
+                            android:selectAllOnFocus="true"
+                            android:hint="شروع از"
+
+                            android:paddingLeft="8dp"
+                            android:paddingRight="8dp"
+                            android:textSize="16sp"
+                            android:visibility="visible" />
+                    </LinearLayout>
+
                 </LinearLayout>
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="0dp"
-                android:layout_weight="4"
-                android:theme="@style/MyEditText"
-                android:layout_alignParentLeft="true"
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-            <android.support.design.widget.TextInputEditText
+
+                <me.omidh.liquidradiobutton.LiquidRadioButton
+                    android:id="@+id/radioEvryWeek"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="روزهای هفته"
+                    android:textColor="@color/grayText"
+                    android:textSize="18sp"
+                    app:lrb_checkedColor="@color/colorPrimary"
+                    app:lrb_explodeCount="3"
+                    app:lrb_inAnimDuration="500"
+                    app:lrb_outAnimDuration="500"
+                    app:lrb_outterPadding="8dp"
+                    app:lrb_strokeRadius="10dp"
+
+                    app:lrb_strokeWidth="1dp"
+                    app:lrb_unCheckedColor="@color/grayText" />
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/edtSelectedDay"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="4dp"
+                    android:selectAllOnFocus="true"
+                    android:layout_below="@id/radioEvryWeek"
+                    android:drawableRight="@drawable/ic_down"
+                    android:enabled="true"
+
+                    android:focusable="false"
+                    android:hint="انتخاب روزهای هفته"
+                    android:visibility="gone" />
+
+            </RelativeLayout>
+
+            <co.lujun.androidtagview.TagContainerLayout
+                android:id="@+id/tagcontainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="شروع از"
+                android:layout_marginTop="20dp"
+                android:padding="10dp"
+                android:visibility="gone"
 
-                android:focusable="false"
-                android:enabled="true"
-                android:textSize="16sp"
-                android:id="@+id/edtStartEachDay"
-                android:drawableRight="@drawable/ic_down"/>
-            </android.support.design.widget.TextInputLayout>
+                app:container_background_color="#00000000"
+                app:container_border_radius="0dp"
+                app:container_gravity="right"
+                app:horizontal_interval="10dp"
+                app:tag_background_color="#9b9a9b"
+                app:tag_border_color="@color/transparent"
+                app:tag_border_width="0dp"
+                app:tag_clickable="false"
+                app:tag_corner_radius="10dp"
+                app:tag_cross_color="@color/white"
+                app:tag_enable_cross="true"
+                app:tag_horizontal_padding="15dp"
+                app:tag_max_length="18"
+                app:tag_text_color="@color/white"
+                app:tag_text_direction="rtl"
+                app:tag_text_size="14sp"
+
+                app:tag_theme="none"
+                app:tag_vertical_padding="10dp"
+                app:vertical_interval="10dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+
+                >
+
+                <me.omidh.liquidradiobutton.LiquidRadioButton
+                    android:id="@+id/radioBirth"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="چرخه ضد بارداری"
+                    android:textColor="@color/grayText"
+                    android:textSize="18sp"
+                    app:lrb_checkedColor="@color/colorPrimary"
+                    app:lrb_explodeCount="3"
+                    app:lrb_inAnimDuration="500"
+                    app:lrb_outAnimDuration="500"
+                    app:lrb_outterPadding="8dp"
+                    app:lrb_strokeRadius="10dp"
+
+                    app:lrb_strokeWidth="1dp"
+                    app:lrb_unCheckedColor="@color/grayText" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:id="@+id/lyBirth"
+                        android:visibility="gone">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/edtBirthlUse"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_toLeftOf="@id/radioEachDay"
+                        android:gravity="center_horizontal"
+                        android:hint="تعداد روزهای مصرف مداوم دارو"
+                        android:inputType="number"
+                        android:maxLength="2"
+                        android:selectAllOnFocus="true"
+                        android:textSize="18sp"
+                        android:visibility="visible" />
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/edtBirthStop"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_toLeftOf="@id/radioEachDay"
+                    android:gravity="center_horizontal"
+                    android:hint="تعداد روزهای توقف دارو"
+                    android:inputType="number"
+                    android:maxLength="2"
+                    android:selectAllOnFocus="true"
+                    android:textSize="18sp"
+                    android:visibility="visible" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="14sp"
+                            android:textColor="@color/black"
+                            android:text="اگر شما در اواسط چرخه هستید می توانید در فیلد زیر تعداد روزهای سپری شده از چرخه را وارد کنید"/>
+                        <android.support.design.widget.TextInputEditText
+                            android:id="@+id/edtPastDay"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_toLeftOf="@id/radioEachDay"
+                            android:gravity="center_horizontal"
+                            android:hint="تعداد روزهای سپری شده"
+                            android:inputType="number"
+                            android:maxLength="2"
+                            android:selectAllOnFocus="true"
+                            android:textSize="18sp"
+                            android:visibility="visible" />
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/edtStartBirth"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableRight="@drawable/ic_down"
+                    android:enabled="true"
+                    android:focusable="false"
+                    android:selectAllOnFocus="true"
+                    android:hint="شروع از"
+                    android:layout_marginTop="8dp"
+                    android:textSize="16sp"
+                    android:visibility="visible" />
+                    </LinearLayout>
             </LinearLayout>
-        </RelativeLayout>
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <me.omidh.liquidradiobutton.LiquidRadioButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:lrb_strokeWidth="1dp"
-                app:lrb_explodeCount="3"
-                app:lrb_outterPadding="8dp"
-                app:lrb_strokeRadius="10dp"
-                app:lrb_inAnimDuration="500"
-                android:id="@+id/radioEvryWeek"
-                app:lrb_outAnimDuration="500"
-                app:lrb_checkedColor="@color/colorPrimary"
-                app:lrb_unCheckedColor="@color/grayText"
-                android:text="هر"
 
-                android:textSize="18sp"
-                android:textColor="@color/grayText"
-                />
+            <!--
+                    <com.nex3z.togglebuttongroup.MultiSelectToggleGroup
+                        android:id="@+id/group_weekdays"
+                        android:layout_width="match_parent"
+                        android:visibility=""
+                        android:layout_height="wrap_content"
+                        app:tbgRtl="true"
+                        android:layout_marginRight="16dp"
+                        app:tbgChildSpacingForLastRow="@dimen/cardview_default_elevation"
+                        app:tbgChildSpacing="auto">
 
-            <android.support.design.widget.TextInputEditText
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:hint="انتخاب روزهای هفته"
-                android:focusable="false"
-                android:layout_toLeftOf="@id/radioEvryWeek"
-                android:layout_marginRight="4dp"
-                android:enabled="true"
-                android:id="@+id/edtSelectedDay"
-                android:drawableRight="@drawable/ic_down"/>
+                        <com.nex3z.togglebuttongroup.button.CircularToggle
+                            android:id="@+id/shanbe"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="16sp"
+                            app:tbgMarkerColor="@color/roze"
+                            android:layout_margin="8dp"
+                            android:text="شنبه"/>
+                        <com.nex3z.togglebuttongroup.button.CircularToggle
+                            android:id="@+id/yekshanbe"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="16sp"
+                            android:layout_margin="8dp"
 
-        </RelativeLayout>
-        <co.lujun.androidtagview.TagContainerLayout
-            android:id="@+id/tagcontainer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:padding="10dp"
-            app:container_background_color="#00000000"
+                            app:tbgMarkerColor="@color/roze"
 
-            app:container_border_radius="0dp"
-            app:container_gravity="right"
-            app:horizontal_interval="10dp"
-            app:tag_background_color="#9b9a9b"
-            app:tag_border_color="@color/transparent"
-            app:tag_border_width="0dp"
-            app:tag_clickable="false"
-            app:tag_corner_radius="10dp"
-            app:tag_enable_cross="true"
-            app:tag_horizontal_padding="15dp"
-            app:tag_max_length="18"
-            app:tag_text_color="@color/white"
-            app:tag_text_direction="rtl"
-            app:tag_text_size="14sp"
-            android:visibility="gone"
-            app:tag_cross_color="@color/white"
+                            android:text="۱ شنبه"/>
+                        <com.nex3z.togglebuttongroup.button.CircularToggle
+                            android:id="@+id/doshanbe"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="16sp"
+                            app:tbgMarkerColor="@color/roze"
+                            android:layout_margin="8dp"
 
-            app:tag_theme="none"
-            app:tag_vertical_padding="10dp"
-            app:vertical_interval="10dp" />
+                            android:text="۲ شنبه"/>
 
-<!--
-        <com.nex3z.togglebuttongroup.MultiSelectToggleGroup
-            android:id="@+id/group_weekdays"
-            android:layout_width="match_parent"
-            android:visibility=""
-            android:layout_height="wrap_content"
-            app:tbgRtl="true"
-            android:layout_marginRight="16dp"
-            app:tbgChildSpacingForLastRow="@dimen/cardview_default_elevation"
-            app:tbgChildSpacing="auto">
+                        <com.nex3z.togglebuttongroup.button.CircularToggle
+                            android:id="@+id/seshanbe"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="16sp"
+                            app:tbgMarkerColor="@color/roze"
+                            android:layout_margin="8dp"
 
-            <com.nex3z.togglebuttongroup.button.CircularToggle
-                android:id="@+id/shanbe"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="16sp"
-                app:tbgMarkerColor="@color/roze"
-                android:layout_margin="8dp"
-                android:text="شنبه"/>
-            <com.nex3z.togglebuttongroup.button.CircularToggle
-                android:id="@+id/yekshanbe"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="16sp"
-                android:layout_margin="8dp"
+                            android:text="۳ شنبه"/>
 
-                app:tbgMarkerColor="@color/roze"
+                        <com.nex3z.togglebuttongroup.button.CircularToggle
+                            android:id="@+id/charshanbe"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="16sp"
+                            app:tbgMarkerColor="@color/roze"
+                            android:layout_margin="8dp"
 
-                android:text="۱ شنبه"/>
-            <com.nex3z.togglebuttongroup.button.CircularToggle
-                android:id="@+id/doshanbe"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="16sp"
-                app:tbgMarkerColor="@color/roze"
-                android:layout_margin="8dp"
+                            android:text="۴ شنبه"/>
 
-                android:text="۲ شنبه"/>
+                        <com.nex3z.togglebuttongroup.button.CircularToggle
+                            android:id="@+id/panjshanbe"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="16sp"
+                            app:tbgMarkerColor="@color/roze"
+                            android:layout_margin="8dp"
 
-            <com.nex3z.togglebuttongroup.button.CircularToggle
-                android:id="@+id/seshanbe"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="16sp"
-                app:tbgMarkerColor="@color/roze"
-                android:layout_margin="8dp"
+                            android:text="۵ شنبه"/>
 
-                android:text="۳ شنبه"/>
+                        <com.nex3z.togglebuttongroup.button.CircularToggle
+                            android:id="@+id/jome"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="14sp"
+                            app:tbgMarkerColor="@color/roze"
+                            android:layout_margin="8dp"
 
-            <com.nex3z.togglebuttongroup.button.CircularToggle
-                android:id="@+id/charshanbe"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="16sp"
-                app:tbgMarkerColor="@color/roze"
-                android:layout_margin="8dp"
-
-                android:text="۴ شنبه"/>
-
-            <com.nex3z.togglebuttongroup.button.CircularToggle
-                android:id="@+id/panjshanbe"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="16sp"
-                app:tbgMarkerColor="@color/roze"
-                android:layout_margin="8dp"
-
-                android:text="۵ شنبه"/>
-
-            <com.nex3z.togglebuttongroup.button.CircularToggle
-                android:id="@+id/jome"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="14sp"
-                app:tbgMarkerColor="@color/roze"
-                android:layout_margin="8dp"
-
-                android:text="جمعه"/>
+                            android:text="جمعه"/>
 
 
 
-        </com.nex3z.togglebuttongroup.MultiSelectToggleGroup>
--->
+                    </com.nex3z.togglebuttongroup.MultiSelectToggleGroup>
+            -->
 
-    </LinearLayout>
+        </LinearLayout>
 
 
     </LinearLayout>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp">
+        android:layout_marginBottom="16dp"
+        android:layout_marginTop="16dp">
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_centerHorizontal="true">
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:background="@drawable/ripple_red"
-            android:textSize="16sp"
-            android:layout_marginRight="8dp"
-            android:textColor="@color/white"
-            android:id="@+id/btnCancle"
-            android:text="لغو"
-            />
+            android:orientation="horizontal">
+
             <Button
+                android:id="@+id/btnCancle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
+                android:layout_marginRight="8dp"
+                android:background="@drawable/ripple_red"
+                android:text="لغو"
                 android:textColor="@color/white"
-                android:text="تایید"
+                android:textSize="16sp" />
+
+            <Button
                 android:id="@+id/btnOk"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
                 android:layout_marginLeft="8dp"
                 android:background="@drawable/ripple_green_dark"
-                />
+                android:text="تایید"
+                android:textColor="@color/white" />
         </LinearLayout>
     </RelativeLayout>
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>

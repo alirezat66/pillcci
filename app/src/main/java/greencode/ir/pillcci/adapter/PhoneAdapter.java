@@ -8,6 +8,8 @@ import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -41,7 +43,9 @@ public class PhoneAdapter extends RecyclerView.Adapter<PhoneAdapter.ViewHolder> 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         public TextView txtPhone;
-        CircleImageView imgLogo;
+        ImageView imgLogo;
+        CircleImageView imgUser;
+        RelativeLayout lyEdit;
         public void bind(final PhoneBook item, final onPhoneClick listener) {
 
             itemView.setOnClickListener(new View.OnClickListener() {
@@ -57,7 +61,9 @@ public class PhoneAdapter extends RecyclerView.Adapter<PhoneAdapter.ViewHolder> 
             super(v);
 
             imgLogo = v.findViewById(R.id.img_logo);
+            imgUser = v.findViewById(R.id.img_user);
             txtPhone =  v.findViewById(R.id.txtPhone);
+            lyEdit = v.findViewById(R.id.lyEdit);
 
         }
     }
@@ -72,6 +78,7 @@ public class PhoneAdapter extends RecyclerView.Adapter<PhoneAdapter.ViewHolder> 
 
     public interface onPhoneClick{
         public void onItemClick(PhoneBook phoneBook);
+        public void onItemEdit(PhoneBook phoneBook);
     }
 
     @Override
@@ -83,37 +90,39 @@ public class PhoneAdapter extends RecyclerView.Adapter<PhoneAdapter.ViewHolder> 
 
 
         holder.txtPhone.setText(data.getfName()+" "+data.getlName());
+        holder.lyEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                myListener.onItemEdit(data);
+            }
+        });
         if(data.isInitial()){
-            holder.imgLogo.setImageResource(R.drawable.ambulance_icon);
-        }else {
-            if(data.getImg().equals("")) {
-                holder.imgLogo.setImageResource(R.drawable.profile_boy_avatar);
+            holder.lyEdit.setVisibility(View.INVISIBLE);
+            if(position==0){
+                holder.imgLogo.setImageResource(R.drawable.ambulance_icon);
+
+            }else if(position==1) {
+
+                holder.imgLogo.setImageResource(R.drawable.medicine_1_icon);
+
             }else {
+
+                holder.imgLogo.setImageResource(R.drawable.ic_add_user);
+            }
+        }else {
+            holder.lyEdit.setVisibility(View.VISIBLE);
+            if(data.getImg().equals("")) {
+                holder.imgLogo.setImageResource(R.drawable.ic_add_user);
+                holder.imgUser.setVisibility(View.INVISIBLE);
+            }else {
+                holder.imgLogo.setVisibility(View.INVISIBLE);
+                holder.imgUser.setVisibility(View.VISIBLE);
                 byte[] decodedString = Base64.decode(data.getImg(), Base64.DEFAULT);
                 Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-                holder.imgLogo.setImageBitmap(decodedByte);
+                holder.imgUser.setImageBitmap(decodedByte);
             }
         }
-      /*  holder.txtTime.setText(data.getLastUse());
-        holder.txtDate.setText(data.getNextUsage());
-        holder.txtCatName.setText(data.getCatName());
-        if (!data.getImg().equals("")) {
-            byte[] decodedString = Base64.decode(data.getImg(), Base64.DEFAULT);
-            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-            holder.imgLogo.setImageBitmap(decodedByte);
-        }else {
-            holder.imgLogo.setImageResource(R.drawable.pill_avator);
-        }*/
-       /* if(data.getState().equals("online")){
-            holder.img.setBorderColor(Color.parseColor("#14af14"));
-            holder.img.setBorderWidth(4);
 
-
-        }else {
-            holder.img.setBorderColor(Color.parseColor("#ff0000"));
-            holder.img.setBorderWidth(2);
-            holder.img.setBorderWidth(0);
-        }*/
 
 
     }

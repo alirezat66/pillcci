@@ -51,4 +51,20 @@ public class ChangePassReq {
     public int getId() {
         return id;
     }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public void setPass(String pass) {
+        this.pass = pass;
+    }
+
+    public void setRetryPass(String retryPass) {
+        this.retryPass = retryPass;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 }

@@ -1,104 +1,138 @@
-<android.support.v7.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_margin="8dp"
-    app:cardCornerRadius="5dp"
-    app:cardElevation="8dp"
-    android:layout_height="wrap_content"
-    android:layout_width="match_parent">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:id="@+id/mainLay"
+    android:layout_height="104dp"
+    android:layout_width="match_parent"
+    android:layout_marginBottom="1dp">
+    <android.support.v7.widget.CardView
+        android:layout_width="12dp"
 
+        android:layout_gravity="right"
+        android:id="@+id/catColor"
+        android:layout_marginRight="-6dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
+        app:cardBackgroundColor="@color/red"
+        app:cardCornerRadius="3dp"
+        android:orientation="vertical"
+        android:layout_height="match_parent"></android.support.v7.widget.CardView>
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical">
-
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:id="@+id/rlText"
-            android:background="@color/white"
-            android:layout_height="wrap_content">
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/img_logo"
-                android:layout_alignParentLeft="true"
-                android:layout_height="72dp"
-                android:layout_margin="16dp"
-                android:src="@drawable/pill_avator"
-                android:layout_centerVertical="true"
-                android:layout_width="72dp"
-                 />
-
-            <LinearLayout
-                android:orientation="vertical"
+               <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:id="@+id/textLayout"
-                android:layout_toRightOf="@id/img_logo"
-                android:layout_marginRight="8dp"
-                android:layoutDirection="rtl"
-                >
-                <TextView
-                    style="@style/BigGray"
-                    android:text=""
-                    android:id="@+id/txtMedName"
-                    android:layout_marginRight="16dp"
-                    android:layout_marginTop="12dp"/>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
-                    android:orientation="horizontal"
-                    android:layout_marginRight="16dp"
-                    android:layout_marginBottom="6dp">
-                    <TextView
-                        style="@style/NormalTextBlack"
-                        android:text="دسته:"/>
-                    <TextView
-                        style="@style/NormalTextBlack"
-                        android:text=""
-                        android:id="@+id/txtCatName"/>
+                android:id="@+id/rlText"
+                android:background="@color/white"
+                android:layout_height="wrap_content">
 
-                </LinearLayout>
+                 <LinearLayout
+                     android:layout_width="match_parent"
+                     android:layout_height="match_parent"
+                     android:layout_toLeftOf="@id/imgLogo"
+                     android:weightSum="10"
+                     android:layout_centerVertical="true"
+                     android:layoutDirection="rtl"
+                     android:orientation="horizontal"
+                     >
+                     <LinearLayout
+                         android:orientation="vertical"
+                         android:layout_width="0dp"
+                         android:layout_weight="6"
+                         android:layout_height="match_parent"
+                         android:id="@+id/textLayout"
+                        android:layout_gravity="center_vertical"
+                         android:layout_marginLeft="8dp"
+                         android:layoutDirection="rtl"
+                         >
+                         <TextView
+                             style="@style/BigGray"
+                             android:text=""
+                             android:maxLines="2"
+                             android:transitionName="simple_activity_transition"
+                             android:id="@+id/txtMedName"
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
-                    android:orientation="horizontal"
-                    android:layout_marginRight="16dp"
-                    android:layout_marginBottom="6dp">
-                    <TextView
-                        style="@style/NormalTextBlack"
-                        android:text="آخرین مصرف:"/>
-                    <TextView
-                        style="@style/NormalTextBlack"
-                        android:text=""
-                        android:id="@+id/txtUseTime"/>
+                             android:layout_marginRight="8dp"
+                             android:layout_marginTop="8dp"/>
+                         <TextView
+                             style="@style/BigGray"
+                             android:text=""
+                             android:textSize="14sp"
+                             android:maxLines="1"
+                             android:layout_width="match_parent"
+                             android:layout_height="wrap_content"
+                             android:id="@+id/txtUseTime"
+                             android:layout_marginTop="6dp"
+                             android:layout_marginRight="16dp"
+                             android:layout_marginBottom="6dp"/>
 
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
-                    android:orientation="horizontal"
-                    android:layout_marginRight="16dp"
-                    android:layout_marginBottom="6dp">
-                    <TextView
-                        style="@style/NormalTextBlack"
-                        android:text="مصرف بعدی:"/>
-                    <TextView
-                        style="@style/NormalTextBlack"
-                        android:text=""
-                        android:id="@+id/txtNextTime"/>
+                     </LinearLayout>
+                     <RelativeLayout
+                         android:layout_width="0dp"
+                         android:layout_weight="4"
+                         android:layout_height="wrap_content"
+                         android:layout_alignParentLeft="true"
+                         android:id="@+id/lyLeft"
+                         >
 
-                </LinearLayout>
+                         <LinearLayout
+                             android:layout_width="match_parent"
+                             android:layout_height="match_parent"
+                             android:orientation="vertical"
+                             android:weightSum="10">
+                             <LinearLayout
+                                 android:layout_width="match_parent"
+                                 android:layout_height="0dp"
+                                 android:id="@+id/lyDelete"
 
+                                 android:layout_weight="5">
+                                 <TextView
+                                     android:layout_width="match_parent"
+                                     android:layout_height="match_parent"
+                                     android:textSize="14sp"
+                                     android:gravity="center_horizontal|center_vertical"
+                                     android:textColor="@color/colorPrimaryDark"
+                                     android:text="حذف"/>
+                             </LinearLayout>
+                             <LinearLayout
+                                 android:layout_width="match_parent"
+                                 android:layout_height="1dp"
+                                 android:layout_marginLeft="4dp"
+                                 android:background="@color/grayLiteText">
 
-            </LinearLayout>
+                             </LinearLayout>
+                             <LinearLayout
+                                 android:layout_width="match_parent"
+                                 android:layout_height="0dp"
+                                 android:id="@+id/lyStop"
+                                 android:layout_weight="5">
+                                 <TextView
+                                     android:layout_width="match_parent"
+                                     android:layout_height="match_parent"
+                                     android:textSize="14sp"
+                                     android:id="@+id/txtStop"
+                                     android:gravity="center_horizontal|center_vertical"
+                                     android:textColor="@color/colorPrimaryDark"
+                                     android:text="توقف مصرف"/>
+                             </LinearLayout>
+                         </LinearLayout>
+                     </RelativeLayout>
 
-        </RelativeLayout>
+                 </LinearLayout>
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/imgLogo"
+                    android:layout_height="72dp"
+                    android:layout_margin="16dp"
+                    android:transitionName="simple_activity_transition"
+                    android:layout_alignParentRight="true"
+                    android:src="@drawable/pill_avator"
+                    android:layout_centerVertical="true"
+                    android:layout_width="72dp"
+                    />
 
+            </RelativeLayout>
 
 
 

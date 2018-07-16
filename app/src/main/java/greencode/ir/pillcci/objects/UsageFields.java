@@ -20,9 +20,9 @@ public class UsageFields {
     long startTimeStamp;
     String unitUsage;
     ArrayList<String>unitsCount;
-    ArrayList<String>unitTimes;
+    ArrayList<Long>unitTimes;
     String description;
-    public UsageFields(int typedayUsage, String usageStartDate, int repeatDays,boolean isRegular, ArrayList<String> days, int typeOfdayUsage, double diffrenceOfUsage, int countOfUsagePerDay, int startHour, int startMin, String unitUsage, ArrayList<String> unitsCount, ArrayList<String> unitTimes,String description,long startTimeStamp) {
+    public UsageFields(int typedayUsage, String usageStartDate, int repeatDays,boolean isRegular, ArrayList<String> days, int typeOfdayUsage, double diffrenceOfUsage, int countOfUsagePerDay, int startHour, int startMin, String unitUsage, ArrayList<String> unitsCount, ArrayList<Long> unitTimes,String description,long startTimeStamp) {
         this.typedayUsage = typedayUsage;
         this.usageStartDate = usageStartDate;
         this.isRegular = isRegular;
@@ -96,7 +96,7 @@ public class UsageFields {
         return unitsCount;
     }
 
-    public ArrayList<String> getUnitTimes() {
+    public ArrayList<Long> getUnitTimes() {
         return unitTimes;
     }
 }

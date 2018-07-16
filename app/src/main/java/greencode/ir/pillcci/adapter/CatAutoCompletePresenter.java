@@ -30,9 +30,6 @@ public class CatAutoCompletePresenter extends RecyclerViewPresenter<Category> {
         super(context);
         AppDatabase database = AppDatabase.getInMemoryDatabase(context);
         categories = new ArrayList<>(database.categoryDao().listOfCats());
-
-
-
     }
 
     @Override

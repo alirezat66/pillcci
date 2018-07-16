@@ -17,7 +17,7 @@ public class ChosePhotoTakerDialog extends BottomSheetDialog {
 
     PhotoChoserInterface myInterface;
     Context context;
-    LinearLayout lyGallery,lyCamera;
+    LinearLayout lyGallery,lyCamera,lyCancel;
     public ChosePhotoTakerDialog(Context context){
         super(context);
         this.context = context;
@@ -32,7 +32,7 @@ public class ChosePhotoTakerDialog extends BottomSheetDialog {
         View view = View.inflate(context, R.layout.dialog_photo_selector, null);
 
         setContentView(view);
-        setCancelable(false);
+        setCancelable(true);
         WindowManager.LayoutParams params = getWindow().getAttributes();
         params.width = -1;
         getWindow().setAttributes(params);
@@ -40,6 +40,7 @@ public class ChosePhotoTakerDialog extends BottomSheetDialog {
 
         lyCamera = findViewById(R.id.lyCamera);
         lyGallery = findViewById(R.id.lyGallery);
+        lyCancel = findViewById(R.id.lyCancel);
 
 
         lyCamera.setOnClickListener(new View.OnClickListener() {
@@ -52,6 +53,12 @@ public class ChosePhotoTakerDialog extends BottomSheetDialog {
             @Override
             public void onClick(View v) {
                 myInterface.onSuccess(2);
+            }
+        });
+        lyCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                myInterface.onRejected();
             }
         });
     }

@@ -12,9 +12,20 @@ public class GeneralFields {
     public String catName;
     public int catColour;
     public String alarmUrl;
+    public int isLight;
+    public int isVibrate;
 
 
-    public GeneralFields(String midName, String b64, String couse, String drName, String catName, int catColour, String alarmUrl) {
+    public int getIsLight() {
+        return isLight;
+    }
+
+    public int getIsVibrate() {
+        return isVibrate;
+    }
+
+    public GeneralFields(String midName, String b64, String couse, String drName, String catName,
+                         int catColour, String alarmUrl, int isLight, int isVibrate) {
         this.midName = midName;
         this.b64 = b64;
         this.couse = couse;
@@ -22,6 +33,9 @@ public class GeneralFields {
         this.catName = catName;
         this.catColour = catColour;
         this.alarmUrl = alarmUrl;
+        this.isLight=isLight;
+        this.isVibrate = isVibrate;
+
     }
 
     public String getMidName() {

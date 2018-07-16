@@ -3,18 +3,29 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="180dp"
     android:background="@color/colorPrimary"
     tools:context="greencode.ir.pillcci.activities.MainActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:weightSum="2"
-        android:orientation="horizontal">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:layout_margin="8dp"
+            android:textColor="@color/white"
+            android:text="نحوه بارگزاری عکس:"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:weightSum="3">
         <RelativeLayout
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1">
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -24,28 +35,32 @@
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
                 >
-
-                <android.support.v7.widget.AppCompatImageView
+                <RelativeLayout
                     android:layout_width="72dp"
                     android:layout_height="72dp"
-                    app:srcCompat="@drawable/ic_gallery"
-                    app:civ_border_width="1dp"
-                    android:layout_marginTop="8dp"
-                    app:civ_border_color="@color/white"
-                   />
+                    android:background="@drawable/oval_dark_mody"
+                    >
+                    <android.support.v7.widget.AppCompatImageView
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        app:srcCompat="@drawable/ic_gallery"
+                        android:layout_centerInParent="true"
+                        />
+                </RelativeLayout>
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="گالری"
                     android:textSize="18sp"
-                    android:layout_marginBottom="8dp"
+                    android:layout_marginTop="8dp"
                     android:gravity="center_horizontal"
                     android:textColor="@color/white"/>
             </LinearLayout>
         </RelativeLayout>
         <RelativeLayout
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1">
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -55,25 +70,65 @@
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
                 >
-
-                <android.support.v7.widget.AppCompatImageView
+                <RelativeLayout
                     android:layout_width="72dp"
                     android:layout_height="72dp"
-                    app:srcCompat="@drawable/ic_camera"
-                    app:civ_border_width="1dp"
-                    android:layout_marginTop="8dp"
-                    app:civ_border_color="@color/white"
-                    />
+                    android:background="@drawable/oval_dark_mody"
+                    >
+                    <android.support.v7.widget.AppCompatImageView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        app:srcCompat="@drawable/ic_camera"
+                        android:layout_centerInParent="true"
+                        />
+                </RelativeLayout>
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="دوربین"
                     android:textSize="18sp"
-                    android:layout_marginBottom="8dp"
+                    android:layout_marginTop="8dp"
                     android:gravity="center_horizontal"
                     android:textColor="@color/white"/>
             </LinearLayout>
         </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:id="@+id/lyCancel"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                >
+                <RelativeLayout
+                    android:layout_width="72dp"
+                    android:layout_height="72dp"
+                    android:background="@drawable/oval_dark_mody"
+                    >
+                    <android.support.v7.widget.AppCompatImageView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        app:srcCompat="@drawable/ic_highlight_off"
+                        android:layout_centerInParent="true"
+                        />
+                </RelativeLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="لغو"
+                    android:textSize="18sp"
+                    android:layout_marginTop="8dp"
+                    android:gravity="center_horizontal"
+                    android:textColor="@color/white"/>
+            </LinearLayout>
+        </RelativeLayout>
+        </LinearLayout>
     </LinearLayout>
 
 

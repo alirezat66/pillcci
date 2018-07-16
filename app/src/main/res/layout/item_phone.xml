@@ -8,20 +8,46 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
+        android:layout_margin="8dp"
         android:orientation="vertical">
         <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="96dp"
+            android:layout_height="96dp"
+            android:scaleType="centerCrop"
+            android:layout_centerHorizontal="true"
+            android:visibility="visible"
+            android:layout_marginBottom="8dp"
+            android:id="@+id/img_user"
+
+            />
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="96dp"
+            android:layout_marginLeft="8dp"
+
+            android:layout_toRightOf="@id/img_logo"
+            android:id="@+id/lyEdit">
+            <ImageView
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_alignParentBottom="true"
+                android:src="@drawable/edit_blue_icon"/>
+        </RelativeLayout>
+        <ImageView
             android:id="@+id/img_logo"
             android:layout_centerHorizontal="true"
-            android:layout_height="100dp"
+            android:layout_height="96dp"
             android:scaleType="centerCrop"
             android:layout_marginBottom="8dp"
-            android:src="@drawable/profile_boy_avatar"
+            android:padding="16dp"
+
+            app:srcCompat="@drawable/ic_add_user"
+            android:background="@drawable/oval_white_strok"
             android:layout_width="100dp"
             />
         <TextView
             style="@style/NormalTextBlack"
-            android:text=""
+            android:text="رضا تقی زاده"
 
             android:layout_centerHorizontal="true"
             android:layout_below="@id/img_logo"

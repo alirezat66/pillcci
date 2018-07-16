@@ -1,41 +1,47 @@
 package greencode.ir.pillcci.dialog;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialog;
+import android.support.design.widget.BottomSheetDialogFragment;
+import android.support.design.widget.TextInputEditText;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.WindowManager;
+import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import greencode.ir.pillcci.R;
 import greencode.ir.pillcci.adapter.EditEachTimeAdapter;
 import greencode.ir.pillcci.objects.EachUsage;
+import greencode.ir.pillcci.timepicker.TimePickerDialog;
+import greencode.ir.pillcci.timepicker.data.Type;
+import greencode.ir.pillcci.timepicker.listener.OnDateSetListener;
+import greencode.ir.pillcci.utils.KeyboardUtil;
+import greencode.ir.pillcci.utils.PersianCalculater;
+import saman.zamani.persiandate.PersianDate;
 
 /**
  * Created by alireza on 5/18/18.
  */
 
-public class EachTimeEditPartDialog extends Dialog {
+@SuppressLint("ValidFragment")
+public class EachTimeEditPartDialog extends BottomSheetDialogFragment implements EditEachTimeAdapter.SelectListener, OnDateSetListener {
 
     EachTimeEditPart myInterface;
     Context context;
-    RecyclerView container;
-    EditText edtStartTime;
-    Button btnOk,btnCancel;
 
     String startTime;
     String unit;
@@ -43,128 +49,213 @@ public class EachTimeEditPartDialog extends Dialog {
     double diffrenceOfUsage;
     double eachTimeUsage;
     EditEachTimeAdapter adapter;
+    PersianDate nowPersianDate;
+    PersianDate minPersianDate;
+    PersianDate maxPersianDate;
 
-    public EachTimeEditPartDialog(Context context, int startTimeHour, int startTimeMin, int countOfUsagePerDay, double diffrenceOfUsage, String unitUse,double eachTimeUsage) {
-        super(context);
+    FragmentManager supportedFragmentManager;
+    EachUsage data;
+
+    int minMinute = -1;
+    int minHours = -1;
+    int maxMinute = -1;
+    int maxHours = -1;
+    long startTimeDate;
+    @BindView(R.id.edtStartEvrayDay)
+    TextInputEditText edtStartEvrayDay;
+    @BindView(R.id.container)
+    RecyclerView recyclerView;
+    @BindView(R.id.btnCancle)
+    Button btnCancle;
+    @BindView(R.id.btnOk)
+    Button btnOk;
+    Unbinder unbinder;
+
+    @SuppressLint("ValidFragment")
+    public EachTimeEditPartDialog(Context context, int startTimeHour, int startTimeMin, int countOfUsagePerDay, double diffrenceOfUsage, String unitUse, double eachTimeUsage, FragmentManager manager, long startTimeDate) {
         this.context = context;
         String startStr;
         String startMinStr;
-        if(startTimeHour<10){
-            startStr="0"+startTimeHour;
-        }else {
-            startStr=startTimeHour+"";
+        this.supportedFragmentManager = manager;
+        if (startTimeHour < 10) {
+            startStr = "0" + startTimeHour;
+        } else {
+            startStr = startTimeHour + "";
         }
-        if(startTimeMin==0){
-            startMinStr="00";
-        }else {
-            startMinStr=""+startTimeMin;
+        if (startTimeMin == 0) {
+            startMinStr = "00";
+        } else {
+            startMinStr = "" + startTimeMin;
         }
-        this.startTime = startStr+":"+startMinStr;
-        this.count=countOfUsagePerDay;
-        this.unit= unitUse;
-        this.diffrenceOfUsage =diffrenceOfUsage;
-        this.eachTimeUsage=eachTimeUsage;
+        this.startTime = startStr + ":" + startMinStr;
+        this.count = countOfUsagePerDay;
+        this.unit = unitUse;
+        this.diffrenceOfUsage = diffrenceOfUsage;
+        this.eachTimeUsage = eachTimeUsage;
+        this.startTimeDate = startTimeDate;
     }
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        Dialog dialog = new BottomSheetDialog(getContext()) {
 
+            @Override
+            public void onBackPressed() {
+                myInterface.onRejected();
+            }
+        };
+        return dialog;
+    }
     public void setListener(EachTimeEditPart listener) {
         this.myInterface = listener;
     }
 
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        requestWindowFeature(1);
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = View.inflate(context, R.layout.dialog_each_time_edit_part, null);
-
-        setContentView(view);
-        setCancelable(false);
-        WindowManager.LayoutParams params = getWindow().getAttributes();
-        params.width = -1;
-        getWindow().setAttributes(params);
-
-
-        btnCancel = findViewById(R.id.btnCancle);
-        btnOk = findViewById(R.id.btnOk);
-        edtStartTime = findViewById(R.id.edtStartEvrayDay);
-        container = findViewById(R.id.container);
-        edtStartTime.setText(startTime);
+        ButterKnife.bind(this, view);
+        edtStartEvrayDay.setText(startTime);
 
         ArrayList<EachUsage> list = new ArrayList<>();
-        for(int i=0;i<count;i++){
-            EachUsage item = new EachUsage(startTime,unit,eachTimeUsage+"");
-            list.add(item);
-            startTime = calcNewTime(startTime);
-
-
-
-           /* TextView text = (TextView) to_add.findViewById(R.id.text);
-            text.setText(options[i]);
-            text.setTypeface(FontSelector.getBold(getActivity()));*/
-
-        }
-        container.setLayoutManager(new LinearLayoutManager(context,LinearLayoutManager.VERTICAL,false));
-        adapter =new EditEachTimeAdapter(context,list);
-        container.setAdapter(adapter);
+        list = makeAllTimes(count, startTime, startTimeDate, diffrenceOfUsage);
+        edtStartEvrayDay.setText(calculateFirst(list));
+        recyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
+        adapter = new EditEachTimeAdapter(context, list, EachTimeEditPartDialog.this);
+        recyclerView.setAdapter(adapter);
         btnOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                boolean isCurrect=true;
-                ArrayList<String>usageCountList = new ArrayList<>();
-                ArrayList<String>timeList = new ArrayList<>();
-                for(EachUsage eachUsage:adapter.getList()){
-                    if(eachUsage.getEachUse().length()==0){
-                        isCurrect=false;
+                boolean isCurrect = true;
+                for (EachUsage eachUsage : adapter.getList()) {
+                    if (eachUsage.getEachUse().length() == 0) {
+                        isCurrect = false;
                         break;
-                    }else {
-                        usageCountList.add(Double.parseDouble(eachUsage.getEachUse())+"");
-                        timeList.add(eachUsage.getTimeStr());
                     }
 
                 }
-                if(isCurrect){
-                    myInterface.onSuccess(usageCountList,timeList);
-                }else {
+                if (isCurrect) {
+                    myInterface.onSuccess(adapter.getList());
+                } else {
                     Toast.makeText(context, "میزان مصرف نمی تواند مقدار خالی داشته باشد.", Toast.LENGTH_LONG).show();
                 }
             }
         });
-        btnCancel.setOnClickListener(new View.OnClickListener() {
+        btnCancle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 myInterface.onRejected();
             }
         });
 
+        new KeyboardUtil(getActivity(),view);
 
+        return view;
+    }
+
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
 
     }
 
-    private String calcNewTime(String startTime) {
-        String myTime = startTime;
-        SimpleDateFormat df = new SimpleDateFormat("HH:mm");
-        Date d = null;
-        try {
-            d = df.parse(myTime);
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(d);
+    private ArrayList<EachUsage> makeAllTimes(int count, String startTime, long startTimeDate, double diffrenceOfUsage) {
+        ArrayList<EachUsage> list = new ArrayList<>();
+        long thisStartTimeDate = startTimeDate;
+        String thisStartTime = startTime;
+        for (int i = 0; i < count; i++) {
 
-            double amount = diffrenceOfUsage*60;
+            PersianDate selectedStartDate = new PersianDate(thisStartTimeDate);
+            PersianDate currentPersianDate = new PersianDate(System.currentTimeMillis());
+
+            String[] hoursAndMin = thisStartTime.split(":");
+            int hour = Integer.parseInt(hoursAndMin[0]);
+            int min = Integer.parseInt(hoursAndMin[1]);
+            selectedStartDate.setHour(hour);
+            selectedStartDate.setMinute(min);
+            selectedStartDate.setSecond(0);
+
+            if (selectedStartDate.getTime() < currentPersianDate.getTime()) {
+                selectedStartDate.addDay(1);
+            }
 
 
-            cal.add(Calendar.MINUTE, (int) amount);
-            String newTime = df.format(cal.getTime());
-            return newTime;
-        } catch (ParseException e) {
+            EachUsage item = new EachUsage(thisStartTime, unit, eachTimeUsage + "", selectedStartDate.getTime(), (i == 0 ? true : false));
+            list.add(item);
+            if (selectedStartDate.getHour() + (int) diffrenceOfUsage >= 24) {
+                selectedStartDate.addDay(1);
+                selectedStartDate.setHour((selectedStartDate.getHour() + (int) diffrenceOfUsage) - 24);
+                selectedStartDate.setMinute(selectedStartDate.getMinute());
+                selectedStartDate.setSecond(0);
+                thisStartTimeDate = selectedStartDate.getTime();
+                thisStartTime = PersianCalculater.getHourseAndMin(selectedStartDate.getTime());
+                // raftim to rooze baad
+            } else {
+                selectedStartDate.setHour(selectedStartDate.getHour() + (int) diffrenceOfUsage);
+                selectedStartDate.setMinute(selectedStartDate.getMinute());
+                selectedStartDate.setSecond(0);
+                thisStartTime = PersianCalculater.getHourseAndMin(selectedStartDate.getTime());
+                thisStartTimeDate = selectedStartDate.getTime();
 
-            e.printStackTrace();
-            return startTime;
+                // emroozim
+            }
+
+        }
+
+        this.startTimeDate = list.get(0).getStartDay();
+        return list;
+    }
+
+    public String calculateFirst(ArrayList<EachUsage> list) {
+        return PersianCalculater.getHourseAndMin(list.get(0).getStartDay());
+    }
+
+
+    @Override
+    public void selectTime(EachUsage eachUsage) {
+        data = eachUsage;
+
+        nowPersianDate = new PersianDate(System.currentTimeMillis());
+
+        String[] times = eachUsage.getTimeStr().split(":");
+        int hour = Integer.parseInt(times[0]);
+        int min = Integer.parseInt(times[1]);
+        nowPersianDate.setHour(hour);
+        nowPersianDate.setMinute(min);
+
+
+        TimePickerDialog dialog = new TimePickerDialog.Builder()
+                .setHourText("")
+                .setMinuteText("")
+                .setWheelItemTextSize(16)
+                .setCancelStringId("لغو")
+                .setThemeColor(R.color.colorPrimary)
+                .setTitleStringId("انتخاب زمان")
+                .setSureStringId("انتخاب")
+                .setType(Type.HOURS_MINS)
+                .setCurrentMillseconds(nowPersianDate.getTime())
+                .setCallBack(EachTimeEditPartDialog.this)
+                .build();
+        dialog.show(supportedFragmentManager, "انتخاب زمان");
+    }
+
+    @Override
+    public void onDateSet(TimePickerDialog timePickerView, long millseconds) {
+
+        PersianDate selectedDate = new PersianDate(data.getStartDay());
+        PersianDate selectedHMDate = new PersianDate(millseconds);
+        selectedDate.setHour(selectedHMDate.getHour());
+        selectedDate.setMinute(selectedHMDate.getMinute());
+        if (selectedDate.getTime() < startTimeDate) {
+            Toast.makeText(context, "زمان انتخاب شده نباید قبل از زمان شروع باشد.", Toast.LENGTH_SHORT).show();
+        } else {
+            adapter.updatePilTime(data, selectedDate);
+            edtStartEvrayDay.setText(calculateFirst(adapter.getList()));
         }
 
     }
 
     @Override
-    public void onBackPressed() {
-        myInterface.onRejected();
-        super.onBackPressed();
+    public void onDestroyView() {
+        super.onDestroyView();
     }
 }

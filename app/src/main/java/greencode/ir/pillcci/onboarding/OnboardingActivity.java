@@ -1,19 +1,17 @@
 package greencode.ir.pillcci.onboarding;
 
-import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.graphics.drawable.VectorDrawableCompat;
 
 import com.github.paolorotolo.appintro.AppIntro;
-import com.github.paolorotolo.appintro.AppIntro2Fragment;
 
 import greencode.ir.pillcci.R;
 import greencode.ir.pillcci.activities.LoginActivity;
-import greencode.ir.pillcci.utils.Constants;
-import greencode.ir.pillcci.utils.PreferencesData;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 /**
@@ -35,7 +33,13 @@ public class OnboardingActivity extends AppIntro {
         setSeparatorColor(getResources().getColor(R.color.colorPrimaryDark));
         setSkipText("ورود");
         setColorSkipButton(getResources().getColor(R.color.white));
-        setImageNextButton(getResources().getDrawable(R.drawable.ic_next));
+        Drawable drawable;
+        if (android.os.Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
+            drawable = getResources().getDrawable(R.drawable.ic_next, getTheme());
+        } else {
+            drawable = VectorDrawableCompat.create(getResources(), R.drawable.ic_next, getTheme());
+        }
+        setImageNextButton(drawable);
         setDoneText("پایان");
 
     }

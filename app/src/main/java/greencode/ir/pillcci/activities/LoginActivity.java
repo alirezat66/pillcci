@@ -4,12 +4,14 @@ import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.InputType;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.kaopiz.kprogresshud.KProgressHUD;
 
@@ -18,6 +20,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
 import greencode.ir.pillcci.R;
+import greencode.ir.pillcci.controler.AppDatabase;
+import greencode.ir.pillcci.database.Profile;
 import greencode.ir.pillcci.interfaces.LoginInterface;
 import greencode.ir.pillcci.objects.LoginReq;
 import greencode.ir.pillcci.objects.LoginResponse;
@@ -54,6 +58,8 @@ public class LoginActivity extends BaseActivity implements LoginInterface{
     LinearLayout lyOne;
     @BindView(R.id.btnRegiser)
     Button btnRegiser;
+    @BindView(R.id.checkboxShowPass)
+    CheckBox showPass;
     KProgressHUD kProgressHUD;
     LoginPresenter presenter;
     @Override
@@ -71,6 +77,18 @@ public class LoginActivity extends BaseActivity implements LoginInterface{
         }
         forgetPass.setPaintFlags(forgetPass.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         presenter  = new LoginPresenter(this);
+        showPass.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    edtPass.setInputType(InputType.TYPE_CLASS_TEXT);
+                }else {
+                    edtPass.setInputType(InputType.TYPE_CLASS_TEXT |
+                            InputType.TYPE_TEXT_VARIATION_PASSWORD);
+
+                }
+            }
+        });
 
     }
 
@@ -112,10 +130,15 @@ public class LoginActivity extends BaseActivity implements LoginInterface{
 
     @Override
     public void onSuccessLogin(LoginResponse resp) {
+
+
         disMissWaiting();
         hiddenError();
         PreferencesData.saveBool(Constants.PREF_LOGIN,true);
 
+        Profile profile = new Profile(edtUser.getText().toString(),"","",0,0,"","","","","","");
+        AppDatabase database = AppDatabase.getInMemoryDatabase(this);
+        database.profileDao().insertProfile(profile);
         Intent intent = new Intent(this,MainActivity.class);
         startActivity(intent);
         finish();

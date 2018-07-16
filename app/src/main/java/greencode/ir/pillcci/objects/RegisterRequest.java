@@ -9,12 +9,39 @@ public class RegisterRequest {
     String pass;
     String retryPass;
     String moarefCode;
-
+    String code;
     public RegisterRequest(String userName, String pass, String retryPass, String moarefCode) {
         this.userName = userName;
         this.pass = pass;
         this.retryPass = retryPass;
         this.moarefCode = moarefCode;
+    }
+
+    public RegisterRequest() {
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public void setPass(String pass) {
+        this.pass = pass;
+    }
+
+    public void setRetryPass(String retryPass) {
+        this.retryPass = retryPass;
+    }
+
+    public void setMoarefCode(String moarefCode) {
+        this.moarefCode = moarefCode;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public String getCode() {
+        return code;
     }
 
     public String getUserName() {

@@ -1,22 +1,23 @@
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
     android:background="@color/white"
     >
     <ScrollView
         android:layout_width="match_parent"
+        android:layout_alignParentTop="true"
         android:layout_height="wrap_content"
+        android:id="@+id/scroll"
         android:fillViewport="true">
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_margin="16dp"
                 >
                 <LinearLayout
@@ -30,18 +31,19 @@
                         android:layout_height="wrap_content"
                         android:textColor="#d3d3d3"
                         android:textSize="11sp"
-                        android:text="تاریخ شروع"/>
+                        android:text="ساعت شروع"/>
                     <android.support.design.widget.TextInputEditText
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:hint="18:00"
+
                         android:id="@+id/edtStartEvrayDay"
                         android:focusable="false"
                         android:enabled="false"
                         />
                     <android.support.v7.widget.RecyclerView
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="250dp"
                         android:id="@+id/container"
                         android:orientation="vertical"></android.support.v7.widget.RecyclerView>
 
@@ -49,40 +51,44 @@
 
 
             </LinearLayout>
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp">
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_centerHorizontal="true">
-                    <Button
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
-                        android:background="@drawable/ripple_red"
-                        android:textSize="16sp"
-                        android:layout_marginRight="8dp"
-                        android:textColor="@color/white"
-                        android:id="@+id/btnCancle"
-                        android:text="لفو"
-                        />
-                    <Button
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
-                        android:textColor="@color/white"
-                        android:text="تایید"
-                        android:id="@+id/btnOk"
-                        android:layout_marginLeft="8dp"
-                        android:background="@drawable/ripple_green_dark"
-                        />
-                </LinearLayout>
-            </RelativeLayout>
 
-        </LinearLayout>
+
+        </RelativeLayout>
     </ScrollView>
-</LinearLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/scroll"
+
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_centerHorizontal="true">
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/ripple_red"
+                android:textSize="16sp"
+                android:layout_marginRight="8dp"
+                android:textColor="@color/white"
+                android:id="@+id/btnCancle"
+
+                android:text="لغو"
+                />
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:textColor="@color/white"
+                android:text="تایید"
+                android:id="@+id/btnOk"
+                android:layout_marginLeft="8dp"
+                android:background="@drawable/ripple_green_dark"
+                />
+        </LinearLayout>
+    </RelativeLayout>
+</RelativeLayout>

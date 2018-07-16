@@ -1,0 +1,91 @@
+<RelativeLayout android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <include layout="@layout/toolbar_base"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:layout_marginTop="56dp">
+
+
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:weightSum="10"
+                    android:layoutDirection="rtl"
+                    android:layout_marginTop="8dp">
+                    <com.isapanah.awesomespinner.AwesomeSpinner
+                    android:id="@+id/pill_spinner"
+                        app:spinnerDirection="rtl"
+                        app:spinnerHint="داروی خود را انتخاب کنید"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+                    <com.isapanah.awesomespinner.AwesomeSpinner
+                        android:id="@+id/cat_spinner"
+                        android:layout_marginTop="8dp"
+                        app:spinnerDirection="rtl"
+                        app:spinnerHint="دسته داروی خود را انتخاب کنید"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:focusable="false"
+                        android:id="@+id/edtStartDate"
+                        android:hint="شروع بازه مصرف"/>
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:focusable="false"
+                        android:id="@+id/edtFinishDate"
+                        android:hint="پایان بازه مصرف"/>
+                </LinearLayout>
+
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_centerHorizontal="true"
+                    android:layout_alignParentBottom="true"
+                    android:orientation="vertical"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_height="wrap_content">
+                    <Button
+                        android:layout_width="match_parent"
+                        android:layout_marginBottom="8dp"
+                        android:layout_height="wrap_content"
+                        android:text="اعمال فیلتر"
+                        android:layout_marginRight="16dp"
+                        android:layout_marginLeft="16dp"
+                        android:background="@drawable/ripple_green_dark"
+                        android:textColor="@color/white"
+                        android:id="@+id/btnInsert"
+                        android:textSize="16.0sp"/>
+                    <Button
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="لغو"
+                        android:layout_marginBottom="16dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_marginLeft="16dp"
+                        android:id="@+id/btnDelete"
+                        android:background="@drawable/ripple_red"
+                        android:textColor="@color/white"
+                        android:textSize="16.0sp"/>
+                </LinearLayout>
+
+
+
+    </RelativeLayout>
+</RelativeLayout>

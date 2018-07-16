@@ -1,17 +1,28 @@
 package greencode.ir.pillcci.activities;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
+import android.Manifest;
 import android.content.Context;
-import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.MediaPlayer;
+import android.hardware.Camera;
+import android.hardware.camera2.CameraAccessException;
+import android.hardware.camera2.CameraManager;
+import android.media.AudioAttributes;
+import android.media.AudioManager;
+import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.os.Handler;
 import android.os.PowerManager;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.AppCompatImageView;
+import android.support.v7.widget.CardView;
 import android.util.Base64;
 import android.view.KeyEvent;
 import android.view.View;
@@ -23,6 +34,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -32,9 +44,30 @@ import greencode.ir.pillcci.R;
 import greencode.ir.pillcci.controler.AppDatabase;
 import greencode.ir.pillcci.database.PillObject;
 import greencode.ir.pillcci.database.PillUsage;
-import greencode.ir.pillcci.service.EventReciver;
+import greencode.ir.pillcci.dialog.CancelDialog;
+import greencode.ir.pillcci.dialog.CancelListener;
 import greencode.ir.pillcci.utils.BaseActivity;
+import greencode.ir.pillcci.utils.Constants;
+import greencode.ir.pillcci.utils.DatabaseManager;
+import greencode.ir.pillcci.utils.PersianCalculater;
+import greencode.ir.pillcci.utils.PreferencesData;
+import greencode.ir.pillcci.utils.ReadAndWrite;
+import greencode.ir.pillcci.utils.Utility;
+import saman.zamani.persiandate.PersianDate;
+
 public class ActivityAlarmManager extends BaseActivity implements View.OnKeyListener {
+
+    @BindView(R.id.txtMessage)
+    TextView txtMessage;
+    @BindView(R.id.cardCat)
+    CardView cardCat;
+    @BindView(R.id.layout_container)
+    LinearLayout layoutContainer;
+    @BindView(R.id.txtclock)
+    TextView txtclock;
+    private Camera mCamera;
+    private Camera.Parameters parameters;
+    AudioManager mAudioManager;
 
     @BindView(R.id.imgLogo)
     CircleImageView imgLogo;
@@ -62,87 +95,407 @@ public class ActivityAlarmManager extends BaseActivity implements View.OnKeyList
     Button btnOk;
     @BindView(R.id.layoutOk)
     LinearLayout layoutOk;
-    int snoozCount = 0;
-    int state = 0;
     ViewGroup transitionsContainer;
-    MediaPlayer mp;
-    PillUsage pillUsage;
+    Ringtone mp;
+    Vibrator vibrator;
     @BindView(R.id.desc)
     TextView desc;
+    @BindView(R.id.txtRemind)
+    TextView txtRemind;
     private PowerManager.WakeLock wl;
+    ArrayList<PillUsage> allNotUsed;// liste hame daroohayi ke timeshoon reside va bayad masraf shan hamin alan.
+    CountDownTimer countDownTimer;
+    private CameraManager camManager;
 
+    int state = 0 ;
+    String[] mPermission = {
+            Manifest.permission.CAMERA
+    };
+    boolean isFinished = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_alarm_manager);
+
         ButterKnife.bind(this);
+        mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+
         PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
         wl = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK, "My Tag");
         wl.acquire();
-
-        AppDatabase appDatabase = AppDatabase.getInMemoryDatabase(this);
-        pillUsage = appDatabase.pillUsageDao().getNearestUsed(System.currentTimeMillis());
-        ArrayList<PillUsage> list = new ArrayList<>(appDatabase.pillUsageDao().listPillUsage());
-        if (pillUsage != null) {
-
-
-            PillObject pill = appDatabase.pillObjectDao().specialPil(pillUsage.getPillName());
-            if (pill.getB64() != null) {
-                if (!pill.getB64().equals("")) {
-                    byte[] decodedString = Base64.decode(pill.getB64(), Base64.DEFAULT);
-                    Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-                    imgLogo.setImageBitmap(decodedByte);
-                }
-            }
-
-            if (pillUsage.getCatRingtone().length() == 0) {
-                Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
-                mp = MediaPlayer.create(this, notification);
-            } else {
-                Uri notification = Uri.parse(pillUsage.getCatRingtone());
-                mp = MediaPlayer.create(this, notification);
-            }
-            mp.setLooping(true);
-            mp.start();
-            txtMedName.setText(pillUsage.getPillName());
-            catName.setText(pillUsage.getCatNme());
-            unitText.setText(pillUsage.getUnitAmount() + " " + pillUsage.getUnit());
-            if(!pill.getDescription().equals("")){
-                desc.setVisibility(View.VISIBLE);
-                desc.setText(pill.getDescription());
-            }
-            snoozCount = pillUsage.getSnoozCount();
-            if (pillUsage.getSnoozCount() > 2) {
-                btnSnooz.setVisibility(View.GONE);
-            }
-
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        PersianDate persianDate = new PersianDate(System.currentTimeMillis());
+        txtclock.setText("زمان فعلی :"+PersianCalculater.getHourseAndMin(persianDate.getTime()));
+        final AppDatabase appDatabase = AppDatabase.getInMemoryDatabase(this);
+        allNotUsed = new ArrayList<>(appDatabase.pillUsageDao().getNearestUsedList(persianDate.getTime() + 60000));
+        ReadAndWrite.appendLog("we are in alarm manager and this time : " + persianDate.getHour() + ":" + persianDate.getMinute() + ":" + persianDate.getSecond());
+        transitionsContainer = findViewById(R.id.layout_container);
+        if (allNotUsed.size() != 0) {
+            ReadAndWrite.appendLog("we should alarm becuase we have pill");
+            makeAlarm();
+            Utility.reCalculateManager(this);
+        } else {
+            Utility.reCalculateManager(this);
+            finish();
         }
 
 
-        transitionsContainer = findViewById(R.id.layout_container);
+    }
 
+    private void makeAlarm() {
+
+
+        AppDatabase appDatabase = AppDatabase.getInMemoryDatabase(this);
+        final PillUsage pillUsage = allNotUsed.get(0);// avalin iteme liste reminder ro migirim
+        final PillObject pill = appDatabase.pillObjectDao().specialPil(pillUsage.getPillName(), pillUsage.getCatNme());//daroo ro dar miarim
+        int isVibrate = pill.getVibrate();
+        int isLight = pill.getLight();
+        if (needToRemind(pill)) {
+            txtRemind.setVisibility(View.VISIBLE);
+        } else {
+            txtRemind.setVisibility(View.GONE);
+
+        }
+        cardCat.setCardBackgroundColor(pill.getCatColor());
+        /// age ax dasht axo neshoonim midim
+        showImage(pill);
+        // music ro play mikonim
+        makeRing(pillUsage);
+
+        // vibration  ro play mikonim
+        makeVibration(isVibrate);
+        isFinished=false;
+        //light flash
+        makeFlash(isLight);
+        //fieldhaye texti ro minvisim
+        makeTextesFeture(pillUsage, pill);
+
+        // age snoozcount tamam shode bashe dige snooz nadare
+        final int reminderCount = PreferencesData.getInt(Constants.PREF_REMIND_COUNT, 3);
+
+        if (pillUsage.getSnoozCount() > reminderCount) {
+            btnSnooz.setVisibility(View.GONE);
+        } else {
+            btnSnooz.setVisibility(View.VISIBLE);
+        }
+
+
+        int destance = PreferencesData.getInt(Constants.PREF_DISTANCE, 10);
+
+        btnSnooz.setText("یادآوری در " + destance + " دقیقه دیگر");
+
+
+        btnUsage.setVisibility(View.VISIBLE);
+        btnCancel.setVisibility(View.VISIBLE);
+        layoutOk.setVisibility(View.GONE);
+        txtMessage.setVisibility(View.GONE);
+
+        if (countDownTimer == null) {
+            // age countdown ba dokme cancel shode bashe dobare misazimesh ke 55 sanie baad ghat kone kolan
+            countDownTimer = new CountDownTimer(45000, 5000) { // adjust the milli seconds here
+
+                public void onTick(long millisUntilFinished) {
+
+                }
+
+                public void onFinish() {
+                    ReadAndWrite.appendLog("finished counter time");
+                    ReadAndWrite.appendLog("pillusage snooz count = " + pillUsage.getSnoozCount());
+                    ReadAndWrite.appendLog("pillusage reminderCount = " + reminderCount);
+                    if (pillUsage.getSnoozCount() > reminderCount) {
+                        // age hanooz snooz dashte bashe snoozesh mikonim
+                        state = 4;
+                        stopPlay();
+                        updateOperation();
+
+                    } else {
+                        state = 2;
+                        stopPlay();
+                        updateOperation();
+                        // age na miaim cancelesh mikonim
+                    }
+                }
+            }.start();
+        }
+
+
+    }
+
+    private void makeFlash(int isLight) {
+        if (isLight == 1) {
+            boolean hasFlash = getApplicationContext().getPackageManager()
+                    .hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH);
+            if (hasFlash) {
+                if (ActivityCompat.checkSelfPermission(this, mPermission[0])
+                        == PackageManager.PERMISSION_GRANTED) {
+                    lightStart(0);
+
+                }
+
+            }
+        }
+
+    }
+
+    private void lightStart(int count) {
+        if (!isFinished) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                camManager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
+                if (count == 40) {
+                    return;
+                } else {
+                    if (count % 2 == 0) {
+
+                        // Usually back camera is at 0 position.
+                        try {
+                            String cameraId = null; // Usually front camera is at 0 position.
+                            if (cameraId == null) {
+                                cameraId = camManager.getCameraIdList()[0];
+                                camManager.setTorchMode(cameraId, true);
+                            } else {
+                                camManager.setTorchMode(cameraId, true);
+                            }
+                        } catch (CameraAccessException e) {
+                            e.printStackTrace();
+                        }
+
+
+                        Handler handler = new Handler();
+                        final int finalCount = count + 1;
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                lightStart(finalCount);
+                            }
+                        }, 500);
+                    } else {
+                        try {
+                            String cameraId = null; // Usually front camera is at 0 position.
+
+                            if (cameraId == null) {
+                                cameraId = camManager.getCameraIdList()[0];
+                                camManager.setTorchMode(cameraId, false);
+                            } else {
+                                camManager.setTorchMode(cameraId, false);
+                            }
+                        } catch (CameraAccessException e) {
+                            e.printStackTrace();
+                        }
+
+                        Handler handler = new Handler();
+                        final int finalCount = count + 1;
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                lightStart(finalCount);
+                            }
+                        }, 500);
+                    }
+                }
+
+            } else {
+                if (count == 40) {
+                    return;
+                } else {
+                    if (count % 2 == 0) {
+
+                        mCamera = Camera.open();
+                        parameters = mCamera.getParameters();
+                        parameters.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
+                        mCamera.setParameters(parameters);
+                        mCamera.startPreview();
+
+
+                        Handler handler = new Handler();
+                        final int finalCount = count + 1;
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                lightStart(finalCount);
+                            }
+                        }, 500);
+                    } else {
+
+                        mCamera = Camera.open();
+                        parameters = mCamera.getParameters();
+                        parameters.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
+                        mCamera.setParameters(parameters);
+                        mCamera.stopPreview();
+                        Handler handler = new Handler();
+                        final int finalCount = count + 1;
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                lightStart(finalCount);
+                            }
+                        }, 500);
+                    }
+                }
+            }
+        } else {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                try {
+                    String cameraId = null; // Usually front camera is at 0 position.
+
+                    if (cameraId == null) {
+                        cameraId = camManager.getCameraIdList()[0];
+                        camManager.setTorchMode(cameraId, false);
+                    } else {
+                        camManager.setTorchMode(cameraId, false);
+                    }
+                } catch (CameraAccessException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                mCamera = Camera.open();
+                parameters = mCamera.getParameters();
+                parameters.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
+                mCamera.setParameters(parameters);
+                mCamera.stopPreview();
+            }
+        }
+
+    }
+
+    private boolean needToRemind(PillObject pill) {
+        int remindDay = pill.getReminderDays();
+        double countOfPill = pill.getAllPillCount();
+
+        if (remindDay == 0 || countOfPill <= 0) {
+            return false;
+        } else {
+            int usagePerDay = pill.getCountOfUsagePerDay();
+            //darooye har rooz
+
+            String[] unitAmount = pill.getUnitsCount().split(",");
+            if (unitAmount.length == 1) {
+                // hameye masrafa andazeye hame
+                double unitPerUse = Double.parseDouble(unitAmount[0]);
+                if ((unitPerUse * usagePerDay * remindDay) >= countOfPill) {
+                    return true;
+                } else {
+                    return false;
+                }
+            } else {
+                double amountInDay = 0;
+                for (String unitA : unitAmount) {
+                    double unitPerUse = Double.parseDouble(unitA);
+                    amountInDay += unitPerUse;
+                }
+                if ((amountInDay * remindDay) >= countOfPill) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        }
+    }
+
+    private void makeTextesFeture(PillUsage pillUsage, PillObject pill) {
+        txtMedName.setText(pillUsage.getPillName() + " " + PersianCalculater.getHourseAndMin(pillUsage.getSetedTime()));
+        catName.setText(pillUsage.getCatNme());
+        unitText.setText(pillUsage.getUnitAmount() + " " + pillUsage.getUnit());
+        if (!pill.getDescription().equals("")) {
+            desc.setVisibility(View.VISIBLE);
+            desc.setText(pill.getDescription());
+        }
+    }
+
+    private void makeVibration(int isVibrate) {
+
+        if (isVibrate == 1) {
+            vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+
+
+            long[] pattern = {0, 1000, 500,
+                    2000, 500,
+                    1000, 500,
+                    1000, 500,
+                    2000, 500,
+                    1000, 500,
+                    1000, 500,
+                    2000, 500,
+                    1000, 500,
+                    1000, 500,
+                    2000, 500};
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                vibrator.vibrate(VibrationEffect.createWaveform(pattern, -1));
+            } else {
+                //deprecated in API 26
+                vibrator.vibrate(pattern, -1);
+            }
+
+
+            // Vibrate for 500 milliseconds
+
+        }
+    }
+
+    private void makeRing(PillUsage pillUsage) {
+        if (pillUsage.getCatRingtone().length() == 0) {
+            Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
+            mp = RingtoneManager.getRingtone(this, notification);
+            ;
+
+        } else {
+            Uri notification = Uri.parse(pillUsage.getCatRingtone());
+            mp = RingtoneManager.getRingtone(this, notification);
+
+        }
+        if (Build.VERSION.SDK_INT >= 21) {
+            AudioAttributes aa = new AudioAttributes.Builder()
+                    .setUsage(AudioAttributes.USAGE_ALARM)
+                    .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                    .build();
+            mp.setAudioAttributes(aa);
+        } else {
+            mp.setStreamType(AudioManager.STREAM_ALARM);
+        }
+
+        mp.play();
+    }
+
+    private void showImage(PillObject pill) {
+        if (pill.getB64() != null) {
+            if (!pill.getB64().equals("")) {
+                byte[] decodedString = Base64.decode(pill.getB64(), Base64.DEFAULT);
+                Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                imgLogo.setImageBitmap(decodedByte);
+            }
+        }
     }
 
     @Override
     protected void onStop() {
         try {
             wl.release();
-        }catch (Exception ex){
+
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
         super.onStop();
 
     }
 
-    public void stopPlay(){
-        if(mp!=null) {
-
-                mp.stop();
-                mp.release();
-                mp = null;
+    public void stopPlay() {
+        if (mp != null) {
+            mp.stop();
+            mp = null;
 
         }
+        if (vibrator != null) {
+            vibrator.cancel();
+        }
+        if (countDownTimer != null) {
+            // count down ro pak mikonim ke dobar cancel ya snooz nashe
+            countDownTimer.cancel();
+            countDownTimer = null;
+        }
+
+        isFinished = true;
+
     }
+
     @OnClick({R.id.btnUsage, R.id.btnSnooz, R.id.btnCancel, R.id.btnReturn, R.id.btnOk})
     public void onClick(View view) {
         switch (view.getId()) {
@@ -183,73 +536,193 @@ public class ActivityAlarmManager extends BaseActivity implements View.OnKeyList
     }
 
     private void updateOperation() {
+        final PillUsage pillUsage = allNotUsed.get(0);
         if (state == 1) {
             // user used pill
             pillUsage.setState(1);
-            pillUsage.setUsedTime(System.currentTimeMillis());
+            ReadAndWrite.appendLog("we use  pill");
+
+            PersianDate persianDate = new PersianDate(System.currentTimeMillis());
+            pillUsage.setUsedTime(persianDate.getTime());
+            PillObject object = AppDatabase.getInMemoryDatabase(this).pillObjectDao().specialPil(pillUsage.getPillName(), pillUsage.getCatNme());
+
+            showNext(pillUsage);
+            if (object.getTypeOfUsage() == 4) {
+                makeNextInBirth(pillUsage);
+            } else {
+                makeNextUsage(pillUsage);
+            }
         } else if (state == 2) {
+            //snoozoo zafe
             long usageTime = pillUsage.getUsageTime();
-            usageTime = usageTime + (10 * 60 * 1000);
-            pillUsage.setUsageTime(usageTime);
-            pillUsage.setSnoozCount(snoozCount + 1);
-        } else {
+
+            int destance = PreferencesData.getInt(Constants.PREF_DISTANCE, 10);
+            ReadAndWrite.appendLog("snooz destance = " + destance);
+            usageTime = usageTime + (destance * 60 * 1000);
+            PersianDate persianDate = new PersianDate(usageTime);
+            persianDate.setSecond(0);
+            ReadAndWrite.appendLog("we snooz  pill and new date is " + ReadAndWrite.getHMS(persianDate));
+
+            pillUsage.setUsageTime(persianDate.getTime());
+            pillUsage.setSnoozCount(pillUsage.getSnoozCount() + 1);
+            ReadAndWrite.appendLog("snooz count after this snooz = " + (pillUsage.getSnoozCount() + 1));
+
+            showNext(pillUsage);
+        } else if (state == 4) {
+            //timesh tamam shode
+
+            ReadAndWrite.appendLog("we finished becouse snooz count finished and any act not get from user");
+
             pillUsage.setState(2);
-        }
-        AppDatabase database = AppDatabase.getInMemoryDatabase(this);
-        database.pillUsageDao().update(pillUsage);
+            PersianDate persianDate = new PersianDate(System.currentTimeMillis());
+            pillUsage.setUsedTime(persianDate.getTime());
+            PillObject object = AppDatabase.getInMemoryDatabase(this).pillObjectDao().specialPil(pillUsage.getPillName(), pillUsage.getCatNme());
 
-        PillUsage newPill = database.pillUsageDao().getNearestUsage(System.currentTimeMillis());
-        if (newPill != null) {
-            startAlarmPillReminder(newPill);
+            showNext(pillUsage);
+            if (object.getTypeOfUsage() == 4) {
+                makeNextInBirth(pillUsage);
+            } else {
+                makeNextUsage(pillUsage);
+            }
+        } else if (state == 3) {
+            // cancell ro zade
+
+            final AppDatabase database = AppDatabase.getInMemoryDatabase(this);
+            PillObject pill = database.pillObjectDao().specialPil(pillUsage.getPillName(), pillUsage.getCatNme());
+            if (pill.getUseType() == 1) {
+                DatabaseManager.cancelUsage(ActivityAlarmManager.this, pillUsage);
+                PersianDate persianDate = new PersianDate(System.currentTimeMillis());
+                pillUsage.setUsedTime(persianDate.getTime());
+                PillObject object = AppDatabase.getInMemoryDatabase(this).pillObjectDao().specialPil(pillUsage.getPillName(), pillUsage.getCatNme());
+
+                showNext(pillUsage);
+                if (object.getTypeOfUsage() == 4) {
+                    makeNextInBirth(pillUsage);
+                } else {
+                    makeNextUsage(pillUsage);
+                }
+            } else {
+                final CancelDialog dialog = new CancelDialog(ActivityAlarmManager.this, pill);
+                dialog.setListener(new CancelListener() {
+                    @Override
+                    public void onReject() {
+                        dialog.dismiss();
+                    }
+
+                    @Override
+                    public void onSuccess(int type) {
+                        if (type == 1) {
+                            ReadAndWrite.appendLog("this  canceled and remove  pill");
+                            DatabaseManager.cancelUsage(ActivityAlarmManager.this, pillUsage);
+                            PersianDate persianDate = new PersianDate(System.currentTimeMillis());
+                            pillUsage.setUsedTime(persianDate.getTime());
+                            PillObject object = AppDatabase.getInMemoryDatabase(ActivityAlarmManager.this).pillObjectDao().specialPil(pillUsage.getPillName(), pillUsage.getCatNme());
+                            showNext(pillUsage);
+                            if (object.getTypeOfUsage() == 4) {
+                                makeNextInBirth(pillUsage);
+                            } else {
+                                makeNextUsage(pillUsage);
+                            }
+
+                        } else {
+                            ReadAndWrite.appendLog("this  canceled and add to end");
+                            DatabaseManager.addToEnd(ActivityAlarmManager.this, pillUsage);
+                            PersianDate persianDate = new PersianDate(System.currentTimeMillis());
+                            pillUsage.setUsedTime(persianDate.getTime());
+                            PillObject object = AppDatabase.getInMemoryDatabase(ActivityAlarmManager.this).pillObjectDao().specialPil(pillUsage.getPillName(), pillUsage.getCatNme());
+                            showNext(pillUsage);
+                            if (object.getTypeOfUsage() == 4) {
+                                makeNextInBirth(pillUsage);
+                            } else {
+                                makeNextUsage(pillUsage);
+                            }
+
+
+                        }
+                        dialog.dismiss();
+
+                    }
+
+                });
+                dialog.show();
+            }
         }
 
-        finish();
+        if (countDownTimer != null) {
+            // count down ro pak mikonim ke dobar cancel ya snooz nashe
+            countDownTimer.cancel();
+            countDownTimer = null;
+        }
+
     }
 
-    private void startAlarmPillReminder(PillUsage pillUsage) {
-        AlarmManager alarmManager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
-        Intent myIntent = new Intent(ActivityAlarmManager.this, EventReciver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, myIntent, 0);
-        alarmManager.set(AlarmManager.RTC_WAKEUP, ((System.currentTimeMillis()) + (pillUsage.getUsageTime() - System.currentTimeMillis())), pendingIntent);
+    private void makeNextInBirth(PillUsage pillUsage) {
+        // inja mikhaym begim age 2 rooz monde be payane masraf add kon;
+        AppDatabase database = AppDatabase.getInMemoryDatabase(this);
+
+        PillObject object = database.pillObjectDao().specialPil(pillUsage.getPillName(), pillUsage.getCatNme());
+        List<PillUsage> usages = database.pillUsageDao().getAllNotUsed(pillUsage.getPillName(), pillUsage.getCatNme());
+        if (usages.size() / object.getCountOfUsagePerDay() <= 4 * object.getCountOfUsagePerDay()) {
+            DatabaseManager.makeNextBirthControl(this, pillUsage);
+        }
+    }
+
+    private void showNext(PillUsage pillUsage) {
+        AppDatabase database = AppDatabase.getInMemoryDatabase(this);
+        database.pillUsageDao().update(pillUsage);
+        PillObject pill = database.pillObjectDao().specialPil(pillUsage.getPillName(), pillUsage.getCatNme());
+        double pillCount = pill.getAllPillCount();
+        pillCount -= Double.parseDouble(pillUsage.getUnitAmount());
+        pill.setAllPillCount(pillCount);
+        database.pillObjectDao().update(pill);
+        Utility.reCalculateManager(ActivityAlarmManager.this);
+        if (allNotUsed.size() == 1) {
+            finish();
+        } else {
+            allNotUsed.remove(0);
+            makeAlarm();
+        }
+    }
+
+    private void makeNextUsage(PillUsage pillUsage) {
+        DatabaseManager.makeNextUsage(ActivityAlarmManager.this, pillUsage);
+    }
+
+
+    public void goneButtons() {
+        btnSnooz.setVisibility(View.GONE);
+        btnUsage.setVisibility(View.GONE);
+        btnCancel.setVisibility(View.GONE);
+        layoutOk.setVisibility(View.VISIBLE);
+        txtMessage.setVisibility(View.VISIBLE);
+
     }
 
     private void showAnimateUsage() {
-
-        btnSnooz.setVisibility(View.GONE);
-
-        btnCancel.setVisibility(View.GONE);
-
-        layoutOk.setVisibility(View.VISIBLE);
-
-
+        goneButtons();
+        txtMessage.setText("دارو را مصرف می کنم");
+        txtMessage.setTextColor(getResources().getColor(R.color.teal));
     }
 
-
-    private void showAnimateSnoosz() {
-
-        btnUsage.setVisibility(View.GONE);
-
-        btnCancel.setVisibility(View.GONE);
-
-        layoutOk.setVisibility(View.VISIBLE);
-
-    }
 
     private void showAnimateCancel() {
-        btnUsage.setVisibility(View.GONE);
-        btnSnooz.setVisibility(View.GONE);
-        layoutOk.setVisibility(View.VISIBLE);
+        goneButtons();
+        txtMessage.setText("دارو را مصرف نمی کنم");
+        txtMessage.setTextColor(getResources().getColor(R.color.colorAccent));
     }
 
     private void showAnimateReturn() {
+        int reminderCount = PreferencesData.getInt(Constants.PREF_REMIND_COUNT, 3);
+        PillUsage pillUsage  = allNotUsed.get(0);
         btnUsage.setVisibility(View.VISIBLE);
-        if (snoozCount > 2) {
+        if (pillUsage.getSnoozCount() > reminderCount) {
             btnSnooz.setVisibility(View.GONE);
         } else {
             btnSnooz.setVisibility(View.VISIBLE);
         }
         btnCancel.setVisibility(View.VISIBLE);
         layoutOk.setVisibility(View.GONE);
+        txtMessage.setVisibility(View.GONE);
     }
 
     @Override
@@ -259,15 +732,51 @@ public class ActivityAlarmManager extends BaseActivity implements View.OnKeyList
         window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
                 WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON |
                 WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
-                |WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON|
+                | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON |
                 WindowManager.LayoutParams.FLAG_FULLSCREEN
 
-               );
+        );
     }
 
 
     @Override
     public boolean onKey(View v, int keyCode, KeyEvent event) {
         return false;
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        if (allNotUsed.size() > 1) {
+            final int reminderCount = PreferencesData.getInt(Constants.PREF_REMIND_COUNT, 3);
+
+            for (PillUsage usage : allNotUsed) {
+                if (usage.getSnoozCount() <= reminderCount) {
+                    long usageTime = usage.getUsageTime();
+
+                    int destance = PreferencesData.getInt(Constants.PREF_DISTANCE, 10);
+                    ReadAndWrite.appendLog("snooz destance = " + destance);
+                    usageTime = usageTime + (destance * 60 * 1000);
+                    PersianDate date = new PersianDate(usageTime);
+                    date.setSecond(0);
+                    ReadAndWrite.appendLog("we snooz  pill and new date is " + ReadAndWrite.getHMS(date));
+
+                    usage.setUsageTime(date.getTime());
+                    ReadAndWrite.appendLog("snooz count after this snooz = " + (usage.getSnoozCount() + 1));
+                    usage.setSnoozCount(usage.getSnoozCount() + 1);
+
+                    AppDatabase database = AppDatabase.getInMemoryDatabase(this);
+                    database.pillUsageDao().update(usage);
+
+                } else {
+                    usage.setState(2);
+                    AppDatabase database = AppDatabase.getInMemoryDatabase(this);
+                    database.pillUsageDao().update(usage);
+                }
+            }
+        }
+        Utility.reCalculateManager(this);
+
+        super.onDestroy();
     }
 }

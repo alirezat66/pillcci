@@ -144,6 +144,15 @@ public class ForgetPassTwoActivity extends BaseActivity implements ChangePassTwo
     }
 
     @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent forgetIntent = new Intent(this,ForgetPassOneActivity.class);
+        forgetIntent.putExtra(Constants.PREF_USER_NAME,edtUser.getText().toString());
+        startActivity(forgetIntent);
+        finish();
+    }
+
+    @Override
     public void onError(String error) {
         disMissWaiting();
     }

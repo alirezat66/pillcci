@@ -3,6 +3,10 @@
   <component name="assetNames">
     <option name="mapping">
       <map>
+        <entry key="ambulance_icon_1" value="ambulance_icon" />
+        <entry key="not_used_icon" value="not_used_icon_pn" />
+        <entry key="skip_icon" value="skip_icon_pn" />
+        <entry key="success_icon" value="success_icon_pn" />
         <entry key="user" value="user_pn" />
       </map>
     </option>

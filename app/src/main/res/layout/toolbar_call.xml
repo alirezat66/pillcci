@@ -9,7 +9,7 @@
     android:elevation="5dp"
     android:fitsSystemWindows="true"
     android:layoutDirection="ltr"
-    android:minHeight="?attr/actionBarSize"
+    android:minHeight="56dp"
     tools:ignore="VectorDrawableCompat"
     app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
@@ -24,7 +24,7 @@
             android:layout_width="wrap_content"
             android:layout_marginRight="16dp"
             android:layout_marginLeft="16dp"
-            android:layout_height="?attr/actionBarSize"
+            android:layout_height="56dp"
             android:layout_alignParentRight = "true"
             android:layout_centerVertical="true"
             android:scaleType="centerInside"
@@ -39,15 +39,7 @@
             android:padding="16dp"
             android:id="@+id/imgAdd"
             app:srcCompat="@drawable/add_blue_icon"/>
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="16dp"
-            android:id="@+id/imgEdit"
-            android:background="@color/transparent"
-            android:src="@drawable/edit_blue_icon"
-            android:layout_centerVertical="true"
-            android:layout_toRightOf="@id/imgAdd"/>
+
 
 
         <TextView

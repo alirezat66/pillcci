@@ -1,11 +1,15 @@
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="app_name">pillcci</string>
     <string name="app_name_fa">پیلچی</string>
     <string name="onboarding_page_one">اینجا شعار محصول ثبت شود در اینجا شعار محصول ثبت شود.اینجا شعار محصول ثبت می‌شود.در اینجا شعار محصول ثبت می‌شود.</string>
     <string name="color_picker">انتخاب رنگ دسته</string>
     <string name="menu_delete_task">حذف</string>
     <string name="menu_cancel">کنسل</string>
-
+    <string name="use">مصرف شد</string>
+    <string name="skip">پرش</string>
+    <string name="dontuse">عدم مصرف</string>
+    <string name="infinity">&#8734;</string>
+    <string  name="google_maps_key">adasdasd</string>
     <string-array name="days_list">
         <item>شنبه</item>
         <item>یک شنبه</item>
@@ -15,5 +19,83 @@
         <item>پنج شنبه</item>
         <item>جمعه </item>
     </string-array>
+    <string name="title_activity_maps">Map</string>
 
+
+
+    <string name="picker_sure">تایید</string>
+    <string name="picker_cancel">لغو</string>
+    <string name="picker_title">انتخاب ساعت</string>
+
+    <string name="picker_year">سال</string>
+    <string name="picker_month">ماه</string>
+    <string name="picker_day">روز</string>
+    <string name="picker_hour">ساعت</string>
+    <string name="picker_minute">دقیقه</string>
+
+
+
+
+
+
+
+
+
+    <string name="mdtp_done_label" msgid="7007948707597430919">"انجام شد"</string>
+    <string name="mdtp_ok">تایید</string>
+    <string name="mdtp_cancel">بیخیال</string>
+    <!--
+         Content description for the hour selector in the time picker, which displays
+         selectable hours of the day along the inside edge of a circle, as in an analog clock.
+         [CHAR LIMIT=50]
+    -->
+    <string name="mdtp_hour_picker_description" msgid="7586639618712934060">"لغزنده دایره‌ای ساعت"</string>
+    <!--
+         Content description for the minute selector in the time picker, which displays
+         selectable five-minute intervals along the inside edge of a circle, as in an analog clock.
+         [CHAR LIMIT=50]
+    -->
+    <string name="mdtp_minute_picker_description" msgid="6024811202872705251">"لغزنده دایره‌ای دقیقه"</string>
+    <!-- Accessibility announcement for hour circular picker [CHAR LIMIT=NONE] -->
+    <string name="mdtp_select_hours" msgid="7651068754188418859">"انتخاب ساعت"</string>
+    <!-- Accessibility announcement for minute circular picker [CHAR LIMIT=NONE] -->
+    <string name="mdtp_select_minutes" msgid="8327182090226828481">"انتخاب دقیقه"</string>
+
+    <!--
+        Content description for the month and day selector in the date picker, which displays
+        a selectable grid of days laid out by month.
+        [CHAR LIMIT=50]
+     -->
+    <string name="mdtp_day_picker_description">Month grid of days</string>
+    <!--
+        Content description for the year selector in the date picker, which displays
+        a scrolling, vertical list of years.
+        [CHAR LIMIT=50]
+     -->
+    <string name="mdtp_year_picker_description">Year list</string>
+    <!-- Accessibility announcement for the day picker [CHAR LIMIT=NONE] -->
+    <string name="mdtp_select_day">Select month and day</string>
+    <!-- Accessibility announcement for the year picker [CHAR LIMIT=NONE] -->
+    <string name="mdtp_select_year">Select year</string>
+    <!-- Accessibility description for the item that is currently selected. -->
+    <string name="mdtp_item_is_selected" msgid="2674929164900463786">"<xliff:g id="ITEM">%1$s</xliff:g> انتخاب شد"</string>
+    <!-- Accessibility announcement when a number that had been typed in is deleted [CHAR_LIMIT=NONE] -->
+    <string name="mdtp_deleted_key" msgid="6908431551612331381">"<xliff:g id="KEY">%1$s</xliff:g> حذف شد"</string>
+
+    <!-- DO NOT TRANSLATE -->
+    <string name="mdtp_time_placeholder" translatable="false">--</string>
+    <!-- DO NOT TRANSLATE -->
+    <string name="mdtp_time_separator" translatable="false">:</string>
+
+    <!-- DO NOT TRANSLATE -->
+    <string name="mdtp_radial_numbers_typeface" translatable="false">sans-serif</string>
+    <!-- DO NOT TRANSLATE -->
+    <string name="mdtp_sans_serif" translatable="false">sans-serif</string>
+
+    <!-- DO NOT TRANSLATE -->
+    <string name="mdtp_day_of_week_label_typeface" translatable="false">sans-serif</string>
+    <string name="am_label">قبل‌ازظهر</string>
+    <string name="pm_label">بعدازظهر</string>
+    <string name="editInfo">در صورت ویرایش فیلدهای مرتبط با نحوه مصرف و بازه مصرف ، تمامی یادآوری های پیش رو حذف شده و مجددا دارو براساس فیلدهای وارد شده ایجاد می شود. لذا در صورتی که مایل به اصلاح این فیلدها هستید، در اصلاح آنها دقت نمایید.
+        برای مثال در صورتی که تمایل دارید فیلد مدت زمان مصرف را اصلاح نمایید، روزهای باقی مانده از مصرف را وارد نمایید  ، یا اگر نوع مصرف شما چرخه ضد بارداری می باشد، حتما فیلد مرتبط با روزهای گذشته از مصرف را اصلاح نمایید.</string>
 </resources>

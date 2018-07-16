@@ -43,6 +43,8 @@
                         android:layout_height="wrap_content"
                         android:textColor="@color/grayText"
                         android:layout_marginLeft="24dp"
+                        android:selectAllOnFocus="true"
+
                         android:layout_marginRight="24dp"
                         android:gravity="center_horizontal"
                         android:textColorHint="@color/grayText"
@@ -59,6 +61,8 @@
                         android:textColor="@color/VioletBlue"
                         android:layout_marginLeft="24dp"
                         android:layout_marginTop="16dp"
+                        android:selectAllOnFocus="true"
+
                         android:id="@+id/edtCode"
                         android:maxLength="6"
                         android:gravity="center_horizontal"

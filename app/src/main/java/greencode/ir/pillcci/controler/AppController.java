@@ -1,24 +1,20 @@
 package greencode.ir.pillcci.controler;
 
 import android.app.Activity;
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 
-
+import com.crashlytics.android.Crashlytics;
 
 import greencode.ir.pillcci.R;
-import greencode.ir.pillcci.database.PillUsage;
-import greencode.ir.pillcci.service.EventReciver;
+import greencode.ir.pillcci.utils.Utility;
+import io.fabric.sdk.android.Fabric;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 
 public class AppController extends MultiDexApplication {
-
 
     private static final String TAG = AppController.class.getSimpleName();
 
@@ -36,6 +32,10 @@ public class AppController extends MultiDexApplication {
         super.onCreate();
         CalligraphyConfig.initDefault(new CalligraphyConfig.Builder().setDefaultFontPath("iransansmobilefanum.ttf").setFontAttrId(R.attr.fontPath).build());
         MultiDex.install(this);
+        Fabric fabric = new Fabric.Builder(this)
+                .kits(new Crashlytics()).debuggable(true)
+                .build();
+        Fabric.with(fabric);
        /* defaultUEH = Thread.getDefaultUncaughtExceptionHandler();
         // setup handler for uncaught exception
         Thread.setDefaultUncaughtExceptionHandler(_unCaughtExceptionHandler);*/
@@ -47,16 +47,7 @@ public class AppController extends MultiDexApplication {
                 public void uncaughtException(Thread thread, Throwable ex) {
 
 
-
-                    AppDatabase database = AppDatabase.getInMemoryDatabase(getApplicationContext());
-                    PillUsage pillUsage= database.pillUsageDao().getNearestUsage(System.currentTimeMillis());
-                    if(pillUsage!=null) {
-                        AlarmManager alarmManager = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
-                        Intent myIntent = new Intent(getApplicationContext(), EventReciver.class);
-                        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, myIntent, 0);
-                        alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + (pillUsage.getUsageTime() - System.currentTimeMillis()), pendingIntent);
-
-                    }
+                    Utility.reCalculateManager(getApplicationContext());
                    /* // here I do logging of exception to a db
                     Log.e("error",ex.toString());
                     PendingIntent myActivity = PendingIntent.getActivity(getApplicationContext(),

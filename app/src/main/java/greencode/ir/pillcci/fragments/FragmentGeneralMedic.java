@@ -35,7 +35,9 @@ import com.kevalpatel.ringtonepicker.RingtonePickerListener;
 import com.otaliastudios.autocomplete.Autocomplete;
 import com.otaliastudios.autocomplete.AutocompleteCallback;
 import com.otaliastudios.autocomplete.AutocompletePresenter;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
+import com.zcw.togglebutton.ToggleButton;
 
 import org.xdty.preference.colorpicker.ColorPickerDialog;
 import org.xdty.preference.colorpicker.ColorPickerSwatch;
@@ -49,16 +51,21 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 import de.hdodenhof.circleimageview.CircleImageView;
 import greencode.ir.pillcci.R;
+import greencode.ir.pillcci.activities.AddMedicianActivity;
 import greencode.ir.pillcci.adapter.CatAutoCompletePresenter;
 import greencode.ir.pillcci.adapter.DrAutoCompletePresenter;
 import greencode.ir.pillcci.adapter.PillAutoCompletePresenter;
+import greencode.ir.pillcci.adapter.ResultAutoCompletePresenter;
 import greencode.ir.pillcci.controler.AppDatabase;
 import greencode.ir.pillcci.database.Category;
 import greencode.ir.pillcci.database.PillObject;
 import greencode.ir.pillcci.dialog.ChosePhotoTakerDialog;
+import greencode.ir.pillcci.dialog.FinishDialog;
+import greencode.ir.pillcci.dialog.FinishListener;
 import greencode.ir.pillcci.dialog.PhotoChoserInterface;
 import greencode.ir.pillcci.objects.GeneralFields;
 import greencode.ir.pillcci.utils.Constants;
+import greencode.ir.pillcci.utils.PreferencesData;
 import greencode.ir.pillcci.utils.Utility;
 import pl.aprilapps.easyphotopicker.DefaultCallback;
 import pl.aprilapps.easyphotopicker.EasyImage;
@@ -91,20 +98,54 @@ public class FragmentGeneralMedic extends Fragment {
     Button btnDelete;
     Unbinder unbinder;
     String ringTone;
+    @BindView(R.id.toggleVibrate)
+    ToggleButton toggleVibrate;
+    @BindView(R.id.toggleLight)
+    ToggleButton toggleLight;
     private int mSelectedColor;
     ChosePhotoTakerDialog dialog;
     private static final int REQUEST_CODE_PERMISSION = 2;
+    private static final int REQUEST_CODE_PERMISSION_Light = 3;
+    int isVibrate;
+    int isLight;
+    String[] mPermission = {
+            Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA
+    };
     private Autocomplete pillAutocomplete;
+    private Autocomplete resultAutoCompelete;
     private Autocomplete drAutoComplete;
     private Autocomplete catAutoComplete;
-    String[] mPermission = {
-            Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.CAMERA
-    };
+
     String b64Image = "";
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    }
+
+    private void setUpResultAutoCompele() {
+        float elevation = 6f;
+        Drawable backgroundDrawable = new ColorDrawable(Color.WHITE);
+        AutocompletePresenter<String> presenter = new ResultAutoCompletePresenter(getContext());
+        AutocompleteCallback<String> callback = new AutocompleteCallback<String>() {
+            @Override
+            public boolean onPopupItemClicked(Editable editable, String item) {
+                editable.clear();
+                editable.append(item);
+                return true;
+            }
+
+            public void onPopupVisibilityChanged(boolean shown) {
+            }
+        };
+
+        resultAutoCompelete = Autocomplete.<String>on(edtUseRes
+        )
+                .with(elevation)
+                .with(backgroundDrawable)
+                .with(presenter)
+                .with(callback)
+                .build();
     }
 
     private void setUpPillNameAutoCompelet() {
@@ -137,18 +178,29 @@ public class FragmentGeneralMedic extends Fragment {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == REQUEST_CODE_PERMISSION) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED &&
-                    grantResults[1] == PackageManager.PERMISSION_GRANTED&&
-                    grantResults[2]==PackageManager.PERMISSION_DENIED
+                    grantResults[1] == PackageManager.PERMISSION_GRANTED &&
+                    grantResults[2] == PackageManager.PERMISSION_GRANTED
                     ) {
                 showDialogForImageSelector();
 
             } else {
-                Toast.makeText(getContext(), "برای ادامه نیاز به اجازه دسترسی وجود دارد.", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "برای ادامه،نیاز به اجازه دسترسی وجود دارد.", Toast.LENGTH_LONG).show();
+            }
+        } else if (requestCode == REQUEST_CODE_PERMISSION_Light) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED
+                    ) {
+                isLight=1;
+
+            } else {
+                isLight =0;
+                toggleLight.setToggleOff();
+
             }
         } else {
-            Toast.makeText(getContext(), "برای ادامه نیاز به اجازه دسترسی وجود دارد.", Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), "برای ادامه، نیاز به اجازه دسترسی وجود دارد.", Toast.LENGTH_LONG).show();
         }
     }
+
 
     @Nullable
     @Override
@@ -162,6 +214,48 @@ public class FragmentGeneralMedic extends Fragment {
         setUpPillNameAutoCompelet();
         setUpDrNameAutoComplete();
         setUpCatNameAutoComplete();
+        setUpResultAutoCompele();
+        isVibrate = ( PreferencesData.getBoolean(Constants.PREF_VIBRATE,false)?1:0);
+        isLight = (PreferencesData.getBoolean(Constants.PREF_LOGHT,false)?1:0);
+
+        if(AddMedicianActivity.getGeneralFields()!=null){
+
+            isVibrate=AddMedicianActivity.getGeneralFields().getIsVibrate();
+            isLight=AddMedicianActivity.getGeneralFields().getIsLight();
+        }
+        if(isVibrate==1) {
+            toggleVibrate.setToggleOn();
+        }else {
+            toggleVibrate.setToggleOff();
+        }
+        if(isLight==1) {
+            toggleLight.setToggleOn();
+        }else {
+            toggleLight.setToggleOff();
+        }
+        toggleVibrate.setOnToggleChanged(new ToggleButton.OnToggleChanged() {
+            @Override
+            public void onToggle(boolean on) {
+                if(on){
+                    isVibrate=1;
+                }else {
+                    isVibrate=0;
+                }
+            }
+        });
+        toggleLight.setOnToggleChanged(new ToggleButton.OnToggleChanged() {
+            @Override
+            public void onToggle(boolean on) {
+                if(on) {
+
+                    checkPermissionLight();
+                }else {
+                    isLight=0;
+
+                }
+            }
+        });
+
         ringTone = RingtoneManager
                 .getDefaultUri(RingtoneManager.TYPE_RINGTONE).toString();
 
@@ -179,7 +273,7 @@ public class FragmentGeneralMedic extends Fragment {
                 editable.clear();
                 editable.append(item.getName());
                 ringTone = item.getRingtone();
-                mSelectedColor=item.getColor();
+                mSelectedColor = item.getColor();
                 edtColor.setTextColor(item.getColor());
                 return true;
 
@@ -208,9 +302,9 @@ public class FragmentGeneralMedic extends Fragment {
             @Override
             public boolean onPopupItemClicked(Editable editable, String item) {
 
-                    editable.clear();
-                    editable.append(item);
-                    return true;
+                editable.clear();
+                editable.append(item);
+                return true;
 
 
             }
@@ -251,10 +345,17 @@ public class FragmentGeneralMedic extends Fragment {
                 setRingToneDialog();
                 break;
             case R.id.edtColor:
-
                 setColorDialog();
                 break;
             case R.id.btnInsert:
+                /*boolean isFirst = PreferencesData.getBoolean(Constants.PREF_FIRST_PILL, true);
+                if (isFirst) {
+                    PreferencesData.saveBool(Constants.PREF_FIRST_PILL, false);
+                    showDialogForLight();
+                } else {
+                    insertData();
+
+                }*/
                 insertData();
                 break;
             case R.id.btnDelete:
@@ -263,35 +364,75 @@ public class FragmentGeneralMedic extends Fragment {
         }
     }
 
+    private void checkPermissionLight() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            try {
+                if (ActivityCompat.checkSelfPermission(getContext(), mPermission[2])
+                        != PackageManager.PERMISSION_GRANTED) {
+                    String[]permissionLight ={mPermission[2]};
+                    requestPermissions(
+                            permissionLight, REQUEST_CODE_PERMISSION_Light);
+                    // If any permission aboe not allowed by user, this condition will execute every tim, else your else part will work
+                } else {
+
+                   isLight=1;
+                }
+            } catch (Exception e) {
+
+                e.printStackTrace();
+            }
+        } else {
+            isLight=1;
+        }
+
+    }
+
+    private void showDialogForLight() {
+
+        final FinishDialog mydialog = new FinishDialog(getContext(), "فلشر فعال شود؟", "در صورت فعال کردن  فلشر در هنگام شروع یادآوری گوشی شما  فلشر را برای اطمینان از مشاهده یادآوری به کار می برد.شما همچنین می توانید از بخش ویرایش دارو این گزینه را تغییر دهید.");
+        mydialog.setListener(new FinishListener() {
+            @Override
+            public void onReject() {
+                mydialog.dismiss();
+            }
+
+            @Override
+            public void onSuccess() {
+                mydialog.dismiss();
+                checkPermissionLight();
+            }
+
+
+        });
+        mydialog.show();
+    }
+
     private void insertData() {
         if (edtMedName.getText().toString().length() == 0) {
             edtMedName.setError("نام دارو باید وارد شود.");
             edtMedName.requestFocus();
         } else {
 
-            if (!b64Image.equals("")) {
-                AppDatabase database = AppDatabase.getInMemoryDatabase(getContext());
-                PillObject object = database.pillObjectDao().specialPil(edtMedName.getText().toString());
-                if (object == null) {
-                    GeneralFields generalFields = new GeneralFields(edtMedName.getText().toString(), b64Image, edtUseRes.getText().toString(),
-                            edtDrName.getText().toString(), edtCatName.getText().toString(), mSelectedColor, ringTone);
-                    onAction.onSaveButton(generalFields);
-                } else {
-                    if (object.getCatName().equals(edtCatName.getText().toString())) {
-                        edtMedName.setError("دارویی با این نام  و با این دسته ذخیره شده است.");
-                        edtMedName.requestFocus();
-                    } else {
-                        GeneralFields generalFields = new GeneralFields(edtMedName.getText().toString(), b64Image, edtUseRes.getText().toString(),
-                                edtDrName.getText().toString(), edtCatName.getText().toString(), mSelectedColor, ringTone);
-                        onAction.onSaveButton(generalFields);
-                    }
 
+            AppDatabase database = AppDatabase.getInMemoryDatabase(getContext());
+            PillObject object = database.pillObjectDao().specialPil(edtMedName.getText().toString(), edtCatName.getText().toString());
+            if (object == null) {
+                GeneralFields generalFields = new GeneralFields(edtMedName.getText().toString(), b64Image, edtUseRes.getText().toString(),
+                        edtDrName.getText().toString(), edtCatName.getText().toString(), mSelectedColor, ringTone,isLight,isVibrate);
+                onAction.onSaveButton(generalFields);
+            } else {
+                if (object.getCatName().equals(edtCatName.getText().toString()) || ((object.getCatName().equals("عمومی")) && edtCatName.getText().toString().trim().equals(""))) {
+                    edtMedName.setError("دارویی با این نام  و با این دسته ذخیره شده است.");
+                    edtMedName.requestFocus();
+                } else {
+                    GeneralFields generalFields = new GeneralFields(edtMedName.getText().toString(), b64Image, edtUseRes.getText().toString(),
+                            edtDrName.getText().toString(), edtCatName.getText().toString(), mSelectedColor, ringTone,isLight,isVibrate);
+                    onAction.onSaveButton(generalFields);
                 }
 
-
-            }else{
-                Toast.makeText(getContext(), "image not set", Toast.LENGTH_SHORT).show();
             }
+
+
         }
 
     }
@@ -357,7 +498,7 @@ public class FragmentGeneralMedic extends Fragment {
                         || ActivityCompat.checkSelfPermission(getContext(), mPermission[2])
                         != PackageManager.PERMISSION_GRANTED) {
 
-                    ActivityCompat.requestPermissions(getActivity(),
+                    requestPermissions(
                             mPermission, REQUEST_CODE_PERMISSION);
 
                     // If any permission aboe not allowed by user, this condition will execute every tim, else your else part will work
@@ -386,7 +527,7 @@ public class FragmentGeneralMedic extends Fragment {
                         .load(imageFile)
                         .centerCrop()
                         .resize(100, 100)
-                        .into(imgLogo, new com.squareup.picasso.Callback() {
+                        .into(imgLogo, new Callback() {
                             @Override
                             public void onSuccess() {
                                 new ConvertToB64().execute(imageFile);

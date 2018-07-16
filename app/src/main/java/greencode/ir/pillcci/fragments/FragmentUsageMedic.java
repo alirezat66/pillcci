@@ -11,9 +11,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.jzxiang.pickerview.TimePickerDialog;
-import com.jzxiang.pickerview.listener.OnDateSetListener;
-
 import java.util.ArrayList;
 
 import butterknife.BindView;
@@ -28,7 +25,11 @@ import greencode.ir.pillcci.dialog.EachTimeEditPartDialog;
 import greencode.ir.pillcci.dialog.EachTimeInterface;
 import greencode.ir.pillcci.dialog.UsageCountDialog;
 import greencode.ir.pillcci.dialog.UsageCountInterface;
+import greencode.ir.pillcci.objects.EachUsage;
 import greencode.ir.pillcci.objects.UsageFields;
+import greencode.ir.pillcci.timepicker.TimePickerDialog;
+import greencode.ir.pillcci.timepicker.listener.OnDateSetListener;
+import greencode.ir.pillcci.utils.PersianCalculater;
 import greencode.ir.pillcci.utils.Utility;
 import saman.zamani.persiandate.PersianDate;
 
@@ -54,8 +55,8 @@ public class FragmentUsageMedic extends Fragment implements OnDateSetListener {
     Button btnDelete;
     int dayRepeat=0;
     int typeDayUsage=0;
-    String usageStartDate;
-    ArrayList<String> daysOfUsage;
+    String usageStartDate="";
+    ArrayList<String> daysOfUsage = new ArrayList<>();
     int countOfUsagePerDay = 0;
     double diffrenceOfUsage= 0;
     int startTimeHour=0;
@@ -66,7 +67,7 @@ public class FragmentUsageMedic extends Fragment implements OnDateSetListener {
 
     long ourStartTimeStamp=0;
     ArrayList<String>unitsCount;
-    ArrayList<String>unitTimes;
+    ArrayList<Long>unitTimes;
     TimePickerDialog timePickerDialog;
 
     @Override
@@ -75,19 +76,38 @@ public class FragmentUsageMedic extends Fragment implements OnDateSetListener {
 
     }
 
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_add_medician_step_two, container, false);
         ButterKnife.bind(this, view);
+        Utility.hideKeyboard();
 
         return view;
+    }
+
+    @Override
+    public void onStart() {
+        if(!useDays.getText().toString().equals("")){
+            usePartDays.setEnabled(true);
+        }
+        if(!usePartDays.getText().toString().equals("")){
+            edtStartTime.setEnabled(true);
+        }
+        if(!edtStartTime.getText().toString().equals("")){
+            edtUseEachTime.setEnabled(true);
+        }
+        edtDescription.setEnabled(true);
+        super.onStart();
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         onAction = (onActionStepTwo) context;
+
+
 
     }
 
@@ -117,8 +137,9 @@ public class FragmentUsageMedic extends Fragment implements OnDateSetListener {
                         || edtUseEachTime.getText().toString().length()==0 ){
                     Toast.makeText(getContext(), "وارد کردن همه فیلدها جز فیلد توضیحات اجباری است.", Toast.LENGTH_LONG).show();
                 }else {
+                    String description = edtDescription.getText().toString().replace("\n"," ");
                     onAction.onSaveButtonTwo(new UsageFields(typeDayUsage,usageStartDate,dayRepeat,isRegular,daysOfUsage,typeDayUsage,
-                            diffrenceOfUsage,countOfUsagePerDay,startTimeHour,startTimeMin,unitUse,unitsCount,unitTimes,edtDescription.getText().toString(),ourStartTimeStamp));
+                            diffrenceOfUsage,countOfUsagePerDay,startTimeHour,startTimeMin,unitUse,unitsCount,unitTimes,description.toString(),ourStartTimeStamp));
                 }
 
                 break;
@@ -132,7 +153,7 @@ public class FragmentUsageMedic extends Fragment implements OnDateSetListener {
     }
 
     private void showDialogFour() {
-        final EachTimeDialog eachTimeDialog = new EachTimeDialog(getContext());
+        final EachTimeDialog eachTimeDialog = new EachTimeDialog(getContext(),unitUse,countEachUse);
         eachTimeDialog.setListener(new EachTimeInterface() {
             @Override
             public void onSuccess(double count, String unit) {
@@ -140,33 +161,40 @@ public class FragmentUsageMedic extends Fragment implements OnDateSetListener {
                 unitUse = unit;
                 eachTimeDialog.dismiss();
 
-                final EachTimeEditPartDialog editDialog = new EachTimeEditPartDialog(getContext(),startTimeHour,startTimeMin,countOfUsagePerDay,diffrenceOfUsage,unitUse,countEachUse);
+                final EachTimeEditPartDialog editDialog = new EachTimeEditPartDialog(getContext(),startTimeHour,startTimeMin,countOfUsagePerDay,diffrenceOfUsage,unitUse,countEachUse,getFragmentManager(),ourStartTimeStamp);
                 editDialog.setListener(new EachTimeEditPart() {
                     @Override
-                    public void onSuccess(ArrayList<String> usageEachCount,ArrayList<String>times) {
-                        unitsCount = usageEachCount;
-                        unitTimes=times;
-                        String temp = usageEachCount.get(0);
+                    public void onSuccess(ArrayList<EachUsage> usages) {
+                        unitsCount = new ArrayList<>();
+                        unitTimes = new ArrayList<>();
+                        for(EachUsage use:usages){
+                            unitsCount.add(use.getEachUse());
+                            unitTimes.add(use.getStartDay());
+                        }
+
+
+                        String temp = unitsCount.get(0);
                         boolean allSame = true;
-                        for(String use : usageEachCount){
+                        for(String use : unitsCount){
                             if(!use.equals(temp)){
                                 allSame = false;
                                 break;
                             }
                         }
+
                         if(allSame){
                             edtUseEachTime.setText(temp+" "+unitUse+" در هر وعده");
                         }else {
                             String finalStr = "به ترتیب ";
-                            for(String use : usageEachCount){
+                            for(String use : unitsCount){
                                 finalStr+=use;
                                 finalStr+=",";
                             }
                             finalStr = finalStr.substring(0,finalStr.length()-1);
                             finalStr=finalStr+" "+unitUse;
                             finalStr+=" در ساعت(های): ";
-                            for(String timeStr:times){
-                                finalStr+=timeStr;
+                            for(long timeStr:unitTimes){
+                                finalStr+=PersianCalculater.getHourseAndMin(timeStr);
                                 finalStr+=",";
                             }
                             finalStr=finalStr.substring(0,finalStr.length()-1);
@@ -174,7 +202,10 @@ public class FragmentUsageMedic extends Fragment implements OnDateSetListener {
                         }
                         edtDescription.setEnabled(true);
                         edtDescription.setFocusable(true);
+                        String str = edtUseEachTime.getText().toString().replace(".0","");
+                        edtUseEachTime.setText(str);
                         editDialog.dismiss();
+
                     }
 
                     @Override
@@ -183,7 +214,9 @@ public class FragmentUsageMedic extends Fragment implements OnDateSetListener {
 
                     }
                 });
-                editDialog.show();
+                editDialog.show(getActivity().getSupportFragmentManager(), eachTimeDialog.getTag());
+
+
 
             }
 
@@ -192,12 +225,13 @@ public class FragmentUsageMedic extends Fragment implements OnDateSetListener {
                 eachTimeDialog.dismiss();
             }
         });
-        eachTimeDialog.show();
+        eachTimeDialog.show(getActivity().getSupportFragmentManager(), eachTimeDialog.getTag());
     }
 
     private void showDialogThree() {
 
         timePickerDialog = Utility.getTimeDialog(this,getResources().getColor(R.color.colorPrimary));
+
         timePickerDialog.show(getFragmentManager(),"انتخاب زمان");
        /* final SelectTimeDialog selectTimeDialog = new SelectTimeDialog(getContext());
         selectTimeDialog.setListener(new SelectTimeInterface() {
@@ -220,7 +254,7 @@ public class FragmentUsageMedic extends Fragment implements OnDateSetListener {
     }
 
     private void showDialogTwo() {
-        final UsageCountDialog dialogUsage = new UsageCountDialog(getContext());
+        final UsageCountDialog dialogUsage = new UsageCountDialog(getContext(),countOfUsagePerDay);
         dialogUsage.setListener(new UsageCountInterface() {
             @Override
             public void onSuccess(int selected,String title,int count,double difrent) {
@@ -242,12 +276,14 @@ public class FragmentUsageMedic extends Fragment implements OnDateSetListener {
     }
 
     private void showDialogOne() {
-        final DayRepeatDialog dialog = new DayRepeatDialog(getContext(),getActivity(),getActivity().getSupportFragmentManager());
+        final DayRepeatDialog dialog = new DayRepeatDialog(getContext(),getActivity(),getActivity().getSupportFragmentManager(),
+                typeDayUsage,daysOfUsage,dayRepeat,ourStartTimeStamp);
         dialog.setListener(new DayRepeatInterface() {
 
 
             @Override
             public void onSuccess(int type,int eachdays, String startDate, String title, ArrayList<String> days,long startTimeStamp) {
+
 
               //  disableAfterOne();
                 typeDayUsage = type;
@@ -257,9 +293,7 @@ public class FragmentUsageMedic extends Fragment implements OnDateSetListener {
                 if(type==1 || type==2) {
                     isRegular=true;
                     useDays.setText(title + " - شروع از : " + startDate);
-
-                }else {
-
+                }else if(type==3){
                     if(days.size()==7){
                         isRegular=true;
                         typeDayUsage=1;
@@ -278,6 +312,10 @@ public class FragmentUsageMedic extends Fragment implements OnDateSetListener {
                         }
                         useDays.setText(title + " " + ourdays + "\n" + "  شروع از :" + startDate);
                     }
+                }else if(type==4){
+                    isRegular=true;
+
+                    useDays.setText(title + " - شروع از : " + startDate);
                 }
                 usePartDays.setEnabled(true);
                 PersianDate date = new PersianDate(startTimeStamp);
@@ -292,7 +330,7 @@ public class FragmentUsageMedic extends Fragment implements OnDateSetListener {
                 dialog.dismiss();
             }
         });
-        dialog.show();
+        dialog.show(getActivity().getSupportFragmentManager(), dialog.getTag());
     }
 
 
@@ -308,10 +346,9 @@ public class FragmentUsageMedic extends Fragment implements OnDateSetListener {
     @Override
     public void onDateSet(TimePickerDialog timePickerView, long millseconds) {
         PersianDate persianCalendar = new PersianDate(millseconds);
-
         startTimeHour  = persianCalendar.getHour();
         startTimeMin=persianCalendar.getMinute();
-        edtStartTime.setText(persianCalendar.getHour()+":"+persianCalendar.getMinute());
+        edtStartTime.setText(PersianCalculater.getHourseAndMin(millseconds));
         edtUseEachTime.setEnabled(true);
         disablePartFour();
         //disableAfterThree();

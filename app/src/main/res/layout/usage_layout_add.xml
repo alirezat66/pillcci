@@ -54,12 +54,12 @@
         <android.support.design.widget.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="ساعت شروع"
+            android:hint="ساعت اولین مصرف"
             android:maxLines="1"
             android:id="@+id/edtStartTime"
             android:focusable="false"
             android:enabled="false"
-
+            android:layoutDirection="rtl"
             android:drawableRight="@drawable/ic_keyboard_arrow_down"
             android:textColor="@color/grayText"
             />
@@ -87,13 +87,15 @@
         android:layout_width="match_parent"
         android:theme="@style/MyEditText"
         app:counterMaxLength="140"
+        android:layout_marginBottom="16dp"
         app:counterEnabled="true"
         android:layout_height="wrap_content">
         <android.support.design.widget.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="توضیحات"
-            android:maxLines="2"
+            android:hint="توضیحات ( مثلا : بعد از غذا مصرف شود)"
+            android:maxLines="8"
+
             android:maxLength="140"
 
             android:enabled="false"

@@ -1,0 +1,214 @@
+<RelativeLayout android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <include layout="@layout/toolbar_base"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:layout_marginTop="56dp">
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fillViewport="true">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/BigBlue"
+                    android:text="تنظیمات یادآوری"
+                    android:textSize="24sp"
+                    android:layout_gravity="right"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginTop="20dp"
+                    android:layoutDirection="rtl"
+                 />
+
+                <TextView
+                    style="@style/BigBlue"
+                    android:text="نوع هشدار"
+                    android:layout_gravity="right"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginTop="16dp"
+                    android:textSize="20sp"
+                    android:layoutDirection="rtl"
+                    />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="10"
+                    android:layout_margin="16dp"
+                    android:layoutDirection="rtl">
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="5">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="لرزش"
+                        android:layout_gravity="center_vertical"
+                        android:textSize="18sp"
+                        android:textColor="@color/gray"/>
+                        <com.zcw.togglebutton.ToggleButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="25dp"
+                            android:id="@+id/toggleVibrate"
+                            android:layout_marginRight="8dp"
+                            />
+
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="5">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="فلاش"
+                            android:layout_gravity="center_vertical"
+                            android:textSize="18sp"
+                            android:textColor="@color/gray"/>
+                        <com.zcw.togglebutton.ToggleButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="25dp"
+                            android:id="@+id/toggleLight"
+
+                            android:layout_marginRight="8dp"
+                            />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/gray"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_below="@id/txtPhone"
+                    android:layout_marginTop="8dp"></LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:weightSum="10"
+                    android:layoutDirection="rtl"
+                    android:layout_marginTop="20dp">
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:theme="@style/MyEditText"
+                        android:layout_weight="5">
+                        <android.support.design.widget.TextInputEditText
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:hint="تعداد یادآوری"
+                            android:maxLines="1"
+                            android:ems="10"
+                            android:selectAllOnFocus="true"
+
+                            android:gravity="center_horizontal"
+                            android:inputType="number"
+                            android:layoutDirection="rtl"
+                            android:id="@+id/edtReminderCount"
+                            android:maxLength="1"
+                            android:textColor="@color/grayText"
+                            />
+                    </android.support.design.widget.TextInputLayout>
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:theme="@style/MyEditText"
+                        android:layout_weight="5">
+                        <android.support.design.widget.TextInputEditText
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:hint="فاصله هر یادآوری(دقیقه)"
+                            android:maxLines="1"
+                            android:ems="10"
+
+                            android:gravity="center_horizontal"
+                            android:inputType="number"
+                            android:selectAllOnFocus="true"
+
+                            android:layoutDirection="rtl"
+                            android:id="@+id/edtDistance"
+                            android:maxLength="2"
+                            android:textColor="@color/grayText"
+                            />
+                    </android.support.design.widget.TextInputLayout>
+
+                </LinearLayout>
+                <TextView
+                    style="@style/BigBlue"
+                    android:text="حدف کلیه اطلاعات"
+                    android:textSize="24sp"
+                    android:id="@+id/btnDeleteAllInfo"
+                    android:layout_marginBottom="20dp"
+                    android:layout_gravity="right"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginTop="20dp"
+                    android:layoutDirection="rtl"
+                    />
+                <TextView
+                    style="@style/BigBlue"
+                    android:text="خروج از حساب کاربری"
+                    android:textSize="24sp"
+                    android:id="@+id/btnExit"
+                    android:layout_marginBottom="20dp"
+                    android:layout_gravity="right"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginTop="20dp"
+                    android:layoutDirection="rtl"
+                    />
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_centerHorizontal="true"
+                    android:layout_alignParentBottom="true"
+                    android:orientation="vertical"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginLeft="16dp"
+
+                    android:layout_height="wrap_content">
+                    <Button
+                        android:layout_width="match_parent"
+                        android:layout_marginBottom="8dp"
+                        android:layout_height="wrap_content"
+                        android:text="ذخیره مشخصات"
+                        android:layout_marginRight="16dp"
+                        android:layout_marginLeft="16dp"
+                        android:background="@drawable/ripple_green_dark"
+                        android:textColor="@color/white"
+                        android:id="@+id/btnInsert"
+                        android:textSize="16.0sp"/>
+                    <Button
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="لغو"
+                        android:layout_marginBottom="16dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_marginLeft="16dp"
+                        android:id="@+id/btnDelete"
+                        android:background="@drawable/ripple_red"
+                        android:textColor="@color/white"
+                        android:textSize="16.0sp"/>
+                </LinearLayout>
+
+
+            </LinearLayout>
+        </ScrollView>
+
+
+    </RelativeLayout>
+</RelativeLayout>

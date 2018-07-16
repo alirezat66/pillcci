@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer-array name="rightColors">
+        <item>@color/tealLight</item>
+        <item>@color/tealLight</item>
+        <item>@color/tealLight</item>
+    </integer-array>
+
+    <integer-array name="leftColors">
+        <item>@color/lightorange</item>
+        <item>@color/colorAccent</item>
+        <item>@color/colorAccent</item>
+    </integer-array>
+
+    <integer-array name="rightDrawables">
+        <item>@drawable/success_icon_pn</item>
+
+    </integer-array>
+
+    <integer-array name="leftDrawables">
+        <item>@drawable/skip_icon_pn</item>
+        <item>@drawable/not_used_icon_pn</item>
+    </integer-array>
+
+    <string-array name="rightTexts">
+        <item>@string/use</item>
+
+    </string-array>
+    <string-array name="leftTexts">
+        <item>@string/skip</item>
+        <item>@string/dontuse</item>
+    </string-array>
+
+
+</resources>

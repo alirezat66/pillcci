@@ -34,6 +34,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:lrb_strokeWidth="1dp"
+                android:checked="true"
                 app:lrb_explodeCount="3"
                 app:lrb_outterPadding="8dp"
                 android:layout_gravity="right"

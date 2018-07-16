@@ -15,8 +15,10 @@ import greencode.ir.pillcci.database.PillObject;
 import greencode.ir.pillcci.database.PillObjectDao;
 import greencode.ir.pillcci.database.PillUsage;
 import greencode.ir.pillcci.database.PillUsageDao;
+import greencode.ir.pillcci.database.Profile;
+import greencode.ir.pillcci.database.ProfileDao;
 
-@Database(entities = {Category.class,PillUsage.class, PillObject.class, PhoneBook.class}, version = 1)
+@Database(entities = {Category.class,PillUsage.class, PillObject.class, PhoneBook.class, Profile.class}, version =3)
 
 public abstract class AppDatabase extends RoomDatabase {
 
@@ -25,6 +27,7 @@ public abstract class AppDatabase extends RoomDatabase {
     public abstract PillObjectDao pillObjectDao();
     public abstract PillUsageDao pillUsageDao();
     public abstract PhoneBookDao phoneBookDao();
+    public abstract ProfileDao profileDao();
 
 
     public static AppDatabase getInMemoryDatabase(Context context) {

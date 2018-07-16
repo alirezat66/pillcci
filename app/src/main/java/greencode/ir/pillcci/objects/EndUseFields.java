@@ -8,11 +8,22 @@ public class EndUseFields {
     int useType;
     int AlluseDay;
     double alluseCount;
-
-    public EndUseFields(int useType, int alluseDay, double alluseCount) {
+    int dayReminder;
+    double remindAllPill;
+    public EndUseFields(int useType, int alluseDay, double alluseCount,int dayReminder,double remindAllPill) {
         this.useType = useType;
-        AlluseDay = alluseDay;
+        this.AlluseDay = alluseDay;
         this.alluseCount = alluseCount;
+        this.dayReminder=dayReminder;
+        this.remindAllPill=remindAllPill;
+    }
+
+    public int getDayReminder() {
+        return dayReminder;
+    }
+
+    public double getRemindAllPill() {
+        return remindAllPill;
     }
 
     public int getUseType() {

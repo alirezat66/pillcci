@@ -90,7 +90,7 @@ public class ActivityValidateCode extends BaseActivity {
 
                                 if (yourCurrentPasscode.length() == passcodeIndicator.getIndicatorLength()) {
                                     if(yourCurrentPasscode.toString().equals(code)){
-                                        Toast.makeText(ActivityValidateCode.this, "true", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(ActivityValidateCode.this, "true", Toast.LENGTH_LONG).show();
                                     }else {
                                         yourCurrentPasscode = new StringBuilder();
                                         passcodeIndicator.wrongPasscode();

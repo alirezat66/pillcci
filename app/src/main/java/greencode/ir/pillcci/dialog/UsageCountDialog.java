@@ -1,33 +1,35 @@
 package greencode.ir.pillcci.dialog;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.design.widget.BottomSheetDialog;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
-import butterknife.BindView;
 import greencode.ir.pillcci.R;
 
 /**
  * Created by alireza on 5/18/18.
  */
 
-public class UsageCountDialog extends Dialog {
+public class UsageCountDialog extends BottomSheetDialog {
 
     UsageCountInterface myInterface;
     Context context;
     RadioGroup rgOne;
     Button btnCancle;
     Button btnOk;
+    int finalSelected=0;
+    int count=0;
+    double diffrence=0;
 
-
-    public UsageCountDialog(Context context) {
+    public UsageCountDialog(Context context, int countOfUsagePerDay) {
         super(context);
         this.context = context;
+        this.finalSelected = countOfUsagePerDay;
     }
 
     public void setListener(UsageCountInterface listener) {
@@ -59,9 +61,7 @@ public class UsageCountDialog extends Dialog {
             public void onClick(View v) {
 
                 int selectedId = rgOne.getCheckedRadioButtonId();
-                int finalSelected;
-                int count=0;
-                double diffrence=0;
+
                 String title="";
                 switch (selectedId){
                     case R.id.radio0:
@@ -88,24 +88,14 @@ public class UsageCountDialog extends Dialog {
                         title="هر ۶ ساعت";
                         diffrence=6;
                         break;
-                    case R.id.radio4:
-                        finalSelected=5;
-                        count=5;
-                        title="هر ۵ ساعت";
-                        diffrence=5;
-                        break;
+
                     case R.id.radio5:
                         finalSelected=6;
                         count=6;
                         title="هر ۴ ساعت";
                         diffrence=4;
                         break;
-                    case R.id.radio6:
-                        count=7;
-                        finalSelected=7;
-                        title="هر ۳.۵ ساعت";
-                        diffrence=3.5;
-                        break;
+
                     case R.id.radio7:
                         finalSelected=8;
                         count=8;
@@ -132,12 +122,53 @@ public class UsageCountDialog extends Dialog {
                 if(finalSelected!=-1) {
                     myInterface.onSuccess(finalSelected,title,count,diffrence);
                 }else {
-                    Toast.makeText(context, "لطفا یک مورد را انتخاب کنید.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "لطفا یک مورد را انتخاب کنید.", Toast.LENGTH_LONG).show();
                 }
             }
         });
 
 
+        selectSwitch();
+    }
+
+    private void selectSwitch() {
+
+        switch (finalSelected){
+            case 0:
+                rgOne.check(R.id.radio0);
+                break;
+            case 1:
+                rgOne.check(R.id.radio0);
+                break;
+            case 2:
+                rgOne.check(R.id.radio1);
+
+                break;
+            case 3:
+                rgOne.check(R.id.radio2);
+                break;
+
+            case 4:
+                rgOne.check(R.id.radio3);
+                break;
+
+            case 6:
+                rgOne.check(R.id.radio5);
+                break;
+            case 8:
+                rgOne.check(R.id.radio7);
+                break;
+            case 12:
+                rgOne.check(R.id.radio8);
+                break;
+
+            case 24:
+                rgOne.check(R.id.radio9);
+                break;
+            default:
+                finalSelected=-1;
+                break;
+        }
     }
 
 

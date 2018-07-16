@@ -1,0 +1,414 @@
+<RelativeLayout android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <include layout="@layout/toolbar_base"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:layout_marginTop="?attr/actionBarSize">
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fillViewport="true">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:layout_width="96dp"
+                    android:layout_height="96dp"
+                    app:civ_border_width="1dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="16dp"
+                    android:visibility="gone"
+                    app:civ_circle_background_color="@color/colorPrimaryDark"
+                    android:id="@+id/img_person_log"/>
+                <ImageView
+                    android:layout_width="96dp"
+                    android:layout_height="96dp"
+
+                    android:layout_marginTop="16dp"
+                    android:padding="16dp"
+                    android:id="@+id/imgLogo"
+                    android:layout_gravity="center"
+                    android:background="@drawable/oval_white_strok"
+                    app:srcCompat="@drawable/ic_add_user"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/imgLogo"
+                    android:layout_marginTop="8dp"
+                    android:textSize="18.0sp"
+                    android:id="@+id/txtPhone"
+                    android:layout_gravity="center"
+                    android:text="09128724137"
+                    android:textColor="#646464"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/gray"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_below="@id/txtPhone"
+                    android:layout_marginTop="20dp"></LinearLayout>
+                <TextView
+                    style="@style/BigBlue"
+                    android:text="اطلاعات فردی"
+                    android:layout_gravity="right"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginTop="20dp"
+                    android:layoutDirection="rtl"
+                 />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:weightSum="10"
+                    android:layoutDirection="rtl"
+                    android:layout_marginTop="20dp">
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="0dp"
+
+                        android:layout_height="wrap_content"
+                        android:theme="@style/MyEditText"
+                        android:layout_weight="5">
+                        <android.support.design.widget.TextInputEditText
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:hint="نام"
+                            android:maxLines="1"
+                            android:ems="10"
+                            android:nextFocusDown="@id/edtLName"
+                            android:gravity="right"
+                            android:inputType="text"
+                            android:layoutDirection="rtl"
+                            android:id="@+id/edtFName"
+                            android:selectAllOnFocus="true"
+
+                            android:maxLength="30"
+                            android:textColor="@color/grayText"
+                            />
+                    </android.support.design.widget.TextInputLayout>
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="0dp"
+
+                        android:layout_height="wrap_content"
+                        android:theme="@style/MyEditText"
+                        android:layout_weight="5">
+                        <android.support.design.widget.TextInputEditText
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:hint="نام خانوادگی"
+                            android:maxLines="1"
+                            android:ems="10"
+                            android:nextFocusDown="@id/edtAge"
+                            android:selectAllOnFocus="true"
+
+                            android:gravity="right"
+                            android:inputType="text"
+                            android:layoutDirection="rtl"
+                            android:id="@+id/edtLName"
+                            android:maxLength="30"
+                            android:textColor="@color/grayText"
+                            />
+                    </android.support.design.widget.TextInputLayout>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:weightSum="10"
+                    android:layoutDirection="rtl"
+                    android:layout_marginTop="8dp">
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="0dp"
+
+                        android:layout_height="wrap_content"
+                        android:theme="@style/MyEditText"
+                        android:layout_weight="5">
+                        <android.support.design.widget.TextInputEditText
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:hint="جنسیت"
+                            android:maxLines="1"
+                            android:ems="10"
+                            android:selectAllOnFocus="true"
+
+                            android:gravity="right"
+                            android:inputType="text"
+                            android:layoutDirection="rtl"
+                            android:id="@+id/edtsex"
+                            android:focusable="false"
+                            android:drawableRight="@drawable/ic_down"
+                            android:maxLength="30"
+                            android:textColor="@color/grayText"
+                            />
+                    </android.support.design.widget.TextInputLayout>
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="0dp"
+
+                        android:layout_height="wrap_content"
+                        android:theme="@style/MyEditText"
+                        android:layout_weight="5">
+                        <android.support.design.widget.TextInputEditText
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:hint="تاریخ تولد"
+                            android:maxLines="1"
+                            android:ems="10"
+                            android:gravity="right"
+                            android:inputType="text"
+                            android:focusable="false"
+                            android:layoutDirection="rtl"
+                            android:id="@+id/edtBirthYear"
+                            android:maxLength="30"
+                            android:textColor="@color/grayText"
+                            />
+                    </android.support.design.widget.TextInputLayout>
+
+                            </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/gray"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_below="@id/txtTitle"
+                    android:layout_marginTop="20dp"></LinearLayout>
+
+                <TextView
+                    style="@style/BigBlue"
+                    android:text="اطلاعات سلامت"
+                    android:layout_gravity="right"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginTop="20dp"
+                    android:layoutDirection="rtl"
+                    />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:weightSum="9"
+                    android:layoutDirection="rtl"
+                    android:layout_marginTop="8dp">
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="0dp"
+
+                        android:layout_height="wrap_content"
+                        android:theme="@style/MyEditText"
+                        android:layout_weight="3">
+                        <android.support.design.widget.TextInputEditText
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:hint="سن"
+                            android:maxLines="1"
+                            android:ems="10"
+                            android:nextFocusDown="@id/edtHeight"
+                            android:selectAllOnFocus="true"
+
+                            android:gravity="right"
+                            android:inputType="number"
+                            android:layoutDirection="rtl"
+                            android:id="@+id/edtAge"
+                            android:maxLength="3"
+                            android:textColor="@color/grayText"
+                            />
+                    </android.support.design.widget.TextInputLayout>
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="0dp"
+
+                        android:layout_height="wrap_content"
+                        android:theme="@style/MyEditText"
+                        android:layout_weight="3">
+                        <android.support.design.widget.TextInputEditText
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:hint="قد(سانتی متر)"
+                            android:maxLines="1"
+                            android:ems="10"
+                            android:selectAllOnFocus="true"
+
+                            android:nextFocusDown="@id/edtWeight"
+
+                            android:gravity="right"
+                            android:inputType="number"
+                            android:layoutDirection="rtl"
+                            android:id="@+id/edtHeight"
+                            android:maxLength="3"
+                            android:textColor="@color/grayText"
+                            />
+                    </android.support.design.widget.TextInputLayout>
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="0dp"
+
+                        android:layout_height="wrap_content"
+                        android:theme="@style/MyEditText"
+                        android:layout_weight="3">
+                        <android.support.design.widget.TextInputEditText
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:hint="وزن (کیلو گرم)"
+                            android:maxLines="1"
+                            android:ems="10"
+                            android:selectAllOnFocus="true"
+
+                            android:gravity="right"
+                            android:inputType="number"
+                            android:nextFocusDown="@id/edtSickness"
+
+                            android:layoutDirection="rtl"
+                            android:id="@+id/edtWeight"
+                            android:maxLength="3"
+                            android:textColor="@color/grayText"
+                            />
+                    </android.support.design.widget.TextInputLayout>
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:weightSum="10"
+                    android:layoutDirection="rtl"
+                    android:layout_marginTop="8dp">
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="0dp"
+
+                        android:layout_height="wrap_content"
+                        android:theme="@style/MyEditText"
+                        android:layout_weight="5">
+                        <android.support.design.widget.TextInputEditText
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:hint="گروه خونی"
+                            android:maxLines="1"
+                            android:ems="10"
+                            android:selectAllOnFocus="true"
+
+                            android:gravity="right"
+                            android:inputType="text"
+                            android:layoutDirection="rtl"
+                            android:id="@+id/edtBlood"
+                            android:focusable="false"
+                            android:drawableRight="@drawable/ic_down"
+                            android:maxLength="30"
+                            android:textColor="@color/grayText"
+                            />
+                    </android.support.design.widget.TextInputLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:weightSum="9"
+                    android:layoutDirection="rtl"
+                    android:layout_marginTop="8dp">
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="0dp"
+
+                        android:layout_height="wrap_content"
+                        android:theme="@style/MyEditText"
+                        android:layout_weight="9">
+                        <android.support.design.widget.TextInputEditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="سابقه بیماری های مزمن"
+                            android:maxLines="1"
+                            android:gravity="right"
+                            android:maxLength="140"
+                            android:inputType="text"
+                            android:layoutDirection="rtl"
+                            android:nextFocusDown="@id/edtAlergy"
+
+                            android:id="@+id/edtSickness"
+                            android:textColor="@color/grayText"
+                            />
+                    </android.support.design.widget.TextInputLayout>
+
+                </LinearLayout>
+               
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:weightSum="9"
+                    android:layoutDirection="rtl"
+                    android:layout_marginTop="8dp">
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="0dp"
+
+                        android:layout_height="wrap_content"
+                        android:theme="@style/MyEditText"
+                        android:layout_weight="9">
+                        <android.support.design.widget.TextInputEditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="سابقه حساسیت دارویی"
+                            android:maxLines="1"
+                            android:gravity="right"
+                            android:inputType="text"
+                            android:maxLength="140"
+                            android:layoutDirection="rtl"
+                            android:id="@+id/edtAlergy"
+                            android:textColor="@color/grayText"
+                            />
+                    </android.support.design.widget.TextInputLayout>
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_centerHorizontal="true"
+                    android:layout_alignParentBottom="true"
+                    android:orientation="vertical"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_height="wrap_content">
+                    <Button
+                        android:layout_width="match_parent"
+                        android:layout_marginBottom="8dp"
+                        android:layout_height="wrap_content"
+                        android:text="ذخیره مشخصات"
+                        android:layout_marginRight="16dp"
+                        android:layout_marginLeft="16dp"
+                        android:background="@drawable/ripple_green_dark"
+                        android:textColor="@color/white"
+                        android:id="@+id/btnInsert"
+                        android:textSize="16.0sp"/>
+                    <Button
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="لغو"
+                        android:layout_marginBottom="16dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_marginLeft="16dp"
+                        android:id="@+id/btnDelete"
+                        android:background="@drawable/ripple_red"
+                        android:textColor="@color/white"
+                        android:textSize="16.0sp"/>
+                </LinearLayout>
+
+            </LinearLayout>
+        </ScrollView>
+
+
+    </RelativeLayout>
+</RelativeLayout>

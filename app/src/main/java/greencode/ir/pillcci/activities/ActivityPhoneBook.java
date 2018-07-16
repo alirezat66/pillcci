@@ -9,9 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -39,24 +37,19 @@ public class ActivityPhoneBook extends BaseActivity implements PhoneAdapter.onPh
     RecyclerView list;
     @BindView(R.id.imgAdd)
     AppCompatImageView imgAdd;
-    @BindView(R.id.imgEdit)
-    ImageButton imgEdit;
 
-    boolean inEdit = false;
+
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_phone_boox);
         ButterKnife.bind(this);
-        imgEdit.setOnClickListener(new View.OnClickListener() {
+
+        imgBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                inEdit = !inEdit;
-                if(inEdit){
-                    imgEdit.setBackgroundColor(getResources().getColor(R.color.roze));
-                }else {
-                    imgEdit.setBackgroundColor(getResources().getColor(R.color.transparent));
-                }
+                finish();
             }
         });
 
@@ -81,17 +74,16 @@ public class ActivityPhoneBook extends BaseActivity implements PhoneAdapter.onPh
 
     @Override
     public void onItemClick(PhoneBook phoneBook) {
-        if(inEdit){
-            if(phoneBook.isInitial()){
-                Toast.makeText(this, "این شماره تماس قابل ویرایش نیست.", Toast.LENGTH_LONG).show();
-            }else {
-                Intent intent = new Intent(this, ActivityEditPhone.class);
-                intent.putExtra("phone", phoneBook.getPhone());
-                startActivity(intent);
-            }
-        }else {
+
             Intent intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phoneBook.getPhone(), null));
             startActivity(intent);
-        }
+
+    }
+
+    @Override
+    public void onItemEdit(PhoneBook phoneBook) {
+        Intent intent = new Intent(this, ActivityEditPhone.class);
+        intent.putExtra("phone", phoneBook.getPhone());
+        startActivity(intent);
     }
 }

@@ -1,0 +1,476 @@
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:visibility="invisible"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <ru.rambler.libs.swipe_layout.SwipeLayout
+
+                    android:id="@+id/swipe_layout"
+                    style="@style/SwipeLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_centerVertical="true">
+
+                        <com.github.florent37.expansionpanel.ExpansionHeader android:layout_height="wrap_content"
+                            android:layout_width="match_parent"
+                            app:expansion_headerIndicator="@id/headerIndicator"
+                            app:expansion_layout="@id/expansionLayout"
+                            app:expansion_toggleOnClick="true"
+                            >
+
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:id="@+id/rlText"
+                                android:background="@color/white"
+                                android:layout_height="wrap_content">
+
+                                <android.support.v7.widget.AppCompatImageView
+                                    android:adjustViewBounds="true"
+                                    android:id="@+id/headerIndicator"
+                                    android:layout_alignParentLeft="true"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="16dp"
+                                    android:layout_centerVertical="true"
+                                    android:layout_width="wrap_content"
+                                    app:srcCompat="@drawable/ic_right" />
+
+                                <LinearLayout
+                                    android:orientation="vertical"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+
+                                    android:id="@+id/textLayout"
+
+                                    android:layoutDirection="rtl"
+                                    >
+                                    <TextView
+                                        style="@style/BigGray"
+                                        android:text=""
+                                        android:id="@+id/txtMedName"
+                                        android:layout_marginRight="16dp"
+                                        android:layout_marginTop="12dp"/>
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="6dp"
+                                        android:layout_marginRight="16dp"
+                                        android:layout_marginBottom="6dp">
+                                        <TextView
+                                            style="@style/BigGray"
+                                            android:text=""
+                                            android:id="@+id/txtUseTime"/>
+                                        <TextView
+                                            style="@style/BigGray"
+                                            android:id="@+id/txtState"/>
+                                    </LinearLayout>
+
+
+                                </LinearLayout>
+
+                            </RelativeLayout>
+                            <android.support.v7.widget.CardView
+                                android:layout_width="12dp"
+
+                                android:layout_gravity="right"
+                                android:id="@+id/catColor"
+                                android:layout_marginRight="-6dp"
+                                android:layout_marginTop="4dp"
+                                android:layout_marginBottom="4dp"
+                                app:cardBackgroundColor="@color/red"
+                                app:cardCornerRadius="3dp"
+                                android:orientation="vertical"
+                                android:layout_height="match_parent"></android.support.v7.widget.CardView>
+
+                        </com.github.florent37.expansionpanel.ExpansionHeader>
+
+                        <com.github.florent37.expansionpanel.ExpansionLayout
+                            android:id="@+id/expansionLayout"
+                            android:layout_height="wrap_content"
+                            android:layout_width="match_parent"
+                            android:orientation="vertical"
+                            android:background="#FAFAFA"
+                            >
+                            <!-- CONTENT -->
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                >
+                                <View
+                                    android:layout_width="match_parent"
+                                    android:layout_height="5dp"
+                                    android:layout_marginRight="16dp"
+                                    android:layout_marginLeft="16.0dp"
+                                    android:layout_marginTop="8dp"
+                                    android:layerType="software"
+                                    android:background="@drawable/dashed_line"
+                                    ></View>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal"
+                                    android:weightSum="9"
+                                    android:layout_marginTop="12dp"
+                                    android:layoutDirection="rtl"
+                                    >
+                                    <LinearLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="vertical"
+                                        android:gravity="center_horizontal"
+                                        android:layout_weight="3">
+                                        <android.support.v7.widget.AppCompatImageView
+                                            android:layout_width="24dp"
+                                            android:layout_height="24dp"
+
+                                            app:srcCompat="@drawable/category"/>
+                                        <TextView
+                                            style="@style/SmallTextGray"
+                                            android:id="@+id/txtCatName"
+                                            android:text=""
+                                            />
+                                    </LinearLayout>
+                                    <LinearLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="vertical"
+                                        android:gravity="center_horizontal"
+                                        android:layout_weight="3">
+                                        <android.support.v7.widget.AppCompatImageView
+                                            android:layout_width="24dp"
+                                            android:layout_height="24dp"
+                                            app:srcCompat="@drawable/doctor"/>
+                                        <TextView
+                                            style="@style/SmallTextGray"
+                                            android:text=""
+                                            android:id="@+id/txtDrName"
+                                            />
+                                    </LinearLayout>
+                                    <LinearLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="vertical"
+                                        android:gravity="center_horizontal"
+                                        android:layout_weight="3">
+                                        <android.support.v7.widget.AppCompatImageView
+                                            android:layout_width="24dp"
+                                            android:layout_height="24dp"
+                                            app:srcCompat="@drawable/drug"/>
+                                        <TextView
+                                            style="@style/SmallTextGray"
+                                            android:id="@+id/txtUnitUsage"
+                                            android:text=""
+                                            />
+                                    </LinearLayout>
+                                </LinearLayout>
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal"
+                                    android:weightSum="9"
+                                    android:layout_marginBottom="12dp"
+                                    android:layout_marginTop="12dp"
+                                    android:layoutDirection="rtl"
+                                    >
+                                    <LinearLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="vertical"
+                                        android:gravity="center_horizontal"
+                                        android:layout_weight="3">
+                                        <android.support.v7.widget.AppCompatImageView
+                                            android:layout_width="24dp"
+                                            android:layout_height="24dp"
+                                            app:srcCompat="@drawable/time_for"
+                                            />
+                                        <TextView
+                                            style="@style/SmallTextGray"
+                                            android:text=""
+                                            android:id="@+id/txtRepeatCount"
+                                            />
+                                    </LinearLayout>
+                                    <LinearLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="vertical"
+                                        android:gravity="center_horizontal"
+                                        android:id="@+id/lyEdit"
+                                        android:layout_weight="3">
+                                        <android.support.v7.widget.AppCompatImageView
+                                            android:layout_width="24dp"
+                                            android:layout_height="24dp"
+                                            app:srcCompat="@drawable/edit"/>
+                                        <TextView
+                                            style="@style/SmallTextGray"
+                                            android:text="ویرایش مصرف"
+                                            />
+                                    </LinearLayout>
+                                    <LinearLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="vertical"
+                                        android:gravity="center_horizontal"
+                                        android:id="@+id/lyCancel"
+                                        android:visibility="gone"
+                                        android:layout_weight="3">
+                                        <android.support.v7.widget.AppCompatImageView
+                                            android:layout_width="24dp"
+                                            android:layout_height="24dp"
+                                            android:visibility="visible"
+                                            app:srcCompat="@drawable/undo"/>
+                                        <TextView
+                                            style="@style/SmallTextGray"
+                                            android:text="لغو تغییرات"
+                                            />
+                                    </LinearLayout>
+                                </LinearLayout>
+                            </LinearLayout>
+
+                        </com.github.florent37.expansionpanel.ExpansionLayout>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/right_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/tealLight"
+                        android:orientation="horizontal"
+                        app:bring_to_clamp="150dp"
+                        app:clamp="self"
+                        app:gravity="right"
+                        android:layoutDirection="rtl"
+                        app:sticky="100dp">
+
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:layout_gravity="center_vertical">
+                            <TextView
+                                style="@style/RightTextView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_toRightOf="@id/rlUse"
+                                android:layout_alignParentRight="true"
+                                android:layout_centerHorizontal="true"
+                                android:gravity="center"
+                                android:textSize="12.0sp"
+                                android:text="جهت تغییر وضعیت به مصرف شده این قسمت را لمس کنید." />
+                            <RelativeLayout
+                                android:layout_width="100dp"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/rlUse"
+                                android:gravity="center_vertical"
+                                android:layout_alignParentLeft="true"
+                                >
+                                <RelativeLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerInParent="true">
+                                    <ImageView
+                                        android:layout_width="24dp"
+                                        android:layout_height="24dp"
+                                        android:id="@+id/imgUse"
+                                        android:layout_centerHorizontal="true"
+                                        android:src="@drawable/success_icon_pn"/>
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:textSize="12.0sp"
+                                        android:text="مصرف شد"
+
+                                        android:layout_centerHorizontal="true"
+                                        android:layout_below="@id/imgUse"
+                                        android:layout_marginTop="4dp"
+                                        android:textColor="@color/white"
+                                        />
+                                </RelativeLayout>
+                            </RelativeLayout>
+                        </RelativeLayout>
+                    </LinearLayout>
+
+                    <!--LEFT-->
+                    <LinearLayout
+                        android:id="@+id/left_view"
+                        android:layout_width="200dp"
+                        android:layout_height="match_parent"
+                        android:weightSum="2"
+                        android:orientation="horizontal"
+                        android:background="@color/left_bg"
+                        app:bring_to_clamp="100dp"
+                        app:clamp="self"
+                        app:gravity="left"
+                        app:sticky="none">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:id="@+id/lySwipCancel"
+                            android:background="@color/colorAccent">
+                            <RelativeLayout
+                                android:layout_width="100dp"
+                                android:layout_alignParentLeft="true"
+                                android:background="@color/colorAccent"
+                                android:layout_gravity="center_vertical"
+                                android:layout_height="wrap_content">
+                                <RelativeLayout
+                                    android:layout_width="100dp"
+                                    android:layout_height="wrap_content"
+                                    android:id="@+id/rlCancel"
+
+                                    android:layout_alignParentLeft="true"
+                                    android:layout_gravity="left"
+                                    >
+                                    <RelativeLayout
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_centerInParent="true">
+                                        <ImageView
+                                            android:layout_width="24dp"
+                                            android:layout_height="24dp"
+                                            android:id="@+id/imgCancel"
+                                            android:layout_centerHorizontal="true"
+                                            android:src="@drawable/not_used_icon_pn"/>
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:textSize="12.0sp"
+                                            android:text="عدم مصرف"
+
+                                            android:layout_centerHorizontal="true"
+                                            android:layout_below="@id/imgCancel"
+                                            android:layout_marginTop="4dp"
+                                            android:textColor="@color/white"
+                                            />
+                                    </RelativeLayout>
+                                </RelativeLayout>
+
+                            </RelativeLayout>
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:id="@+id/lySwipSkip"
+                            android:background="@color/lightorange">
+                            <RelativeLayout
+                                android:layout_width="100dp"
+                                android:layout_alignParentRight="true"
+                                android:background="@color/lightorange"
+                                android:layout_gravity="center_vertical"
+                                android:layout_height="wrap_content">
+                                <RelativeLayout
+                                    android:layout_width="100dp"
+                                    android:layout_height="wrap_content"
+                                    android:id="@+id/rlUndo"
+
+                                    android:layout_alignParentLeft="true"
+                                    android:layout_gravity="left"
+                                    >
+                                    <RelativeLayout
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_centerInParent="true">
+                                        <ImageView
+                                            android:layout_width="24dp"
+                                            android:layout_height="24dp"
+                                            android:id="@+id/imgUndo"
+                                            android:layout_centerHorizontal="true"
+                                            android:src="@drawable/skip_icon_pn"/>
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:textSize="12.0sp"
+                                            android:text="تغییر زمان"
+
+                                            android:layout_centerHorizontal="true"
+                                            android:layout_below="@id/imgUndo"
+                                            android:layout_marginTop="4dp"
+                                            android:textColor="@color/white"
+                                            />
+                                    </RelativeLayout>
+                                </RelativeLayout>
+
+                            </RelativeLayout>
+
+                        </LinearLayout>
+
+
+                    </LinearLayout>
+                </ru.rambler.libs.swipe_layout.SwipeLayout>
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:id="@+id/actionLayout"
+                android:background="@color/colorPrimary"
+                android:layoutDirection="rtl"
+                android:layout_marginBottom="2dp"
+                android:weightSum="3">
+                <TextView
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:gravity="center"
+                    android:id="@+id/txtUse"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:text="مصرف"/>
+                <LinearLayout
+                    android:layout_width="2dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/white"/>
+                <TextView
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:id="@+id/txtCancel"
+                    android:textSize="16sp"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:text="لغو مصرف"/>
+                <LinearLayout
+                    android:layout_width="2dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/white"/>
+                <TextView
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:gravity="center"
+                    android:id="@+id/txtJump"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:text="تغییر زمان"/>
+            </LinearLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+</android.support.v7.widget.CardView>

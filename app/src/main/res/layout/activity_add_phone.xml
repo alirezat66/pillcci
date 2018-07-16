@@ -7,7 +7,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white"
-        android:layout_marginTop="?attr/actionBarSize">
+        android:layout_marginTop="56dp">
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -23,8 +23,18 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="16dp"
             android:id="@+id/imgLogo"
+            android:visibility="invisible"
             app:civ_border_color="@color/primary"
-            android:src="@drawable/user_pn"/>
+            />
+        <ImageView
+            android:layout_width="96dp"
+            android:layout_height="96dp"
+            android:padding="16dp"
+            android:id="@+id/emptyImage"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/oval_white_strok"
+            app:srcCompat="@drawable/ic_add_user"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -52,6 +62,7 @@
                     android:hint="نام"
                     android:maxLines="1"
                     android:ems="10"
+                    android:selectAllOnFocus="true"
                     android:gravity="center"
                     android:inputType="text"
                     android:layoutDirection="rtl"
@@ -70,6 +81,8 @@
                     android:hint="نام خانوادگی"
                     android:gravity="center"
                     android:id="@+id/edtLName"
+                    android:selectAllOnFocus="true"
+
                     android:layoutDirection="rtl"
                     android:maxLength="30"
                     android:maxLines="1"
@@ -86,8 +99,10 @@
                     android:layout_height="wrap_content"
                     android:hint="شماره تماس"
                     android:maxLines="1"
+                    android:selectAllOnFocus="true"
+
                     android:layoutDirection="rtl"
-                    android:maxLength="11"
+                    android:maxLength="15"
                     android:gravity="center_horizontal"
                     android:inputType="phone"
                     android:id="@+id/edtPhone"
@@ -102,6 +117,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="نسبت"
+                    android:selectAllOnFocus="true"
+
                     android:maxLines="1"
                     android:layoutDirection="rtl"
                     android:maxLength="11"

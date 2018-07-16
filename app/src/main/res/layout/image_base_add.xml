@@ -5,16 +5,36 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     >
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        app:civ_border_color="@color/VioletBlue"
-        app:civ_border_width="1dp"
-        android:layout_marginTop="16dp"
-        android:src="@drawable/pills_avatar"
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:id="@+id/imgLogo"
-        />
+        android:id="@+id/lypic"
+        android:layout_marginTop="10dp">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="96dp"
+            android:layout_height="96dp"
+            app:civ_border_color="@color/VioletBlue"
+            app:civ_border_width="1dp"
+            android:transitionName="image_activity_transition"
+            android:layout_marginTop="16dp"
+            android:src="@drawable/pills_avatar"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/imgLogo"
+            />
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/iv_camera"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:background="@drawable/oval_accent_strok"
+            app:srcCompat="@drawable/ic_add_white_24dp"
+            android:layout_gravity="top|right"
+            android:layout_marginTop="20dp"
+            />
+    </FrameLayout>
+
     <TextView
         style="@style/BigBlue_18"
         android:id="@+id/txtTitleImage"
@@ -22,7 +42,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="16dp"
-        android:layout_below="@id/imgLogo"/>
+        android:layout_below="@id/lypic"/>
 
 
 </RelativeLayout>

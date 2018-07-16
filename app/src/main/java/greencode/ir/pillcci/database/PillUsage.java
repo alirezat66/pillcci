@@ -2,6 +2,11 @@ package greencode.ir.pillcci.database;
 
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
+import android.content.Context;
+
+import greencode.ir.pillcci.R;
+import greencode.ir.pillcci.utils.PersianCalculater;
+import saman.zamani.persiandate.PersianDate;
 
 /**
  * Created by alireza on 5/22/18.
@@ -11,23 +16,27 @@ public class PillUsage {
     @PrimaryKey(autoGenerate = true)
     long id;
     int pillId;
-    String pillName;
+    String pillName;//name of pill
     String time;
-    long usageTime;
-    int state ; // 0 = not used ## 1 = used ## 3=canceled by user
+    long usageTime;// time of usage
+    int state ; // 0 = not used ## 1 = used ## 2=canceled by user ## 3= any action not set
     String useTime;// time that we use pill
-    boolean hasDelay;
+    boolean hasDelay;// has any delay
     String description;
     String catNme;
     int catColor;
     String catRingtone;
     String drName;
     String unit;
-    String unitAmount;
+    String unitAmount;//unit use amount
     String countPerDay;
     long usedTime;
     int snoozCount;
-    public PillUsage(int pillId,String pillName, String time, long usageTime, int state, String useTime, boolean hasDelay, String description, String catNme, int catColor, String catRingtone, String drName, String unit, String unitAmount, String countPerDay,long usedTime) {
+    long setedTime;
+    public PillUsage(int pillId,String pillName, String time, long usageTime,
+                     int state, String useTime, boolean hasDelay, String description, String catNme,
+                     int catColor, String catRingtone, String drName, String unit, String unitAmount,
+                     String countPerDay,long usedTime,long setedTime) {
         this.pillId = pillId;
         this.pillName = pillName;
         this.time = time;
@@ -45,6 +54,11 @@ public class PillUsage {
         this.countPerDay = countPerDay;
         this.usedTime=usedTime;
         this.snoozCount =0;
+        this.setedTime = setedTime;
+    }
+
+    public long getSetedTime() {
+        return setedTime;
     }
 
     public int getPillId() {
@@ -104,7 +118,20 @@ public class PillUsage {
     }
 
     public String getUnitAmount() {
-        return unitAmount;
+        try {
+
+            double count = Double.parseDouble(unitAmount);
+            if(count-(int)count==0) {
+                return (int)count+"";
+            }else {
+                return unitAmount;
+            }
+
+        }catch (NumberFormatException ex){
+
+            ex.printStackTrace();
+            return unitAmount;
+        }
     }
 
     public String getCountPerDay() {
@@ -179,7 +206,38 @@ public class PillUsage {
         return snoozCount;
     }
 
+    public String getPersianUsageTime(){
+
+        long timeStamp = (state==0?usageTime:usedTime);
+        PersianDate date=new PersianDate(timeStamp);
+        return PersianCalculater.getYearMonthAndDay(date.getTime())+" - "+PersianCalculater.getHourseAndMin(date.getTime());
+    }
     public void setSnoozCount(int snoozCount) {
         this.snoozCount = snoozCount;
+    }
+
+    public String getStateText() {
+        String stateText ="";
+        if(state==0){
+            stateText="در انتظار مصرف";
+        }else if(state==1){
+            stateText="مصرف شده";
+        }else if(state==2){
+            stateText="مصرف نشده";
+        }
+        return stateText;
+    }
+
+
+    public int getStateColor(Context context) {
+        int stateColor;
+        if(state == 1){
+            stateColor = context.getResources().getColor(R.color.teal);
+        }else if(state ==0){
+            stateColor = context.getResources().getColor(R.color.orange);
+        }else {
+            stateColor = context.getResources().getColor(R.color.colorAccent);
+        }
+        return stateColor;
     }
 }

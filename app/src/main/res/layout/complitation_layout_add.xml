@@ -6,6 +6,8 @@
     xmlns:toggle="http://schemas.android.com/apk/res-auto"
     android:layout_marginTop="16dp"
     android:orientation="vertical"
+    android:descendantFocusability="beforeDescendants"
+    android:focusableInTouchMode="true"
     android:background="@color/backColor">
     <TextView
         style="@style/BigBlue_18"
@@ -65,12 +67,15 @@
                 android:layout_height="wrap_content"
                 android:maxLines="1"
                 android:ems="4"
+                android:imeOptions="actionDone"
+                android:selectAllOnFocus="true"
+
                 android:gravity="center_horizontal"
                 android:textSize="16sp"
                 android:layout_marginTop="-10dp"
                 android:id="@+id/totalTimeUseDay"
                 android:inputType="number"
-                android:enabled="false"
+                android:enabled="true"
                 android:textColor="@color/grayText"
                 />
             <TextView
@@ -110,11 +115,12 @@
                 android:layout_height="wrap_content"
                 android:maxLines="1"
                 android:ems="4"
+                android:imeOptions="actionDone"
                 android:gravity="center_horizontal"
                 android:layout_marginTop="-10dp"
                 android:id="@+id/edtCountDay"
-                android:enabled="false"
-
+                android:enabled="true"
+                android:selectAllOnFocus="true"
                 android:maxLength="5"
                 android:textSize="16sp"
                 android:inputType="numberDecimal"
@@ -132,108 +138,7 @@
 
 
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/grayLiteText"
-        android:layout_marginTop="16dp"
-        android:visibility="gone"
-        android:orientation="horizontal"
-       />
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:visibility="gone"
-        >
-        <TextView
-            style="@style/BigBlue_18"
-            android:text="یادآوری تهیه دارو"
-            android:layout_gravity="right"
-            android:layout_alignParentRight="true"
-            />
-        <com.zcw.togglebutton.ToggleButton
-            android:layout_width="wrap_content"
-            android:layout_height="30dp"
 
-            android:layout_marginTop="10dp"/>
-
-    </RelativeLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:visibility="gone"
-        android:layoutDirection="rtl">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/grayText"
-            android:textSize="18sp"
-            android:text="مقدار داروی موجود"/>
-        <android.support.design.widget.TextInputEditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:maxLines="1"
-            android:ems="4"
-            android:visibility="gone"
-            android:layout_marginTop="-10dp"
-            android:id="@+id/countOfHave"
-            android:focusable="false"
-            android:textColor="@color/grayText"
-            />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/grayText"
-            android:textSize="18sp"
-            android:visibility="gone"
-            android:text="روز"/>
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:visibility="gone"
-        android:layoutDirection="rtl">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/grayText"
-            android:textSize="18sp"
-            android:text="یاداوری در"/>
-        <android.support.design.widget.TextInputEditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:maxLines="1"
-            android:ems="4"
-            android:layout_marginTop="-10dp"
-            android:id="@+id/beforReminding"
-            android:focusable="false"
-            android:textColor="@color/grayText"
-            />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/grayText"
-            android:textSize="18sp"
-            android:text="روز قبل اتمام"/>
-    </LinearLayout>
-
-    <android.support.design.widget.TextInputLayout
-        android:layout_width="match_parent"
-        android:theme="@style/MyEditText"
-        android:visibility="gone"
-        android:layout_height="wrap_content">
-        <android.support.design.widget.TextInputEditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="زمان یادآوری"
-            android:id="@+id/edtUseRes"
-            android:maxLines="1"
-            android:textColor="@color/grayText"
-            />
-    </android.support.design.widget.TextInputLayout>
 
 </LinearLayout>

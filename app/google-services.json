@@ -1,0 +1,59 @@
+{
+  "project_info": {
+    "project_number": "245875889653",
+    "firebase_url": "https://pillchi-f90b4.firebaseio.com",
+    "project_id": "pillchi-f90b4",
+    "storage_bucket": "pillchi-f90b4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:245875889653:android:bfac47239fb7ad32",
+        "android_client_info": {
+          "package_name": "greencode.ir.pillcci"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "245875889653-0eqberrdsd0na2qh0edqau8boeqg0bmk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "greencode.ir.pillcci",
+            "certificate_hash": "cbc6be4d2a570976f217edfe74cd692e0c5dc7fc"
+          }
+        },
+        {
+          "client_id": "245875889653-gtacj0grd1g46u1k901rsf3locv8q3j3.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "245875889653-gtacj0grd1g46u1k901rsf3locv8q3j3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyADRjc2XEwzoorcV3Wmg_NhnMVsiVD_ZJw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "245875889653-gtacj0grd1g46u1k901rsf3locv8q3j3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

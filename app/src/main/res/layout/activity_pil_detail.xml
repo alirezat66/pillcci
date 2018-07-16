@@ -1,0 +1,364 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/app_bar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/transparent"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        android:fitsSystemWindows="true">
+
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/collapsing_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:contentScrim="@color/colorPrimary"
+            app:expandedTitleMarginStart="48dp"
+            app:expandedTitleMarginEnd="64dp"
+            android:fitsSystemWindows="true">
+
+            <ImageView
+                android:id="@+id/imgLogo"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:minHeight="260dp"
+                android:maxHeight="260dp"
+                android:scaleType="fitXY"
+                android:transitionName="simple_activity_transition"
+                android:fitsSystemWindows="true"
+                app:layout_collapseMode="parallax"/>
+
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layoutDirection="rtl"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                app:layout_collapseMode="pin"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
+
+        </android.support.design.widget.CollapsingToolbarLayout>
+
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        app:layout_anchor="@id/app_bar_layout"
+        app:rippleColor="@color/white"
+        app:layout_anchorGravity="bottom|right|end"
+        style="@style/FabStyle"/>
+
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/scroll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="true"
+
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:descendantFocusability="blocksDescendants">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_margin="16dp">
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardElevation="10dp"
+                    android:id="@+id/cardOne"
+                    android:layout_margin="8dp"
+
+                    app:cardBackgroundColor="@color/white"
+                    app:cardCornerRadius="5dp">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="8dp"
+                        android:orientation="vertical"
+                        >
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layoutDirection="rtl"
+                            android:layout_margin="16dp"
+                            android:orientation="horizontal">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="نام دارو:"
+                                android:textSize="22sp"
+                                android:textColor="@color/grayText" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="22sp"
+                                android:transitionName="simple_activity_transition"
+                                android:id="@+id/txtMedName"
+                                android:textColor="@color/grayText"/>
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            >
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:weightSum="9"
+                                android:layout_marginTop="12dp"
+                                android:layoutDirection="rtl"
+                                >
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical"
+                                    android:gravity="center_horizontal"
+                                    android:layout_weight="3">
+                                    <android.support.v7.widget.AppCompatImageView
+                                        android:layout_width="24dp"
+                                        android:layout_height="24dp"
+
+                                        app:srcCompat="@drawable/category"/>
+                                    <TextView
+                                        style="@style/SmallTextGray"
+                                        android:id="@+id/txtCatName"
+                                        android:text=""
+                                        />
+                                </LinearLayout>
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical"
+                                    android:gravity="center_horizontal"
+                                    android:layout_weight="3">
+                                    <android.support.v7.widget.AppCompatImageView
+                                        android:layout_width="24dp"
+                                        android:layout_height="24dp"
+                                        app:srcCompat="@drawable/doctor"/>
+                                    <TextView
+                                        style="@style/SmallTextGray"
+                                        android:text=""
+                                        android:id="@+id/txtDrName"
+                                        />
+                                </LinearLayout>
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical"
+                                    android:gravity="center_horizontal"
+                                    android:layout_weight="3">
+                                    <android.support.v7.widget.AppCompatImageView
+                                        android:layout_width="24dp"
+                                        android:layout_height="24dp"
+                                        app:srcCompat="@drawable/drug"/>
+                                    <TextView
+                                        style="@style/SmallTextGray"
+                                        android:id="@+id/txtUnitUsage"
+                                        android:text=""
+                                        />
+                                </LinearLayout>
+                            </LinearLayout>
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:weightSum="6"
+                                android:layout_marginBottom="12dp"
+                                android:layout_marginTop="12dp"
+                                android:layoutDirection="rtl"
+                                >
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical"
+                                    android:gravity="center_horizontal"
+                                    android:layout_weight="3">
+
+                                    <android.support.v7.widget.AppCompatImageView
+                                        android:layout_width="31dp"
+                                        android:layout_height="20dp"
+                                        app:srcCompat="@drawable/time_for" />
+                                    <TextView
+                                        style="@style/SmallTextGray"
+                                        android:text=""
+                                        android:id="@+id/txtRepeatCount"
+                                        />
+                                </LinearLayout>
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical"
+                                    android:gravity="center_horizontal"
+                                    android:layout_weight="3">
+
+                                    <android.support.v7.widget.AppCompatImageView
+                                        android:layout_width="31dp"
+                                        android:layout_height="20dp"
+                                        app:srcCompat="@drawable/ic_medicines" />
+                                    <TextView
+                                        style="@style/SmallTextGray"
+                                        android:text=""
+                                        android:gravity="center_horizontal"
+                                        android:layout_gravity="center_horizontal"
+                                        android:id="@+id/txtused"
+                                        />
+                                </LinearLayout>
+                            </LinearLayout>
+                        </LinearLayout>
+
+
+                    </LinearLayout>
+                </android.support.v7.widget.CardView>
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardElevation="10dp"
+                    android:layout_margin="8dp"
+                    android:id="@+id/cardTwo"
+                    android:visibility="visible"
+                    android:layout_below="@id/cardOne"
+                    app:cardBackgroundColor="@color/white"
+                    app:cardCornerRadius="5dp">
+                    <LinearLayout
+                        xmlns:android="http://schemas.android.com/apk/res/android"
+                        xmlns:app="http://schemas.android.com/apk/res-auto"
+                        xmlns:tools="http://schemas.android.com/tools"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:layout_margin="16dp"
+                        android:orientation="vertical"
+                        android:background="@color/white"
+
+                        >
+                        <TextView
+                            style="@style/BigBlue_18"
+                            android:text="نحوه مصرف"
+
+                            android:layout_gravity="right"
+                            android:layout_alignParentRight="true"
+                            />
+                        <android.support.design.widget.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:theme="@style/MyEditText"
+                            android:layout_height="wrap_content">
+                            <android.support.design.widget.TextInputEditText
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="روزهای مصرف"
+                                android:maxLines="2"
+                                android:layoutDirection="rtl"
+                                android:id="@+id/useDays"
+                                android:focusable="false"
+                                android:textColor="@color/grayText"
+                                />
+                        </android.support.design.widget.TextInputLayout>
+                        <android.support.design.widget.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:theme="@style/MyEditText"
+                            android:layout_height="wrap_content">
+                            <android.support.design.widget.TextInputEditText
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="نوبت(های) روزانه"
+                                android:maxLines="1"
+                                android:focusable="false"
+                                android:enabled="false"
+                                android:selectAllOnFocus="true"
+
+                                android:layoutDirection="rtl"
+                                android:id="@+id/usePartDays"
+                                android:drawableRight="@drawable/ic_keyboard_arrow_down"
+                                android:textColor="@color/grayText"
+                                />
+                        </android.support.design.widget.TextInputLayout>
+                        <android.support.design.widget.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:theme="@style/MyEditText"
+                            android:layout_height="wrap_content">
+                            <android.support.design.widget.TextInputEditText
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="ساعت شروع"
+                                android:maxLines="1"
+                                android:selectAllOnFocus="true"
+
+                                android:id="@+id/edtStartTime"
+                                android:focusable="false"
+                                android:enabled="false"
+
+                                android:drawableRight="@drawable/ic_keyboard_arrow_down"
+                                android:textColor="@color/grayText"
+                                />
+                        </android.support.design.widget.TextInputLayout>
+
+                        <android.support.design.widget.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:theme="@style/MyEditText"
+                            android:layout_height="wrap_content">
+                            <android.support.design.widget.TextInputEditText
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="مقدار مصرف هر نوبت"
+                                android:maxLines="4"
+                                android:selectAllOnFocus="true"
+
+                                android:layoutDirection="rtl"
+                                android:id="@+id/edtUseEachTime"
+                                android:focusable="false"
+                                android:enabled="false"
+
+                                android:drawableRight="@drawable/ic_keyboard_arrow_down"
+                                android:textColor="@color/grayText"
+                                />
+                        </android.support.design.widget.TextInputLayout>
+                        <android.support.design.widget.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:theme="@style/MyEditText"
+                            app:counterMaxLength="140"
+                            app:counterEnabled="true"
+                            android:layout_height="wrap_content">
+                            <android.support.design.widget.TextInputEditText
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="توضیحات"
+                                android:maxLines="8"
+                                android:selectAllOnFocus="true"
+
+                                android:maxLength="140"
+
+                                android:enabled="false"
+                                android:layoutDirection="rtl"
+                                android:id="@+id/edtDescription"
+                                android:textColor="@color/grayText"
+                                />
+                        </android.support.design.widget.TextInputLayout>
+
+
+
+
+                    </LinearLayout>
+                </android.support.v7.widget.CardView>
+            </RelativeLayout>
+        </FrameLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+
+</android.support.design.widget.CoordinatorLayout>
