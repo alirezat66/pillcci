@@ -1,6 +1,6 @@
 package greencode.ir.pillcci.interfaces;
 
-import greencode.ir.pillcci.objects.ChangePassStepOneRes;
+import greencode.ir.pillcci.retrofit.respObject.ChangePassStepOneRes;
 
 /**
  * Created by alireza on 5/12/18.

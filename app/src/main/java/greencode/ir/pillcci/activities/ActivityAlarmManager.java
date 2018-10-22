@@ -1,7 +1,9 @@
 package greencode.ir.pillcci.activities;
 
 import android.Manifest;
+import android.app.ActivityManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -24,6 +26,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.CardView;
 import android.util.Base64;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,6 +35,8 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,12 +51,12 @@ import greencode.ir.pillcci.database.PillObject;
 import greencode.ir.pillcci.database.PillUsage;
 import greencode.ir.pillcci.dialog.CancelDialog;
 import greencode.ir.pillcci.dialog.CancelListener;
+import greencode.ir.pillcci.service.SyncService;
 import greencode.ir.pillcci.utils.BaseActivity;
 import greencode.ir.pillcci.utils.Constants;
 import greencode.ir.pillcci.utils.DatabaseManager;
 import greencode.ir.pillcci.utils.PersianCalculater;
 import greencode.ir.pillcci.utils.PreferencesData;
-import greencode.ir.pillcci.utils.ReadAndWrite;
 import greencode.ir.pillcci.utils.Utility;
 import saman.zamani.persiandate.PersianDate;
 
@@ -112,28 +117,110 @@ public class ActivityAlarmManager extends BaseActivity implements View.OnKeyList
             Manifest.permission.CAMERA
     };
     boolean isFinished = false;
+    FirebaseAnalytics firebaseAnalytics;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_alarm_manager);
-
         ButterKnife.bind(this);
+        firebaseAnalytics = FirebaseAnalytics.getInstance(this);
+        Bundle params = new Bundle();
+        params.putString("phoneNumber", Utility.getPhoneNumber(this));
+        PersianDate persianDate = new PersianDate(System.currentTimeMillis());
+        params.putString("time",PersianCalculater.getYearMonthAndDay(persianDate.getTime())+"-"+PersianCalculater.getHourseAndMin(persianDate.getTime()));
+        firebaseAnalytics.logEvent("alarm_open", params);
         mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 
         PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
         wl = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK, "My Tag");
         wl.acquire();
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        PersianDate persianDate = new PersianDate(System.currentTimeMillis());
-        txtclock.setText("زمان فعلی :"+PersianCalculater.getHourseAndMin(persianDate.getTime()));
+         persianDate = new PersianDate(System.currentTimeMillis());
+        txtclock.setText(PersianCalculater.getHourseAndMin(persianDate.getTime()));
         final AppDatabase appDatabase = AppDatabase.getInMemoryDatabase(this);
         allNotUsed = new ArrayList<>(appDatabase.pillUsageDao().getNearestUsedList(persianDate.getTime() + 60000));
-        ReadAndWrite.appendLog("we are in alarm manager and this time : " + persianDate.getHour() + ":" + persianDate.getMinute() + ":" + persianDate.getSecond());
         transitionsContainer = findViewById(R.id.layout_container);
+        this.startService(new Intent(this, SyncService.class));
+
+        /*if (!isMyServiceRunning(SyncService.class)){
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                this.startForegroundService(new Intent(this, SyncService.class));
+            } else {
+                this.startService(new Intent(this, SyncService.class));
+            }
+        }*/
+
+
         if (allNotUsed.size() != 0) {
-            ReadAndWrite.appendLog("we should alarm becuase we have pill");
             makeAlarm();
             Utility.reCalculateManager(this);
+
+
+            if (countDownTimer == null) {
+                // age countdown ba dokme cancel shode bashe dobare misazimesh ke 55 sanie baad ghat kone kolan
+                countDownTimer = new CountDownTimer(45000, 5000) { // adjust the milli seconds here
+
+                    public void onTick(long millisUntilFinished) {
+
+                    }
+
+                    public void onFinish() {
+                        final int reminderCount = PreferencesData.getInt(Constants.PREF_REMIND_COUNT, 3);
+                        isFinished = true;
+                        stopPlay();
+
+                        ArrayList<PillUsage> notUsed = new ArrayList<>();
+                        for(PillUsage pillUsage : allNotUsed){
+                            notUsed.add(pillUsage);
+                        }
+                        for(PillUsage pillUsage : notUsed){
+
+                            if (pillUsage.getSnoozCount() > reminderCount) {
+                                // age hanooz snooz dashte bashe snoozesh mikonim
+
+
+                                pillUsage.setState(2);
+                                PersianDate persianDate = new PersianDate(System.currentTimeMillis());
+
+                                pillUsage.setUsedTime(persianDate.getTime());
+                                AppDatabase database = AppDatabase.getInMemoryDatabase(ActivityAlarmManager.this);
+                                pillUsage.setIsSync(0);
+                                database.pillUsageDao().update(pillUsage);
+                            } else {
+
+
+
+
+
+                                long usageTime = pillUsage.getUsageTime();
+
+                                int destance = PreferencesData.getInt(Constants.PREF_DISTANCE, 10);
+                                usageTime = usageTime + (destance * 60 * 1000);
+                                PersianDate persianDate = new PersianDate(usageTime);
+                                persianDate.setSecond(0);
+
+                                pillUsage.setUsageTime(persianDate.getTime());
+                                pillUsage.setSnoozCount(pillUsage.getSnoozCount() + 1);
+
+                                AppDatabase database = AppDatabase.getInMemoryDatabase(ActivityAlarmManager.this);
+                                pillUsage.setIsSync(0);
+                                database.pillUsageDao().update(pillUsage);
+                                // age na miaim cancelesh mikonim
+                            }
+                            allNotUsed.remove(0);
+
+                        }
+                        Utility.reCalculateManager(ActivityAlarmManager.this);
+                        finish();
+
+
+
+                    }
+                }.start();
+            }
+
+
+
         } else {
             Utility.reCalculateManager(this);
             finish();
@@ -143,11 +230,14 @@ public class ActivityAlarmManager extends BaseActivity implements View.OnKeyList
     }
 
     private void makeAlarm() {
-
-
+        Bundle params = new Bundle();
+        params.putString("phoneNumber", Utility.getPhoneNumber(this));
+        PersianDate persianDate = new PersianDate(System.currentTimeMillis());
+        params.putString("time",PersianCalculater.getYearMonthAndDay(persianDate.getTime())+"-"+PersianCalculater.getHourseAndMin(persianDate.getTime()));
+        firebaseAnalytics.logEvent("alarm_ring", params);
         AppDatabase appDatabase = AppDatabase.getInMemoryDatabase(this);
         final PillUsage pillUsage = allNotUsed.get(0);// avalin iteme liste reminder ro migirim
-        final PillObject pill = appDatabase.pillObjectDao().specialPil(pillUsage.getPillName(), pillUsage.getCatNme());//daroo ro dar miarim
+        final PillObject pill = appDatabase.pillObjectDao().specialPil(pillUsage.getPillName(),pillUsage.getCatNme());//daroo ro dar miarim
         int isVibrate = pill.getVibrate();
         int isLight = pill.getLight();
         if (needToRemind(pill)) {
@@ -190,33 +280,7 @@ public class ActivityAlarmManager extends BaseActivity implements View.OnKeyList
         layoutOk.setVisibility(View.GONE);
         txtMessage.setVisibility(View.GONE);
 
-        if (countDownTimer == null) {
-            // age countdown ba dokme cancel shode bashe dobare misazimesh ke 55 sanie baad ghat kone kolan
-            countDownTimer = new CountDownTimer(45000, 5000) { // adjust the milli seconds here
 
-                public void onTick(long millisUntilFinished) {
-
-                }
-
-                public void onFinish() {
-                    ReadAndWrite.appendLog("finished counter time");
-                    ReadAndWrite.appendLog("pillusage snooz count = " + pillUsage.getSnoozCount());
-                    ReadAndWrite.appendLog("pillusage reminderCount = " + reminderCount);
-                    if (pillUsage.getSnoozCount() > reminderCount) {
-                        // age hanooz snooz dashte bashe snoozesh mikonim
-                        state = 4;
-                        stopPlay();
-                        updateOperation();
-
-                    } else {
-                        state = 2;
-                        stopPlay();
-                        updateOperation();
-                        // age na miaim cancelesh mikonim
-                    }
-                }
-            }.start();
-        }
 
 
     }
@@ -399,6 +463,11 @@ public class ActivityAlarmManager extends BaseActivity implements View.OnKeyList
             desc.setVisibility(View.VISIBLE);
             desc.setText(pill.getDescription());
         }
+        if(pillUsage.getCatNme().equals("")){
+            layoutContainer.setVisibility(View.GONE);
+        }else {
+            layoutContainer.setVisibility(View.VISIBLE);
+        }
     }
 
     private void makeVibration(int isVibrate) {
@@ -540,38 +609,34 @@ public class ActivityAlarmManager extends BaseActivity implements View.OnKeyList
         if (state == 1) {
             // user used pill
             pillUsage.setState(1);
-            ReadAndWrite.appendLog("we use  pill");
 
             PersianDate persianDate = new PersianDate(System.currentTimeMillis());
             pillUsage.setUsedTime(persianDate.getTime());
             PillObject object = AppDatabase.getInMemoryDatabase(this).pillObjectDao().specialPil(pillUsage.getPillName(), pillUsage.getCatNme());
+                showNext(pillUsage);
+                if (object.getTypeOfUsage() == 4) {
+                    makeNextInBirth(pillUsage);
+                } else {
+                    makeNextUsage(pillUsage);
+                }
 
-            showNext(pillUsage);
-            if (object.getTypeOfUsage() == 4) {
-                makeNextInBirth(pillUsage);
-            } else {
-                makeNextUsage(pillUsage);
-            }
         } else if (state == 2) {
             //snoozoo zafe
             long usageTime = pillUsage.getUsageTime();
 
             int destance = PreferencesData.getInt(Constants.PREF_DISTANCE, 10);
-            ReadAndWrite.appendLog("snooz destance = " + destance);
             usageTime = usageTime + (destance * 60 * 1000);
             PersianDate persianDate = new PersianDate(usageTime);
             persianDate.setSecond(0);
-            ReadAndWrite.appendLog("we snooz  pill and new date is " + ReadAndWrite.getHMS(persianDate));
 
             pillUsage.setUsageTime(persianDate.getTime());
             pillUsage.setSnoozCount(pillUsage.getSnoozCount() + 1);
-            ReadAndWrite.appendLog("snooz count after this snooz = " + (pillUsage.getSnoozCount() + 1));
 
-            showNext(pillUsage);
+                showNext(pillUsage);
+
         } else if (state == 4) {
             //timesh tamam shode
 
-            ReadAndWrite.appendLog("we finished becouse snooz count finished and any act not get from user");
 
             pillUsage.setState(2);
             PersianDate persianDate = new PersianDate(System.currentTimeMillis());
@@ -612,7 +677,6 @@ public class ActivityAlarmManager extends BaseActivity implements View.OnKeyList
                     @Override
                     public void onSuccess(int type) {
                         if (type == 1) {
-                            ReadAndWrite.appendLog("this  canceled and remove  pill");
                             DatabaseManager.cancelUsage(ActivityAlarmManager.this, pillUsage);
                             PersianDate persianDate = new PersianDate(System.currentTimeMillis());
                             pillUsage.setUsedTime(persianDate.getTime());
@@ -625,7 +689,6 @@ public class ActivityAlarmManager extends BaseActivity implements View.OnKeyList
                             }
 
                         } else {
-                            ReadAndWrite.appendLog("this  canceled and add to end");
                             DatabaseManager.addToEnd(ActivityAlarmManager.this, pillUsage);
                             PersianDate persianDate = new PersianDate(System.currentTimeMillis());
                             pillUsage.setUsedTime(persianDate.getTime());
@@ -648,11 +711,7 @@ public class ActivityAlarmManager extends BaseActivity implements View.OnKeyList
             }
         }
 
-        if (countDownTimer != null) {
-            // count down ro pak mikonim ke dobar cancel ya snooz nashe
-            countDownTimer.cancel();
-            countDownTimer = null;
-        }
+
 
     }
 
@@ -669,11 +728,13 @@ public class ActivityAlarmManager extends BaseActivity implements View.OnKeyList
 
     private void showNext(PillUsage pillUsage) {
         AppDatabase database = AppDatabase.getInMemoryDatabase(this);
+        pillUsage.setIsSync(0);
         database.pillUsageDao().update(pillUsage);
         PillObject pill = database.pillObjectDao().specialPil(pillUsage.getPillName(), pillUsage.getCatNme());
         double pillCount = pill.getAllPillCount();
         pillCount -= Double.parseDouble(pillUsage.getUnitAmount());
         pill.setAllPillCount(pillCount);
+        pill.setSync(0);
         database.pillObjectDao().update(pill);
         Utility.reCalculateManager(ActivityAlarmManager.this);
         if (allNotUsed.size() == 1) {
@@ -700,14 +761,14 @@ public class ActivityAlarmManager extends BaseActivity implements View.OnKeyList
 
     private void showAnimateUsage() {
         goneButtons();
-        txtMessage.setText("دارو را مصرف می کنم");
+        txtMessage.setText("دارو را مصرف می\u200Cکنم");
         txtMessage.setTextColor(getResources().getColor(R.color.teal));
     }
 
 
     private void showAnimateCancel() {
         goneButtons();
-        txtMessage.setText("دارو را مصرف نمی کنم");
+        txtMessage.setText("دارو را مصرف نمی\u200Cکنم");
         txtMessage.setTextColor(getResources().getColor(R.color.colorAccent));
     }
 
@@ -744,10 +805,25 @@ public class ActivityAlarmManager extends BaseActivity implements View.OnKeyList
         return false;
     }
 
-
+    private boolean isMyServiceRunning(Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
+    }
     @Override
     protected void onDestroy() {
+
+        Log.e("hilevel","not used number ="+allNotUsed.size());
         if (allNotUsed.size() > 1) {
+            Bundle params = new Bundle();
+            params.putString("phoneNumber", Utility.getPhoneNumber(this));
+            PersianDate persianDate = new PersianDate(System.currentTimeMillis());
+            params.putString("time",PersianCalculater.getYearMonthAndDay(persianDate.getTime())+"-"+PersianCalculater.getHourseAndMin(persianDate.getTime()));
+            firebaseAnalytics.logEvent("alarm_close_forcly", params);
             final int reminderCount = PreferencesData.getInt(Constants.PREF_REMIND_COUNT, 3);
 
             for (PillUsage usage : allNotUsed) {
@@ -755,22 +831,21 @@ public class ActivityAlarmManager extends BaseActivity implements View.OnKeyList
                     long usageTime = usage.getUsageTime();
 
                     int destance = PreferencesData.getInt(Constants.PREF_DISTANCE, 10);
-                    ReadAndWrite.appendLog("snooz destance = " + destance);
                     usageTime = usageTime + (destance * 60 * 1000);
                     PersianDate date = new PersianDate(usageTime);
                     date.setSecond(0);
-                    ReadAndWrite.appendLog("we snooz  pill and new date is " + ReadAndWrite.getHMS(date));
 
                     usage.setUsageTime(date.getTime());
-                    ReadAndWrite.appendLog("snooz count after this snooz = " + (usage.getSnoozCount() + 1));
                     usage.setSnoozCount(usage.getSnoozCount() + 1);
 
                     AppDatabase database = AppDatabase.getInMemoryDatabase(this);
+                    usage.setIsSync(0);
                     database.pillUsageDao().update(usage);
 
                 } else {
                     usage.setState(2);
                     AppDatabase database = AppDatabase.getInMemoryDatabase(this);
+                    usage.setIsSync(0);
                     database.pillUsageDao().update(usage);
                 }
             }

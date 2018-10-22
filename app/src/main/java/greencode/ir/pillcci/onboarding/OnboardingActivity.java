@@ -25,10 +25,9 @@ public class OnboardingActivity extends AppIntro {
 
         setFadeAnimation();
         addSlide(new OnboardingFragment());
-        addSlide(new OnboardingFragment());
-        addSlide(new OnboardingFragment());
-        addSlide(new OnboardingFragment());
-        addSlide(new OnboardingFragment());
+        addSlide(new OnboardingFragmentTwo());
+        addSlide(new OnboardingFragmentThree());
+        addSlide(new OnboardingFragmentFour());
 
         setSeparatorColor(getResources().getColor(R.color.colorPrimaryDark));
         setSkipText("ورود");

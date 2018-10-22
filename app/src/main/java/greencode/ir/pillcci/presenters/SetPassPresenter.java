@@ -38,10 +38,16 @@ public class SetPassPresenter {
     }
 
     public void responseReady(RegisterResponse registerResponse) {
-        if(registerResponse.isSuccess()){
+
             myInterface.onSuccessRegister(registerResponse);
-        }else {
-            myInterface.onErrorRegister(registerResponse.getError());
-        }
+
+    }
+
+    public void callService(RegisterRequest request) {
+        model.setPass(request);
+    }
+
+    public void errorReady(String message) {
+        myInterface.onErrorRegister(message);
     }
 }

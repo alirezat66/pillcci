@@ -8,31 +8,135 @@
     android:orientation="vertical"
     android:background="@color/backColor"
     >
-    <TextView
-        style="@style/BigBlue_18"
-        android:text="اطلاعات کلی"
-        android:layout_gravity="right"
-        android:layout_alignParentRight="true"
-        />
-
-    <android.support.design.widget.TextInputLayout
+    <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/MyEditText">
-    <android.support.design.widget.TextInputEditText
+        app:cardBackgroundColor="@color/white"
+        app:cardElevation="4dp"
+        app:cardCornerRadius="0dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="16dp"
+
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+        <com.github.florent37.expansionpanel.ExpansionHeader
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            app:expansion_headerIndicator="@id/headerIndicator_one"
+            app:expansion_layout="@id/expansionLayout_one"
+            android:layoutDirection="rtl"
+
+            app:expansion_toggleOnClick="true">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:gravity="center_vertical|right"
+                    android:layout_marginRight="16dp"
+                    android:text="نام دارو (اجباری)"/>
+                <android.support.v7.widget.AppCompatImageView
+                    android:adjustViewBounds="true"
+                    android:id="@+id/headerIndicator_one"
+                    android:layout_alignParentLeft="true"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_centerVertical="true"
+                    android:layout_width="wrap_content"
+                    app:srcCompat="@drawable/ic_right" />
+            </RelativeLayout>
+        </com.github.florent37.expansionpanel.ExpansionHeader>
+
+
+        <com.github.florent37.expansionpanel.ExpansionLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:expansion_expanded="true"
+            android:id="@+id/expansionLayout_one"
+
+            >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+        <android.support.design.widget.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="8dp"
+            android:layout_marginLeft="8dp"
+
+            android:maxLines="1"
+
+            android:inputType="text"
+            android:layoutDirection="rtl"
+            android:id="@+id/edtMedName"
+            android:maxLength="30"
+            android:textColor="@color/grayText"
+            />
+        </LinearLayout>
+
+        </com.github.florent37.expansionpanel.ExpansionLayout>
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+    <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="نام دارو
-        (اجباری)"
-        android:maxLines="1"
-
-        android:inputType="text"
+        app:cardCornerRadius="0dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="16dp"
+        app:cardElevation="4dp"
+        android:layout_marginTop="16dp">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+    <com.github.florent37.expansionpanel.ExpansionHeader
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        app:expansion_headerIndicator="@id/headerIndicator"
+        app:expansion_layout="@id/expansionLayout"
         android:layoutDirection="rtl"
-        android:id="@+id/edtMedName"
-        android:maxLength="30"
-        android:textColor="@color/grayText"
-        />
-    </android.support.design.widget.TextInputLayout>
+        app:expansion_toggleOnClick="true">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="56dp"
+            android:gravity="center_vertical|right"
+            android:layout_marginRight="16dp"
+            android:text="اطلاعات تکمیلی"/>
+        <android.support.v7.widget.AppCompatImageView
+            android:adjustViewBounds="true"
+            android:id="@+id/headerIndicator"
+            android:layout_alignParentLeft="true"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_centerVertical="true"
+            android:layout_width="wrap_content"
+            app:srcCompat="@drawable/ic_right" />
+        </RelativeLayout>
+
+
+    </com.github.florent37.expansionpanel.ExpansionHeader>
+    <com.github.florent37.expansionpanel.ExpansionLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:id="@+id/expansionLayout"
+
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
         android:theme="@style/MyEditText"
@@ -55,7 +159,7 @@
         <android.support.design.widget.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="نام پزشک تجویز کننده"
+            android:hint="پزشک معالج"
             android:layoutDirection="rtl"
             android:maxLength="40"
             android:inputType="text"
@@ -66,111 +170,181 @@
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+
         android:theme="@style/MyEditText">
         g<android.support.design.widget.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint=" نام دسته دارو (پیش فرض 'عمومی')"
+            android:hint="مصرف کننده"
             android:maxLines="1"
+            android:singleLine="true"
+            android:lines="1"
             android:layoutDirection="rtl"
             android:maxLength="10"
             android:id="@+id/edtcatName"
             android:textColor="@color/grayText"
             />
     </android.support.design.widget.TextInputLayout>
-    <LinearLayout
+    <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:theme="@style/MyEditText"
+                android:layout_height="wrap_content">
+                <android.support.design.widget.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint=""
+                    android:id="@+id/edtColor"
+                    android:focusable="false"
+                    android:maxLines="1"
+                    android:layoutDirection="rtl"
+
+                    android:textColor="@color/grayText"
+                    />
+            </android.support.design.widget.TextInputLayout>
+        </LinearLayout>
+    </com.github.florent37.expansionpanel.ExpansionLayout>
+    </LinearLayout>
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:weightSum="10">
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="0dp"
-            android:layout_weight="4"
-            android:theme="@style/MyEditText"
-            android:layout_height="wrap_content">
-            <android.support.design.widget.TextInputEditText
+        android:layout_height="match_parent"
+        app:cardCornerRadius="0dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        app:cardBackgroundColor="@color/white"
+        app:cardElevation="4dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <com.github.florent37.expansionpanel.ExpansionHeader
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                app:expansion_headerIndicator="@id/headerIndicator_three"
+                app:expansion_layout="@id/expansionLayout_three"
+                android:layoutDirection="rtl"
+                app:expansion_toggleOnClick="true">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="56dp"
+                        android:gravity="center_vertical|right"
+                        android:layout_marginRight="16dp"
+                        android:text="تنظیمات هشدار"/>
+                    <android.support.v7.widget.AppCompatImageView
+                        android:adjustViewBounds="true"
+                        android:id="@+id/headerIndicator_three"
+                        android:layout_alignParentLeft="true"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="16dp"
+                        android:layout_centerVertical="true"
+                        android:layout_width="wrap_content"
+                        app:srcCompat="@drawable/ic_right" />
+                </RelativeLayout>
+
+
+            </com.github.florent37.expansionpanel.ExpansionHeader>
+            <com.github.florent37.expansionpanel.ExpansionLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="صدای هشدار"
-                android:maxLines="1"
-                android:id="@+id/edtRing"
-                android:layoutDirection="rtl"
-                android:inputType="text"
-                android:focusable="false"
-                android:textColor="@color/grayText"
-                />
-        </android.support.design.widget.TextInputLayout>
+                android:orientation="vertical"
+                android:id="@+id/expansionLayout_three"
 
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"></LinearLayout>
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="0dp"
-            android:layout_weight="4"
-            android:theme="@style/MyEditText"
-            android:layout_height="wrap_content">
-            <android.support.design.widget.TextInputEditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint=""
-                android:id="@+id/edtColor"
-                android:focusable="false"
-                android:maxLines="1"
-                android:layoutDirection="rtl"
+                >
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:weightSum="10">
+                        <android.support.design.widget.TextInputLayout
+                            android:layout_width="0dp"
+                            android:layout_weight="10"
+                            android:paddingRight="16dp"
+                            android:paddingLeft="16dp"
+                            android:theme="@style/MyEditText"
+                            android:layout_height="wrap_content">
+                            <android.support.design.widget.TextInputEditText
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="صدای هشدار"
+                                android:maxLines="1"
 
-                android:textColor="@color/grayText"
-                />
-        </android.support.design.widget.TextInputLayout>
+                                android:id="@+id/edtRing"
+                                android:layoutDirection="rtl"
+                                android:inputType="text"
+                                android:focusable="false"
+                                android:textColor="@color/grayText"
+                                />
+                        </android.support.design.widget.TextInputLayout>
 
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:weightSum="10"
-        android:layout_margin="16dp"
-        android:layoutDirection="rtl">
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="5">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="لرزش"
-                android:layout_gravity="center_vertical"
-                android:textSize="18sp"
-                android:textColor="@color/gray"/>
-            <com.zcw.togglebutton.ToggleButton
-                android:layout_width="wrap_content"
-                android:layout_height="25dp"
-                android:id="@+id/toggleVibrate"
-                android:layout_marginRight="8dp"
-                />
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0"></LinearLayout>
 
+
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:weightSum="10"
+                        android:layout_margin="16dp"
+                        android:layoutDirection="rtl">
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="5">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="لرزش"
+                                android:layout_gravity="center_vertical"
+                                android:textSize="18sp"
+                                android:textColor="@color/gray"/>
+                            <com.zcw.togglebutton.ToggleButton
+                                android:layout_width="wrap_content"
+                                android:layout_height="25dp"
+                                android:id="@+id/toggleVibrate"
+                                android:layout_marginRight="8dp"
+                                />
+
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="5">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="فلاش"
+                                android:layout_gravity="center_vertical"
+                                android:textSize="18sp"
+                                android:textColor="@color/gray"/>
+                            <com.zcw.togglebutton.ToggleButton
+                                android:layout_width="wrap_content"
+                                android:layout_height="25dp"
+                                android:id="@+id/toggleLight"
+                                android:layout_marginRight="8dp"
+                                />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+                </LinearLayout>
+            </com.github.florent37.expansionpanel.ExpansionLayout>
         </LinearLayout>
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="5">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="فلاش"
-                android:layout_gravity="center_vertical"
-                android:textSize="18sp"
-                android:textColor="@color/gray"/>
-            <com.zcw.togglebutton.ToggleButton
-                android:layout_width="wrap_content"
-                android:layout_height="25dp"
-                android:id="@+id/toggleLight"
-                android:layout_marginRight="8dp"
-                />
+    </android.support.v7.widget.CardView>
 
-        </LinearLayout>
-
-    </LinearLayout>
 
 
 </LinearLayout>

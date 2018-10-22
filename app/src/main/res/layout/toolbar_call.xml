@@ -5,7 +5,7 @@
     android:id="@+id/toolBar"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/white"
+    android:background="@color/colorPrimary"
     android:elevation="5dp"
     android:fitsSystemWindows="true"
     android:layoutDirection="ltr"
@@ -16,7 +16,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
+        android:background="@color/colorPrimary"
         >
 
         <android.support.v7.widget.AppCompatImageView
@@ -38,15 +38,15 @@
             android:layout_centerVertical="true"
             android:padding="16dp"
             android:id="@+id/imgAdd"
-            app:srcCompat="@drawable/add_blue_icon"/>
+            app:srcCompat="@drawable/ic_add_white_24dp"/>
 
 
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/VioletBlue"
-            android:textSize="20sp"
+            android:textColor="@color/white"
+            android:textSize="18sp"
             android:maxLines="1"
             android:text="تماس های اضطراری"
             android:layout_toLeftOf="@id/img_back"

@@ -1,12 +1,9 @@
 package greencode.ir.pillcci.presenters;
 
 import greencode.ir.pillcci.Model.POJOModel;
-import greencode.ir.pillcci.interfaces.ChangePassOneInterface;
 import greencode.ir.pillcci.interfaces.ChangePassTwoInterface;
-import greencode.ir.pillcci.objects.ChangePassStepOneReq;
-import greencode.ir.pillcci.objects.ChangePassStepOneRes;
-import greencode.ir.pillcci.objects.ChangePassStepTwoReq;
-import greencode.ir.pillcci.objects.ChangePassStepTwoRes;
+import greencode.ir.pillcci.retrofit.reqobject.ChangePassStepTwoReq;
+import greencode.ir.pillcci.retrofit.respObject.ChangePassStepTwoRes;
 
 /**
  * Created by alireza on 5/12/18.
@@ -20,17 +17,17 @@ public class ChangePassTwoPresenter {
         model = new POJOModel(this);
     }
     public void sendPassChangeReq(ChangePassStepTwoReq req){
-        model.changePassReq(req);
+        model.changePassStepTowReq(req);
     }
 
     public void responseReady(ChangePassStepTwoRes response) {
-        if(response.isSuccess()){
-            myInterface.onSuccess(response);
-        }else {
-            myInterface.onError(response.getError());
-        }
+        myInterface.onSuccess(response);
     }
     public void chechPass(ChangePassStepTwoReq req){
         sendPassChangeReq(req);
+    }
+
+    public void responseError(String message) {
+        myInterface.onError(message);
     }
 }

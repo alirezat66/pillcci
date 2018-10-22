@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.util.Log;
 import android.view.WindowManager;
 
-import greencode.ir.pillcci.utils.ReadAndWrite;
 import greencode.ir.pillcci.utils.Utility;
 import saman.zamani.persiandate.PersianDate;
 
@@ -26,7 +25,6 @@ public class EventReciver extends BroadcastReceiver {
         Log.d("hiLevel","we are in receiver and time is "+System.currentTimeMillis());
 
         PersianDate date = new PersianDate(System.currentTimeMillis());
-        ReadAndWrite.appendLog("alarm triggered  this time " +date.getHour()+":"+date.getMinute()+":"+date.getSecond());
 
         Intent alarmIntent = new Intent();
         alarmIntent.setClassName("greencode.ir.pillcci", "greencode.ir.pillcci.activities.ActivityAlarmManager");
@@ -37,7 +35,6 @@ public class EventReciver extends BroadcastReceiver {
                 WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
         context.startActivity(alarmIntent);
 
-        ReadAndWrite.appendLog("we cant start project " +date.getHour()+":"+date.getMinute()+":"+date.getSecond());
         Utility.reCalculateManager(context);
 /*        final android.os.Handler handler = new android.os.Handler();
         handler.postDelayed(new Runnable() {

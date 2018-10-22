@@ -7,6 +7,7 @@ import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 
 import com.crashlytics.android.Crashlytics;
+import com.crashlytics.android.answers.Answers;
 
 import greencode.ir.pillcci.R;
 import greencode.ir.pillcci.utils.Utility;
@@ -22,6 +23,7 @@ public class AppController extends MultiDexApplication {
     private Thread.UncaughtExceptionHandler defaultUEH;
     private static Activity CurrentActivity = null;
     private static Context CurrentContext;
+    private static Context sContext;
 
 
 
@@ -35,11 +37,22 @@ public class AppController extends MultiDexApplication {
         Fabric fabric = new Fabric.Builder(this)
                 .kits(new Crashlytics()).debuggable(true)
                 .build();
+
+        final Fabric fabric2 = new Fabric.Builder(this)
+                .kits(new Answers())
+                .debuggable(true)
+                .build();
         Fabric.with(fabric);
+        Fabric.with(fabric2);
+        sContext = getApplicationContext();
+
        /* defaultUEH = Thread.getDefaultUncaughtExceptionHandler();
         // setup handler for uncaught exception
         Thread.setDefaultUncaughtExceptionHandler(_unCaughtExceptionHandler);*/
 
+    }
+    public static Context getContext() {
+        return sContext;
     }
     private Thread.UncaughtExceptionHandler _unCaughtExceptionHandler =
             new Thread.UncaughtExceptionHandler() {

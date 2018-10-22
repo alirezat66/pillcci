@@ -42,6 +42,7 @@ public class EditEachTimeAdapter extends RecyclerView.Adapter<EditEachTimeAdapte
         String min  = (selectedDate.getMinute()>=10?selectedDate.getMinute()+"":"0"+selectedDate.getMinute());
         list.get(index).setTimeStr(hours+":"+min);
         list.get(index).setStartDay(selectedDate.getTime());
+        list.get(index).setEachUse(data.getEachUse());
         boolean isChange=false;
         for (int i = 1; i < list.size(); i++) {
             for (int j = i + 1; j < list.size(); j++) {

@@ -1,6 +1,7 @@
 package greencode.ir.pillcci.activities;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -16,12 +17,14 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.zcw.togglebutton.ToggleButton;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import greencode.ir.pillcci.R;
+import greencode.ir.pillcci.controler.AppDatabase;
 import greencode.ir.pillcci.utils.BaseActivity;
 import greencode.ir.pillcci.utils.Constants;
 import greencode.ir.pillcci.utils.InputFilterMinMax;
@@ -52,19 +55,28 @@ public class ActivitySetting extends BaseActivity {
     @BindView(R.id.toggleLight)
     ToggleButton toggleLight;
 
-    boolean isVibrate=false;
-    boolean isLight  = false;
+    boolean isVibrate = false;
+    boolean isLight = false;
 
 
     private static final int REQUEST_CODE_PERMISSION = 2;
     String[] mPermission = {
             Manifest.permission.CAMERA
     };
+    @BindView(R.id.btnDeleteAllInfo)
+    TextView btnDeleteAllInfo;
+    @BindView(R.id.btnExit)
+    TextView btnExit;
+    FirebaseAnalytics firebaseAnalytics;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
         ButterKnife.bind(this);
+        firebaseAnalytics = FirebaseAnalytics.getInstance(this);
+        Bundle params = new Bundle();
+        params.putString("phoneNumber", Utility.getPhoneNumber(this));
+        firebaseAnalytics.logEvent("setting_open", params);
         edtDistance.setFilters(new InputFilter[]{new InputFilterMinMax(1, 30)});
 
         txtTitle.setText("تنظیمات");
@@ -72,33 +84,33 @@ public class ActivitySetting extends BaseActivity {
         int distance = PreferencesData.getInt(Constants.PREF_DISTANCE, 10);
         edtReminderCount.setText(reminderCount + "");
         edtDistance.setText(distance + "");
-         isVibrate = PreferencesData.getBoolean(Constants.PREF_VIBRATE);
-         isLight = PreferencesData.getBoolean(Constants.PREF_LOGHT);
+        isVibrate = PreferencesData.getBoolean(Constants.PREF_VIBRATE);
+        isLight = PreferencesData.getBoolean(Constants.PREF_LOGHT);
 
         toggleVibrate.setOnToggleChanged(new ToggleButton.OnToggleChanged() {
             @Override
             public void onToggle(boolean on) {
-               isVibrate=on;
+                isVibrate = on;
             }
         });
         toggleLight.setOnToggleChanged(new ToggleButton.OnToggleChanged() {
             @Override
             public void onToggle(boolean on) {
-                if(on) {
+                if (on) {
                     checkPermission();
-                }else {
-                    isLight=false;
+                } else {
+                    isLight = false;
                 }
             }
         });
-        if(isVibrate)
+        if (isVibrate)
             toggleVibrate.setToggleOn();
-        if(isLight)
+        if (isLight)
             toggleLight.setToggleOn();
 
 
-
     }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -117,7 +129,8 @@ public class ActivitySetting extends BaseActivity {
 
         }
     }
-    @OnClick({R.id.img_back, R.id.btnInsert, R.id.btnDelete})
+
+    @OnClick({R.id.img_back, R.id.btnInsert, R.id.btnDelete,R.id.btnExit})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.img_back:
@@ -131,23 +144,35 @@ public class ActivitySetting extends BaseActivity {
                 Utility.hideKeyboard();
                 finish();
                 break;
+            case R.id.btnExit:
+                PreferencesData.saveBool(Constants.PREF_LOGIN,false);
+                AppDatabase database = AppDatabase.getInMemoryDatabase(this);
+                database.phoneBookDao().nukeTable();
+                database.pillUsageDao().nukeTable();
+                database.pillObjectDao().nukeTable();
+                database.categoryDao().nukeTable();
+                database.profileDao().nukeTable();
+                Intent intent = new Intent(this,LoginActivity.class);
+                startActivity(intent);
+                finish();
+                break;
         }
     }
 
     private void saveState() {
-        if(edtReminderCount.getText().toString().length()==0 || edtReminderCount.getText().equals("")){
+        if (edtReminderCount.getText().toString().length() == 0 || edtReminderCount.getText().equals("")) {
             Toast.makeText(this, "ورودی تعداد یادآوری صحیح نمی باشد.", Toast.LENGTH_LONG).show();
         }
-        if(edtDistance.getText().toString().length()==0 || edtDistance.getText().toString().equals("0")){
+        if (edtDistance.getText().toString().length() == 0 || edtDistance.getText().toString().equals("0")) {
             Toast.makeText(this, "فاصله زمانی بین یاد آوری صحیح نمی باشد..", Toast.LENGTH_LONG).show();
 
-        }else {
+        } else {
             int reminderCount = Integer.parseInt(edtReminderCount.getText().toString());
             int distance = Integer.parseInt(edtDistance.getText().toString());
             PreferencesData.saveInt(Constants.PREF_REMIND_COUNT, reminderCount);
             PreferencesData.saveInt(Constants.PREF_DISTANCE, distance);
-            PreferencesData.saveBool(Constants.PREF_VIBRATE,isVibrate);
-            PreferencesData.saveBool(Constants.PREF_LOGHT,isLight);
+            PreferencesData.saveBool(Constants.PREF_VIBRATE, isVibrate);
+            PreferencesData.saveBool(Constants.PREF_LOGHT, isLight);
             Utility.hideKeyboard();
             finish();
         }
@@ -157,7 +182,7 @@ public class ActivitySetting extends BaseActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             try {
                 if (ActivityCompat.checkSelfPermission(this, mPermission[0])
-                        != PackageManager.PERMISSION_GRANTED ) {
+                        != PackageManager.PERMISSION_GRANTED) {
 
                     requestPermissions(
                             mPermission, REQUEST_CODE_PERMISSION);
@@ -177,7 +202,8 @@ public class ActivitySetting extends BaseActivity {
     }
 
     private void lightOn() {
-        isLight=true;
+        isLight = true;
     }
+
 
 }

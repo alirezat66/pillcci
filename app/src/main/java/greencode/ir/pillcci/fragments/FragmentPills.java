@@ -22,6 +22,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.CustomEvent;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.kaopiz.kprogresshud.KProgressHUD;
 
 import java.util.ArrayList;
@@ -39,6 +42,7 @@ import greencode.ir.pillcci.database.PillUsage;
 import greencode.ir.pillcci.dialog.FinishDialog;
 import greencode.ir.pillcci.dialog.FinishListener;
 import greencode.ir.pillcci.objects.PillShelf;
+import greencode.ir.pillcci.retrofit.SyncController;
 import greencode.ir.pillcci.utils.DatabaseManager;
 import greencode.ir.pillcci.utils.Utility;
 import saman.zamani.persiandate.PersianDate;
@@ -71,6 +75,7 @@ public class FragmentPills extends Fragment implements PillAdapter.PillListInter
     @BindView(R.id.fabBtn)
     FloatingActionButton fabBtn;
 
+    FirebaseAnalytics firebaseAnalytics;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,9 +87,14 @@ public class FragmentPills extends Fragment implements PillAdapter.PillListInter
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_pills, container, false);
         ButterKnife.bind(this, view);
+        firebaseAnalytics = FirebaseAnalytics.getInstance(getContext());
         imgSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Answers.getInstance().logCustom(new CustomEvent("Search")
+                        .putCustomAttribute("page", "pill")
+                        .putCustomAttribute("phone",AppDatabase.getInMemoryDatabase(getContext()).profileDao().getMyProfile().getPhone())
+                );
                 visibleSearch();
             }
         });
@@ -137,6 +147,10 @@ public class FragmentPills extends Fragment implements PillAdapter.PillListInter
     }
 
     public void visibleSearch() {
+        Bundle params = new Bundle();
+        params.putString("phoneNumber", Utility.getPhoneNumber(getContext()));
+        firebaseAnalytics.logEvent("pil_search", params);
+        visibleSearch();
         txtToday.setVisibility(View.GONE);
         imgSearch.setVisibility(View.GONE);
         edtSearch.setVisibility(View.VISIBLE);
@@ -177,7 +191,7 @@ public class FragmentPills extends Fragment implements PillAdapter.PillListInter
 
     private void makePillShelve() {
         AppDatabase database = AppDatabase.getInMemoryDatabase(getContext());
-        List<PillObject> pillObjects = database.pillObjectDao().address();
+        List<PillObject> pillObjects = database.pillObjectDao().getAllPill();
 
         for (PillObject pilName : pillObjects) {
             PillUsage pillNext = database.pillUsageDao().getNextPill(System.currentTimeMillis(), pilName.getMidname(), pilName.getCatName());
@@ -217,6 +231,9 @@ public class FragmentPills extends Fragment implements PillAdapter.PillListInter
 
     @Override
     public void onDelete(final PillShelf item) {
+        Bundle params = new Bundle();
+        params.putString("phoneNumber", Utility.getPhoneNumber(getContext()));
+        firebaseAnalytics.logEvent("pil_delete", params);
         final FinishDialog dialog = new FinishDialog(getContext(), "از حذف کامل دارو اطمینان دارید؟", "در صورت حذف دارو تمامی گزارشات و مصارف آینده دارو حذف می شود.");
         dialog.setListener(new FinishListener() {
             @Override
@@ -242,7 +259,9 @@ public class FragmentPills extends Fragment implements PillAdapter.PillListInter
         Intent intent = new Intent(getContext(), ActivityPilDetail.class);
         intent.putExtra("midName", item.getName());
         intent.putExtra("catName", item.getCatName());
-
+        Bundle params = new Bundle();
+        params.putString("phoneNumber", Utility.getPhoneNumber(getContext()));
+        firebaseAnalytics.logEvent("pil_click_on_pil_for_detail", params);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Pair<View, String> pair1 = Pair.create((View) imgLogo, imgLogo.getTransitionName());
             Pair<View, String> pair2 = Pair.create((View) txtMedName, txtMedName.getTransitionName());
@@ -258,6 +277,9 @@ public class FragmentPills extends Fragment implements PillAdapter.PillListInter
 
     @Override
     public void onStop(final PillShelf item) {
+        Bundle params = new Bundle();
+        params.putString("phoneNumber", Utility.getPhoneNumber(getContext()));
+        firebaseAnalytics.logEvent("pil_stop", params);
         final FinishDialog dialog;
         if (item.getUsageType() == 4) {
             dialog = new FinishDialog(getContext(), "از توقف مصرف دارو اطمینان دارید؟", "در صورت توقف مصرف تمامی داروهای شما از این تاریخ حذف می شوند.در داروهای ضد بارداری امکان فعال سازی مجدد وجود ندارد. ");
@@ -289,7 +311,7 @@ public class FragmentPills extends Fragment implements PillAdapter.PillListInter
         kProgressHUD = KProgressHUD.create(getContext())
                 .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
                 .setLabel("لطفا منتظر بمانید")
-                .setDetailsLabel("در حال محاسبات ایجاد استفاده های دارو...")
+                .setDetailsLabel("پیلچی در حال تنظیم یادآورهاست...")
                 .setCancellable(false)
                 .setAnimationSpeed(2)
                 .setDimAmount(0.8f)
@@ -349,8 +371,12 @@ public class FragmentPills extends Fragment implements PillAdapter.PillListInter
             AppDatabase database = AppDatabase.getInMemoryDatabase(getContext());
             database.pillUsageDao().insertPillList(usageList);
             pillObject.setState(1);
+            pillObject.setSync(0);
             database.pillObjectDao().update(pillObject);
             Utility.reCalculateManager(getContext());
+            SyncController sync =new SyncController();
+            sync.checkDataBaseForUpdate();
+
 
             return "";
         }

@@ -10,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.kaopiz.kprogresshud.KProgressHUD;
@@ -23,6 +24,7 @@ import greencode.ir.pillcci.controler.AppDatabase;
 import greencode.ir.pillcci.database.Category;
 import greencode.ir.pillcci.database.PillObject;
 import greencode.ir.pillcci.database.PillUsage;
+import greencode.ir.pillcci.database.Profile;
 import greencode.ir.pillcci.dialog.FinishDialog;
 import greencode.ir.pillcci.dialog.FinishListener;
 import greencode.ir.pillcci.fragments.FragmentComplitationMedic;
@@ -31,6 +33,7 @@ import greencode.ir.pillcci.fragments.FragmentUsageMedic;
 import greencode.ir.pillcci.objects.EndUseFields;
 import greencode.ir.pillcci.objects.GeneralFields;
 import greencode.ir.pillcci.objects.UsageFields;
+import greencode.ir.pillcci.retrofit.SyncController;
 import greencode.ir.pillcci.utils.BaseActivity;
 import greencode.ir.pillcci.utils.Utility;
 
@@ -58,8 +61,7 @@ public class AddMedicianActivity extends BaseActivity implements FragmentGeneral
     FrameLayout lyNumberOne;
     @BindView(R.id.txtStepOne)
     TextView txtStepOne;
-    @BindView(R.id.lyStepOne)
-    LinearLayout lyStepOne;
+
     @BindView(R.id.checkedTwo)
     AppCompatImageView checkedTwo;
     @BindView(R.id.lyNumberTwo)
@@ -78,12 +80,17 @@ public class AddMedicianActivity extends BaseActivity implements FragmentGeneral
     TextView lyNumberTwoText;
     @BindView(R.id.lyNumberThreeText)
     TextView lyNumberThreeText;
+    @BindView(R.id.lineOne)
+    RelativeLayout lineOne;
+    @BindView(R.id.linetwo)
+    RelativeLayout linetwo;
+
+
     private int mSelectedColor;
     public static GeneralFields generalFields;
     public static UsageFields usageFields;
     public static EndUseFields endUseFields;
     ArrayList<Fragment> fragments = new ArrayList<>();
-
     KProgressHUD kProgressHUD;
 
 
@@ -92,7 +99,7 @@ public class AddMedicianActivity extends BaseActivity implements FragmentGeneral
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_medician);
         ButterKnife.bind(this);
-        txtTitle.setText("افزودن داروی جدید");
+        txtTitle.setText("افزودن دارو");
         addFragmentList();
         getSupportFragmentManager().beginTransaction().replace(R.id.container, fragments.get(0)).commit();
         imgBack.setOnClickListener(new View.OnClickListener() {
@@ -103,22 +110,25 @@ public class AddMedicianActivity extends BaseActivity implements FragmentGeneral
         });
 
     }
-    public void showWaiting(){
-        kProgressHUD=  KProgressHUD.create(this)
+
+    public void showWaiting() {
+        kProgressHUD = KProgressHUD.create(this)
                 .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
                 .setLabel("لطفا منتظر بمانید")
-                .setDetailsLabel("در حال محاسبات ایجاد استفاده های دارو...")
+                .setDetailsLabel("پیلچی در حال تنظیم یادآورهاست...")
                 .setCancellable(false)
                 .setAnimationSpeed(2)
                 .setDimAmount(0.8f)
                 .setBackgroundColor(getResources().getColor(R.color.colorPrimary))
                 .show();
     }
-    public void disMissWaiting(){
-        if(kProgressHUD!=null){
+
+    public void disMissWaiting() {
+        if (kProgressHUD != null) {
             kProgressHUD.dismiss();
         }
     }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -127,6 +137,7 @@ public class AddMedicianActivity extends BaseActivity implements FragmentGeneral
     public static UsageFields getUsageFields() {
         return usageFields;
     }
+
     public static GeneralFields getGeneralFields() {
         return generalFields;
     }
@@ -142,11 +153,12 @@ public class AddMedicianActivity extends BaseActivity implements FragmentGeneral
 
         lyNumberOne.setVisibility(View.INVISIBLE);
         checkedOne.setVisibility(View.VISIBLE);
+        lineOne.setBackgroundColor(getResources().getColor(R.color.tealLight));
         txtStepTwo.setTextColor(getResources().getColor(R.color.black));
         lyNumberTwoText.setBackground(getResources().getDrawable(R.drawable.oval_green));
         getSupportFragmentManager().beginTransaction().replace(R.id.container, fragments.get(1)).commit();
         generalFields = object;
-        txtTitle.setText("افزودن داروی جدید" + "(" + object.getMidName() + ")");
+        txtTitle.setText("افزودن دارو" + "(" + object.getMidName() + ")");
         Utility.hideKeyboard();
 
     }
@@ -163,6 +175,7 @@ public class AddMedicianActivity extends BaseActivity implements FragmentGeneral
     public void onSaveButtonTwo(UsageFields object) {
         lyNumberTwo.setVisibility(View.INVISIBLE);
         checkedTwo.setVisibility(View.VISIBLE);
+        linetwo.setBackgroundColor(getResources().getColor(R.color.tealLight));
         txtStepThree.setTextColor(getResources().getColor(R.color.black));
         lyNumberThreeText.setBackground(getResources().getDrawable(R.drawable.oval_green));
         getSupportFragmentManager().beginTransaction().replace(R.id.container, fragments.get(2)).commit();
@@ -174,6 +187,7 @@ public class AddMedicianActivity extends BaseActivity implements FragmentGeneral
     public void onCanceleTwo() {
         lyNumberOne.setVisibility(View.VISIBLE);
         checkedOne.setVisibility(View.INVISIBLE);
+        lineOne.setBackgroundColor(getResources().getColor(R.color.gray));
         txtStepTwo.setTextColor(getResources().getColor(R.color.grayLiteText));
         lyNumberTwoText.setBackground(getResources().getDrawable(R.drawable.oval_gray));
 
@@ -187,19 +201,23 @@ public class AddMedicianActivity extends BaseActivity implements FragmentGeneral
     public void onSaveButtonThree(EndUseFields endUseFields) {
 
 
-
-
         this.endUseFields = endUseFields;
         // keyboard off
         new CalcAlarm().execute();
 
 
     }
-    public void saveStartProcess(){
+
+    public void saveStartProcess() {
         Utility.hideKeyboard();
         PillObject pillObject = savePillAndCat();
 
+        // send for server two
+
+
         savePillUsage(pillObject);
+
+
         Utility.reCalculateManager(AddMedicianActivity.this);
 
     }
@@ -211,30 +229,37 @@ public class AddMedicianActivity extends BaseActivity implements FragmentGeneral
         if (pillObject.getUseType() == 1) {
             ///masrafe modam
             usageList = makePillUsageInPerFreeMood(pillObject, this);
-
         } else if (pillObject.getUseType() == 2) {
             // masraf bar asase rooz;
             usageList = makePillUsageInPerCountMood(pillObject, this);
-
-        } else if(pillObject.getUseType()==3){
-            usageList = makePillUsageInPerAmountMood(pillObject);
+        } else if (pillObject.getUseType() == 3) {
+            usageList = makePillUsageInPerAmountMood(pillObject, this);
             //masraf bar asase mizane daroo;
         }
+
+
         AppDatabase database = AppDatabase.getInMemoryDatabase(this);
+        Profile profile = database.profileDao().getMyProfile();
         database.pillUsageDao().insertPillList(usageList);
+        SyncController sync = new SyncController();
+        sync.checkDataBaseForUpdate();
+
+
     }
+
 
     private PillObject savePillAndCat() {
         AppDatabase database = AppDatabase.getInMemoryDatabase(this);
         String catName;
         if (generalFields.getCatName().length() == 0) {
-            catName = "عمومی";
+            catName = "";
         } else {
             catName = generalFields.getCatName();
         }
         database.categoryDao().insertCat(new Category(catName, generalFields.getCatColour(), generalFields.getAlarmUrl()));
 
-        PillObject pillObject = makePillObject(generalFields, usageFields, endUseFields);
+        int id = database.pillObjectDao().getLastId() + 1;
+        PillObject pillObject = makePillObject(generalFields, usageFields, endUseFields, id);
         database.pillObjectDao().insertPill(pillObject);
         return pillObject;
     }
@@ -245,6 +270,8 @@ public class AddMedicianActivity extends BaseActivity implements FragmentGeneral
 
         lyNumberTwo.setVisibility(View.VISIBLE);
         checkedTwo.setVisibility(View.INVISIBLE);
+        linetwo.setBackgroundColor(getResources().getColor(R.color.gray));
+
         txtStepThree.setTextColor(getResources().getColor(R.color.grayLiteText));
         lyNumberThreeText.setBackground(getResources().getDrawable(R.drawable.oval_gray));
         getSupportFragmentManager().beginTransaction().replace(R.id.container, fragments.get(1)).commit();
@@ -256,11 +283,11 @@ public class AddMedicianActivity extends BaseActivity implements FragmentGeneral
     public void onBackPressed() {
 
 
-       showFinishDialog();
+        showFinishDialog();
     }
 
     private void showFinishDialog() {
-        final FinishDialog mydialog = new FinishDialog(this,"از ثبت دارو خارج می شوید؟","");
+        final FinishDialog mydialog = new FinishDialog(this, "از ثبت دارو خارج می شوید؟", "");
         mydialog.setListener(new FinishListener() {
             @Override
             public void onReject() {
@@ -272,7 +299,6 @@ public class AddMedicianActivity extends BaseActivity implements FragmentGeneral
                 mydialog.dismiss();
                 finish();
             }
-
 
 
         });
@@ -293,12 +319,13 @@ public class AddMedicianActivity extends BaseActivity implements FragmentGeneral
         @Override
         protected String doInBackground(String... strings) {
             saveStartProcess();
-           return "";
+            return "";
         }
 
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
             disMissWaiting();
+            usageFields = null;
             finish();
 
         }

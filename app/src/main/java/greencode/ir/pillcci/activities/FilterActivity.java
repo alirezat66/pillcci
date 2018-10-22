@@ -1,5 +1,6 @@
 package greencode.ir.pillcci.activities;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 
 import com.alirezaafkar.sundatepicker.DatePicker;
 import com.alirezaafkar.sundatepicker.interfaces.DateSetListener;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.isapanah.awesomespinner.AwesomeSpinner;
 
 import java.util.ArrayList;
@@ -25,6 +27,7 @@ import greencode.ir.pillcci.R;
 import greencode.ir.pillcci.utils.BaseActivity;
 import greencode.ir.pillcci.utils.DatabaseManager;
 import greencode.ir.pillcci.utils.PersianCalculater;
+import greencode.ir.pillcci.utils.Utility;
 import saman.zamani.persiandate.PersianDate;
 
 /**
@@ -55,6 +58,7 @@ public class FilterActivity extends BaseActivity implements DateSetListener{
     ArrayList<String> midName = new ArrayList<>();
     ArrayList<String> catNames = new ArrayList<>();
 
+    FirebaseAnalytics firebaseAnalytics;
     int sYear=0;
     int sMonth=0;
     int sDay=0;
@@ -69,11 +73,23 @@ public class FilterActivity extends BaseActivity implements DateSetListener{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.filter_activity);
         ButterKnife.bind(this);
+        firebaseAnalytics = FirebaseAnalytics.getInstance(this);
+
+        Bundle params = new Bundle();
+        params.putString("phoneNumber", Utility.getPhoneNumber(this));
+        firebaseAnalytics.logEvent("filter_open", params);
         midName = DatabaseManager.getAllMidNames(this);
+
         catNames = DatabaseManager.getAllCatNames(this);
+        for(int i = 0 ; i <catNames.size(); i++){
+            if(catNames.get(i).equals("")){
+                catNames.set(i,"خودم");
+                break;
+            }
+        }
         pilAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, midName);
         catAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, catNames);
-
+        txtTitle.setText("فیلتر کردن گزارش");
         pillSpinner.setAdapter(pilAdapter);
         catSpinner.setAdapter(catAdapter);
         pillSpinner.setOnSpinnerItemClickListener(new AwesomeSpinner.onSpinnerItemClickListener<String>() {
@@ -91,6 +107,7 @@ public class FilterActivity extends BaseActivity implements DateSetListener{
     }
 
 
+    @SuppressLint("InvalidAnalyticsName")
     @OnClick({R.id.img_back, R.id.edtStartDate, R.id.edtFinishDate, R.id.btnInsert, R.id.btnDelete})
     public void onClick(View view) {
         switch (view.getId()) {
@@ -113,7 +130,7 @@ public class FilterActivity extends BaseActivity implements DateSetListener{
                         .theme(R.style.DialogTheme)
                         .date(calendar)
                         .build(FilterActivity.this)
-                        .show(getSupportFragmentManager(), "شروع مصرف");
+                        .show(getSupportFragmentManager(), "شروع مجدد");
 
                 break;
             case R.id.edtFinishDate:
@@ -140,6 +157,7 @@ public class FilterActivity extends BaseActivity implements DateSetListener{
                         pillName="";
                     }else {
                         pillName=pillSpinner.getSelectedItem();
+
                     }
                 }else {
                     pillName="";
@@ -153,6 +171,34 @@ public class FilterActivity extends BaseActivity implements DateSetListener{
                 }else {
                     catName="";
                 }
+
+                Bundle params = new Bundle();
+                String par1,par2,par3,par4;
+                if(sYear==0){
+                    par1="no";
+                }else {
+                    par1="yes";
+                }
+                if(fYear==0){
+                    par2="no";
+                }else {
+                    par2="yes";
+                }
+                if(pillName.equals("")){
+                    par3 ="no";
+                }else {
+                    par3 ="yes";
+                }
+                if(catName.equals("")){
+                    par4="no";
+                }else {
+                    par4="yes";
+                }
+                params.putString("phoneNumber", Utility.getPhoneNumber(this));
+                String finalPar = "A_"+par1+"_start"+"&"+par2+"_fin&"+par3+"_name&"+par4+"_cat";
+                firebaseAnalytics.logEvent(finalPar, params);
+
+
                 Intent intent = getIntent();
                 intent.putExtra("sYear", sYear);
                 intent.putExtra("sMonth", sMonth);

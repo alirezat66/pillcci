@@ -6,7 +6,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.github.florent37.expansionpanel.ExpansionLayout;
@@ -62,13 +64,19 @@ public class TodayUsageAdapter extends RecyclerView.Adapter<TodayUsageAdapter.Vi
 
     public static interface UsageInterface {
         public void usageAct(PillUsage item);
-        public void cancelUseAct(PillUsage item);
+        public void usageActWithOut(PillUsage item);
+        public void cancelUseAct(PillUsage item,int type);
         public void jumpAct(PillUsage item);
         public void EditAct(PillUsage item);
         public void cancelAct(PillUsage item);
         public void CanNotCancel();
         public void CanNotSkip();
         public void CanNotAccept();
+        public void onLeftOne();
+        public void onLeftTwo();
+        public void onRightOne();
+        public void onRightTwo();
+
     }
 
     @Override
@@ -89,12 +97,13 @@ public class TodayUsageAdapter extends RecyclerView.Adapter<TodayUsageAdapter.Vi
     }
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView txtMedName, txtTime,txtCatName,txtdrName,txtunit,txtrepeatUsage,txtState,txtUse,txtCancel,txtJump,txtcat;
-        public LinearLayout lyEdit,lyCancel,lyAction;
+        public TextView txtdooz,txtMedName, txtTime,txtCatName,txtdrName,txtunit,txtrepeatUsage,txtState,txtcat;
+        public LinearLayout lyEdit,lyCancel,lyAction,lyCatDevider;
         public CardView catColor,root;
+        RelativeLayout txtUse,txtCancel,txtJump;
         public ExpansionLayout expansionLayout;
-
-        LinearLayout lySwipSkip,lySwipCancel,lySwipAccept;
+        ImageView imgPerson;
+        LinearLayout lySwipSkip,lySwipCancel,lySwipAccept,blackDivider;
 
         SwipeLayout swipeLayout;
 
@@ -119,11 +128,14 @@ public class TodayUsageAdapter extends RecyclerView.Adapter<TodayUsageAdapter.Vi
             lyEdit = v.findViewById(R.id.lyEdit);
             lyCancel = v.findViewById(R.id.lyCancel);
             lyAction = v.findViewById(R.id.actionLayout);
+            blackDivider = v.findViewById(R.id.blackDivider);
             catColor = v.findViewById(R.id.catColor);
             lySwipSkip = v.findViewById(R.id.lySwipSkip);
             lySwipCancel = v.findViewById(R.id.lySwipCancel);
             lySwipAccept = v.findViewById(R.id.right_view);
             swipeLayout =v.findViewById(R.id.swipe_layout);
+            lyCatDevider = v.findViewById(R.id.lyCatDivider);
+            imgPerson = v.findViewById(R.id.imgPerson);
         }
         public ExpansionLayout getExpansionLayout() {
             return expansionLayout;
@@ -147,8 +159,19 @@ public class TodayUsageAdapter extends RecyclerView.Adapter<TodayUsageAdapter.Vi
 
         holder.swipeLayout.setOffset(position+1);
         holder.expansionLayout.collapse(true);
-        holder.txtMedName .setText(data.getPillName());
-        holder.txtcat.setText("نام دسته :"+data.getCatNme());
+        holder.txtMedName .setText(data.getPillName() +" "+ "("+data.getUnitAmount() + " " + data.getUnit()+")");
+
+        holder.txtcat.setText(data.getCatNme());
+        if(data.getCatNme().equals("")||data.getCatNme().equals("عمومی") ){
+            holder.txtcat.setVisibility(View.GONE);
+            holder.imgPerson.setVisibility(View.GONE);
+            holder.lyCatDevider.setVisibility(View.GONE);
+        }else {
+            holder.txtcat.setVisibility(View.VISIBLE);
+            holder.imgPerson.setVisibility(View.VISIBLE);
+            holder.lyCatDevider.setVisibility(View.VISIBLE);
+        }
+
         holder.txtcat.setTextColor(data.getCatColor());
         holder.txtTime.setText(PersianCalculater.getHourseAndMin(data.getUsageTime()));
 
@@ -158,24 +181,34 @@ public class TodayUsageAdapter extends RecyclerView.Adapter<TodayUsageAdapter.Vi
         String state = "";
         if(usageType==0){
             holder.lyAction.setVisibility(View.VISIBLE);
-            state="در انتظار مصرف";
+            holder.blackDivider.setVisibility(View.VISIBLE);
+            holder.txtState.setVisibility(View.GONE);
+            state="";
             color = context.getResources().getColor(R.color.darkorange);
         }else if(usageType==1){
+            holder.txtState.setVisibility(View.VISIBLE);
 
             PersianDate date = new PersianDate(data.getUsedTime());
             String h = date.getHour()>=10?date.getHour()+"":"0"+date.getHour();
             String m = date.getMinute()>=10?date.getMinute()+"":"0"+date.getMinute();
             holder.lyAction.setVisibility(View.GONE);
-            state="در ساعت "+h+":"+m+" مصرف شد.";
+            holder.blackDivider.setVisibility(View.GONE);
+            state="مصرف شد ("+h+":"+m+")";
             color = context.getResources().getColor(R.color.teal);
         }else if(usageType==2) {
             holder.lyAction.setVisibility(View.GONE);
+            holder.blackDivider.setVisibility(View.GONE);
+            holder.txtState.setVisibility(View.VISIBLE);
+            holder.txtState.setVisibility(View.VISIBLE);
 
-            state="لغو مصرف توسط کاربر";
+            state="مصرف نشد";
             color = context.getResources().getColor(R.color.colorAccent);
         }else {
+            holder.txtState.setVisibility(View.VISIBLE);
+
             holder.lyAction.setVisibility(View.GONE);
-            state="بلاتکلیف";
+            holder.blackDivider.setVisibility(View.GONE);
+            state="نا\u200Cمشخص";
             color = context.getResources().getColor(R.color.colorAccent);
         }
 
@@ -191,9 +224,19 @@ public class TodayUsageAdapter extends RecyclerView.Adapter<TodayUsageAdapter.Vi
         PersianDate setedTime = new PersianDate(data.getSetedTime());
         if(currentTime.getTime()<data.getUsageTime()){
             if(data.getState()!=0){
-                holder.lyCancel.setVisibility(View.VISIBLE);
+                if (data.isCancelable()){
+                    holder.lyCancel.setVisibility(View.VISIBLE);
+                }else {
+                    holder.lyCancel.setVisibility(View.GONE);
+
+                }
             }else if(data.getSetedTime()!=data.getUsageTime()){
-                holder.lyCancel.setVisibility(View.VISIBLE);
+                if (data.isCancelable()){
+                    holder.lyCancel.setVisibility(View.VISIBLE);
+                }else {
+                    holder.lyCancel.setVisibility(View.GONE);
+
+                }
             }else {
                 holder.lyCancel.setVisibility(View.GONE);
             }
@@ -201,12 +244,18 @@ public class TodayUsageAdapter extends RecyclerView.Adapter<TodayUsageAdapter.Vi
             holder.lyCancel.setVisibility(View.GONE);
 
         }
+
         String h = date.getHour()>=10?date.getHour()+"":"0"+date.getHour();
         String m = date.getMinute()>=10?date.getMinute()+"":"0"+date.getMinute();
         holder.txtTime.setText(h+":"+m);
 
 
-        holder.txtState.setText(" | "+state);
+        if(!state.equals("")){
+            holder.txtState.setText(state);
+
+        }else {
+            holder.txtState.setText(state);
+        }
         holder.txtState.setTextColor(color);
 
         holder.txtCatName.setText(data.getCatNme());
@@ -231,7 +280,7 @@ public class TodayUsageAdapter extends RecyclerView.Adapter<TodayUsageAdapter.Vi
         holder.txtCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                myInterface.cancelUseAct(data);
+                myInterface.cancelUseAct(data,2);
             }
         });
         holder.txtJump.setOnClickListener(new View.OnClickListener() {
@@ -265,7 +314,7 @@ public class TodayUsageAdapter extends RecyclerView.Adapter<TodayUsageAdapter.Vi
                 if(data.getState()==2){
                     myInterface.CanNotCancel();
                 }else {
-                    myInterface.cancelUseAct(data);
+                    myInterface.cancelUseAct(data,1);
                 }
             }
         });
@@ -276,8 +325,35 @@ public class TodayUsageAdapter extends RecyclerView.Adapter<TodayUsageAdapter.Vi
                 if(data.getState()==1){
                     myInterface.CanNotAccept();
                 }else {
-                    myInterface.usageAct(data);
+                    myInterface.usageActWithOut(data);
                 }
+            }
+        });
+        holder.swipeLayout.setOnSwipeListener(new SwipeLayout.OnSwipeListener() {
+            @Override
+            public void onBeginSwipe(SwipeLayout swipeLayout, boolean moveToRight) {
+            }
+
+            @Override
+            public void onSwipeClampReached(SwipeLayout swipeLayout, boolean moveToRight) {
+                if(moveToRight){
+                    myInterface.cancelUseAct(data,1);
+                }else {
+                    holder.swipeLayout.reset();
+                    if(data.getState()==1){
+                        myInterface.CanNotAccept();
+                    }else {
+                        myInterface.usageActWithOut(data);
+                    }
+                }
+            }
+
+            @Override
+            public void onLeftStickyEdge(SwipeLayout swipeLayout, boolean moveToRight) {
+            }
+
+            @Override
+            public void onRightStickyEdge(SwipeLayout swipeLayout, boolean moveToRight) {
             }
         });
         holder.lyCancel.setOnClickListener(new View.OnClickListener() {
@@ -286,6 +362,22 @@ public class TodayUsageAdapter extends RecyclerView.Adapter<TodayUsageAdapter.Vi
                 myInterface.cancelAct(data);
             }
         });
+
+        if(data.getState()!=0){
+            holder.swipeLayout.setSwipeEnabled(false);
+        }else {
+            holder.swipeLayout.setSwipeEnabled(true);
+
+        }
+
+        if(data.isCancelable()){
+            holder.lyEdit.setVisibility(View.VISIBLE);
+        }else {
+            holder.lyEdit.setVisibility(View.GONE);
+        }
+
+
+        holder.swipeLayout.reset();
 
     }
 

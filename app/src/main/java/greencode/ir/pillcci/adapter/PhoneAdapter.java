@@ -42,7 +42,7 @@ public class PhoneAdapter extends RecyclerView.Adapter<PhoneAdapter.ViewHolder> 
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView txtPhone;
+        public TextView txtPhone,txtTell;
         ImageView imgLogo;
         CircleImageView imgUser;
         RelativeLayout lyEdit;
@@ -63,6 +63,7 @@ public class PhoneAdapter extends RecyclerView.Adapter<PhoneAdapter.ViewHolder> 
             imgLogo = v.findViewById(R.id.img_logo);
             imgUser = v.findViewById(R.id.img_user);
             txtPhone =  v.findViewById(R.id.txtPhone);
+            txtTell =  v.findViewById(R.id.txtNumber);
             lyEdit = v.findViewById(R.id.lyEdit);
 
         }
@@ -90,6 +91,7 @@ public class PhoneAdapter extends RecyclerView.Adapter<PhoneAdapter.ViewHolder> 
 
 
         holder.txtPhone.setText(data.getfName()+" "+data.getlName());
+        holder.txtTell.setText(data.getPhone());
         holder.lyEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

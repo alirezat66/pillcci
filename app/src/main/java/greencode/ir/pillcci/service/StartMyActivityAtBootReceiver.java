@@ -22,6 +22,8 @@ public class StartMyActivityAtBootReceiver extends BroadcastReceiver {
             List<PillUsage> expendedUsage = DatabaseManager.getAllExpendedPillUsage(context);
             DatabaseManager.updateToExpendedMode(context,expendedUsage);
             Utility.reCalculateManager(context);
+            context.startService(new Intent(context, SyncService.class));
+
         }
     }
 }

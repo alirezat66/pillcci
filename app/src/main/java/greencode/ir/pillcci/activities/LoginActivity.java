@@ -15,17 +15,22 @@ import android.widget.TextView;
 
 import com.kaopiz.kprogresshud.KProgressHUD;
 
+import java.util.ArrayList;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
 import greencode.ir.pillcci.R;
 import greencode.ir.pillcci.controler.AppDatabase;
+import greencode.ir.pillcci.database.PhoneBook;
+import greencode.ir.pillcci.database.PillObject;
+import greencode.ir.pillcci.database.PillUsage;
 import greencode.ir.pillcci.database.Profile;
 import greencode.ir.pillcci.interfaces.LoginInterface;
-import greencode.ir.pillcci.objects.LoginReq;
 import greencode.ir.pillcci.objects.LoginResponse;
 import greencode.ir.pillcci.presenters.LoginPresenter;
+import greencode.ir.pillcci.retrofit.reqobject.LoginRequest;
 import greencode.ir.pillcci.utils.BaseActivity;
 import greencode.ir.pillcci.utils.Constants;
 import greencode.ir.pillcci.utils.PreferencesData;
@@ -97,7 +102,7 @@ public class LoginActivity extends BaseActivity implements LoginInterface{
         switch (view.getId()) {
             case R.id.btnLogin:
                 Utility.hideKeyboard();
-                  LoginReq req = new LoginReq(edtUser.getText().toString(),edtPass.getText().toString());
+                  LoginRequest req = new LoginRequest(edtUser.getText().toString(),edtPass.getText().toString());
                 presenter.checkValidation(req);
                 break;
             case R.id.forgetPass:
@@ -135,18 +140,24 @@ public class LoginActivity extends BaseActivity implements LoginInterface{
         disMissWaiting();
         hiddenError();
         PreferencesData.saveBool(Constants.PREF_LOGIN,true);
-
-        Profile profile = new Profile(edtUser.getText().toString(),"","",0,0,"","","","","","");
+        Profile profile = resp.getProfile(); //new Profile(edtUser.getText().toString(),"","",0,0,"","","","","","");
         AppDatabase database = AppDatabase.getInMemoryDatabase(this);
         database.profileDao().insertProfile(profile);
-        Intent intent = new Intent(this,MainActivity.class);
+        showWaitingLoad();
+        presenter.getDrugs(profile.getMyId());
+
+
+
+
+
+        /*Intent intent = new Intent(this,MainActivity.class);
         startActivity(intent);
-        finish();
+        finish();*/
 
     }
 
     @Override
-    public void onValidUserPass(LoginReq req) {
+    public void onValidUserPass(LoginRequest req) {
         showWaiting();
         hiddenError();
         presenter.tryToLogin(req);
@@ -167,11 +178,54 @@ public class LoginActivity extends BaseActivity implements LoginInterface{
         showError("نام کاربری ۱۱ کارکتر می باشد.");
     }
 
+    @Override
+    public void onDrugReady(ArrayList<PillObject> posts, ArrayList<PillUsage>usages, ArrayList<PhoneBook>books) {
+        AppDatabase database = AppDatabase.getInMemoryDatabase(this);
+        for(PillObject object : posts){
+            object.setSync(1);
+            database.pillObjectDao().insertPill(object);
+
+        }
+
+        for(PillUsage usage : usages){
+            usage.setIsSync(1);
+            database.pillUsageDao().insertPill(usage);
+        }
+        for(PhoneBook book :books){
+            book.setState(1);
+            database.phoneBookDao().insertPhone(book);
+        }
+        disMissWaiting();
+
+        Utility.reCalculateManager(this);
+        Intent intent = new Intent(this,MainActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    @Override
+    public void onEmptyDrug() {
+        Intent intent = new Intent(this,MainActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
     public void showWaiting(){
         kProgressHUD=  KProgressHUD.create(this)
                 .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
                 .setLabel("لطفا منتظر بمانید")
                 .setDetailsLabel("در حال بررسی صلاحیت ورود")
+                .setCancellable(false)
+                .setAnimationSpeed(2)
+                .setDimAmount(0.8f)
+                .setBackgroundColor(getResources().getColor(R.color.colorPrimary))
+                .show();
+    }
+    public void showWaitingLoad(){
+        kProgressHUD=  KProgressHUD.create(this)
+                .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
+                .setLabel("لطفا منتظر بمانید")
+                .setDetailsLabel("درحال همگام سازی سوابق ...")
                 .setCancellable(false)
                 .setAnimationSpeed(2)
                 .setDimAmount(0.8f)

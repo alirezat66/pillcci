@@ -4,106 +4,626 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="16dp"
     android:orientation="vertical"
     android:background="@color/backColor"
 
     >
-    <TextView
-        style="@style/BigBlue_18"
-        android:text="نحوه مصرف"
-        android:layout_gravity="right"
-        android:layout_alignParentRight="true"
-        />
-    <android.support.design.widget.TextInputLayout
+    <android.support.v7.widget.CardView
         android:layout_width="match_parent"
-        android:theme="@style/MyEditText"
-        android:layout_height="wrap_content">
-        <android.support.design.widget.TextInputEditText
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="0dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="16dp"
+        app:cardElevation="4dp"
+        android:layout_marginTop="16dp">
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="روزهای مصرف"
-            android:maxLines="2"
             android:layoutDirection="rtl"
-            android:id="@+id/useDays"
-            android:focusable="false"
-            android:textColor="@color/grayText"
-            />
-    </android.support.design.widget.TextInputLayout>
-    <android.support.design.widget.TextInputLayout
-        android:layout_width="match_parent"
-        android:theme="@style/MyEditText"
-        android:layout_height="wrap_content">
-        <android.support.design.widget.TextInputEditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="نوبت(های) روزانه"
-            android:maxLines="1"
-            android:focusable="false"
-            android:enabled="false"
-            android:layoutDirection="rtl"
-            android:id="@+id/usePartDays"
-            android:drawableRight="@drawable/ic_keyboard_arrow_down"
-            android:textColor="@color/grayText"
-            />
-    </android.support.design.widget.TextInputLayout>
-    <android.support.design.widget.TextInputLayout
-        android:layout_width="match_parent"
-        android:theme="@style/MyEditText"
-        android:layout_height="wrap_content">
-        <android.support.design.widget.TextInputEditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="ساعت اولین مصرف"
-            android:maxLines="1"
-            android:id="@+id/edtStartTime"
-            android:focusable="false"
-            android:enabled="false"
-            android:layoutDirection="rtl"
-            android:drawableRight="@drawable/ic_keyboard_arrow_down"
-            android:textColor="@color/grayText"
-            />
-    </android.support.design.widget.TextInputLayout>
+            android:orientation="vertical">
+            <com.github.florent37.expansionpanel.ExpansionHeader
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                app:expansion_headerIndicator="@id/headerIndicator"
+                app:expansion_layout="@id/expansionLayout"
+                android:layoutDirection="rtl"
+                app:expansion_toggleOnClick="true">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="56dp"
+                        android:id="@+id/txtDaysOfUse"
+                        android:gravity="center_vertical|right"
+                        android:layout_marginRight="16dp"
+                        android:text="روزهای مصرف"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="56dp"
+                        android:id="@+id/txtTypeOfDays"
+                        android:gravity="center_vertical|right"
+                        android:layout_marginRight="4dp"
+                        android:layout_toLeftOf="@id/txtDaysOfUse"
+                        android:text="(هر روز)"/>
+                    <android.support.v7.widget.AppCompatImageView
+                        android:adjustViewBounds="true"
+                        android:id="@+id/headerIndicator"
+                        android:layout_alignParentLeft="true"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="16dp"
+                        android:layout_centerVertical="true"
+                        android:layout_width="wrap_content"
+                        app:srcCompat="@drawable/ic_right" />
+                </RelativeLayout>
 
-    <android.support.design.widget.TextInputLayout
+
+            </com.github.florent37.expansionpanel.ExpansionHeader>
+            <com.github.florent37.expansionpanel.ExpansionLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:id="@+id/expansionLayout"
+
+                >
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layoutDirection="rtl"
+                    android:orientation="vertical">
+                    <RadioGroup
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layoutDirection="rtl">
+                    <me.omidh.liquidradiobutton.LiquidRadioButton
+                        android:id="@+id/radioEvryDay"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="true"
+                        android:layout_alignParentRight="true"
+                        android:gravity="center_vertical"
+                        android:text="هر روز"
+                        android:textColor="@color/grayText"
+                        android:textSize="18sp"
+                        app:lrb_checkedColor="@color/colorPrimary"
+                        app:lrb_explodeCount="3"
+                        app:lrb_inAnimDuration="500"
+                        app:lrb_outAnimDuration="500"
+                        app:lrb_outterPadding="8dp"
+                        app:lrb_strokeRadius="10dp"
+
+                        app:lrb_strokeWidth="1dp"
+                        app:lrb_unCheckedColor="@color/grayText" />
+                    <me.omidh.liquidradiobutton.LiquidRadioButton
+                        android:id="@+id/radioDaysInterval"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:gravity="center_vertical"
+                        android:text="روزهای غیر متوالی"
+                        android:textColor="@color/grayText"
+                        android:textSize="18sp"
+                        app:lrb_checkedColor="@color/colorPrimary"
+                        app:lrb_explodeCount="3"
+                        app:lrb_inAnimDuration="500"
+                        app:lrb_outAnimDuration="500"
+                        app:lrb_outterPadding="8dp"
+                        app:lrb_strokeRadius="10dp"
+
+                        app:lrb_strokeWidth="1dp"
+                        app:lrb_unCheckedColor="@color/grayText" />
+                    <me.omidh.liquidradiobutton.LiquidRadioButton
+                        android:id="@+id/radioSpecificDays"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:gravity="center_vertical"
+                        android:text="بر اساس روزهای هفته"
+                        android:textColor="@color/grayText"
+                        android:textSize="18sp"
+                        app:lrb_checkedColor="@color/colorPrimary"
+                        app:lrb_explodeCount="3"
+                        app:lrb_inAnimDuration="500"
+                        app:lrb_outAnimDuration="500"
+                        app:lrb_outterPadding="8dp"
+                        app:lrb_strokeRadius="10dp"
+
+                        app:lrb_strokeWidth="1dp"
+                        app:lrb_unCheckedColor="@color/grayText" />
+                    <me.omidh.liquidradiobutton.LiquidRadioButton
+                        android:id="@+id/radiobirthControl"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:gravity="center_vertical"
+                        android:text="چرخه ضد بارداری"
+                        android:textColor="@color/grayText"
+                        android:textSize="18sp"
+                        app:lrb_checkedColor="@color/colorPrimary"
+                        app:lrb_explodeCount="3"
+                        app:lrb_inAnimDuration="500"
+                        app:lrb_outAnimDuration="500"
+                        app:lrb_outterPadding="8dp"
+                        app:lrb_strokeRadius="10dp"
+
+                        app:lrb_strokeWidth="1dp"
+                        app:lrb_unCheckedColor="@color/grayText" />
+                    </RadioGroup>
+                </LinearLayout>
+            </com.github.florent37.expansionpanel.ExpansionLayout>
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+    <android.support.v7.widget.CardView
         android:layout_width="match_parent"
-        android:theme="@style/MyEditText"
-        android:layout_height="wrap_content">
-        <android.support.design.widget.TextInputEditText
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="0dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="16dp"
+        app:cardElevation="4dp"
+        android:layout_marginTop="16dp">
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="مقدار مصرف هر نوبت"
-            android:maxLines="4"
             android:layoutDirection="rtl"
-            android:id="@+id/edtUseEachTime"
-            android:focusable="false"
-            android:enabled="false"
+            android:orientation="vertical">
+            <com.github.florent37.expansionpanel.ExpansionHeader
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                app:expansion_headerIndicator="@id/headerIndicator2"
+                app:expansion_layout="@id/expansionLayout2"
+                android:layoutDirection="rtl"
+                app:expansion_toggleOnClick="true">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="56dp"
+                        android:gravity="center_vertical|right"
+                        android:layout_marginRight="16dp"
+                        android:id="@+id/txtTitleDate"
+                        android:text="زمان شروع مصرف : "/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="56dp"
+                        android:id="@+id/txtStartDate"
+                        android:gravity="center_vertical|right"
+                        android:layout_marginRight="4dp"
+                        android:layout_toLeftOf="@id/txtTitleDate"
+                        android:text="1397/23/8"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="56dp"
+                        android:id="@+id/txtStartTime"
+                        android:gravity="center_vertical|right"
+                        android:layout_marginRight="4dp"
+                        android:layout_toLeftOf="@id/txtStartDate"
+                        android:text="۱۸:۳۰" />
+                    <android.support.v7.widget.AppCompatImageView
+                        android:adjustViewBounds="true"
+                        android:id="@+id/headerIndicator2"
+                        android:layout_alignParentLeft="true"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="16dp"
+                        android:layout_centerVertical="true"
+                        android:layout_width="wrap_content"
+                        app:srcCompat="@drawable/ic_right" />
+                </RelativeLayout>
 
-            android:drawableRight="@drawable/ic_keyboard_arrow_down"
-            android:textColor="@color/grayText"
-            />
-    </android.support.design.widget.TextInputLayout>
-    <android.support.design.widget.TextInputLayout
+
+            </com.github.florent37.expansionpanel.ExpansionHeader>
+            <com.github.florent37.expansionpanel.ExpansionLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:id="@+id/expansionLayout2"
+
+                >
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layoutDirection="rtl"
+
+                    android:layout_marginRight="16dp"
+                    android:orientation="vertical">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layoutDirection="rtl"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="16sp"
+                            android:text="تاریخ شروع : "
+                            android:textColor="@color/black"
+                            />
+                        <TextView
+                            android:id="@+id/txtStartUsageDate"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:enabled="true"
+                            android:padding="16dp"
+                            android:textSize="14sp"
+                            android:textColor="@color/colorPrimary"
+                            android:visibility="visible" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layoutDirection="rtl"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="16sp"
+                            android:text="ساعت شروع : "
+                            android:textColor="@color/black"
+                            />
+                        <TextView
+                            android:id="@+id/txtStartUsageTime"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:enabled="true"
+                            android:padding="16dp"
+                            android:textSize="14sp"
+                            android:textColor="@color/colorPrimary"
+                            android:visibility="visible" />
+                    </LinearLayout>
+                </LinearLayout>
+            </com.github.florent37.expansionpanel.ExpansionLayout>
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+    <android.support.v7.widget.CardView
         android:layout_width="match_parent"
-        android:theme="@style/MyEditText"
-        app:counterMaxLength="140"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="0dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="16dp"
+        app:cardElevation="4dp"
+        android:layout_marginTop="16dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layoutDirection="rtl"
+            android:orientation="vertical">
+            <com.github.florent37.expansionpanel.ExpansionHeader
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                app:expansion_headerIndicator="@id/headerIndicator3"
+                app:expansion_layout="@id/expansionLayout3"
+                android:layoutDirection="rtl"
+                app:expansion_toggleOnClick="true">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="56dp"
+                        android:gravity="center_vertical|right"
+                        android:layout_marginRight="16dp"
+                        android:id="@+id/txtTitlePerDay"
+                        android:text="نوبت های مصرف در هر روز : "/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="56dp"
+                        android:id="@+id/txtPerDay"
+                        android:gravity="center_vertical|right"
+                        android:layout_marginRight="4dp"
+                        android:layout_toLeftOf="@id/txtTitlePerDay"
+                        android:text="۱ نوبت"/>
+
+                    <android.support.v7.widget.AppCompatImageView
+                        android:adjustViewBounds="true"
+                        android:id="@+id/headerIndicator3"
+                        android:layout_alignParentLeft="true"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="16dp"
+                        android:layout_centerVertical="true"
+                        android:layout_width="wrap_content"
+                        app:srcCompat="@drawable/ic_right" />
+                </RelativeLayout>
+
+
+            </com.github.florent37.expansionpanel.ExpansionHeader>
+            <com.github.florent37.expansionpanel.ExpansionLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:id="@+id/expansionLayout3"
+
+                >
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layoutDirection="rtl"
+
+                    android:layout_marginRight="16dp"
+                    android:orientation="vertical">
+                    <RadioGroup
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:id="@+id/rgOne"
+                        android:layoutDirection="rtl">
+                        <me.omidh.liquidradiobutton.LiquidRadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:lrb_strokeWidth="1dp"
+                            app:lrb_explodeCount="3"
+                            app:lrb_outterPadding="8dp"
+                            app:lrb_strokeRadius="10dp"
+                            app:lrb_inAnimDuration="500"
+                            app:lrb_outAnimDuration="500"
+                            android:id="@+id/radio0"
+                            android:checked="true"
+                            app:lrb_checkedColor="@color/colorPrimary"
+                            app:lrb_unCheckedColor="@color/grayText"
+                            android:text="هر ۲۴ ساعت ( ۱ نوبت در روز)"
+                            android:textSize="18sp"
+                            android:textColor="@color/grayText"
+                            />
+                        <me.omidh.liquidradiobutton.LiquidRadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:lrb_strokeWidth="1dp"
+                            app:lrb_explodeCount="3"
+                            app:lrb_outterPadding="8dp"
+                            app:lrb_strokeRadius="10dp"
+                            app:lrb_inAnimDuration="500"
+                            app:lrb_outAnimDuration="500"
+                            android:id="@+id/radio1"
+
+                            app:lrb_checkedColor="@color/colorPrimary"
+                            app:lrb_unCheckedColor="@color/grayText"
+                            android:text="هر ۱۲ ساعت ( ۲ نوبت در روز)"
+                            android:textSize="18sp"
+                            android:textColor="@color/grayText"
+                            />
+                        <me.omidh.liquidradiobutton.LiquidRadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:lrb_strokeWidth="1dp"
+                            app:lrb_explodeCount="3"
+                            app:lrb_outterPadding="8dp"
+                            app:lrb_strokeRadius="10dp"
+                            app:lrb_inAnimDuration="500"
+                            app:lrb_outAnimDuration="500"
+                            android:id="@+id/radio2"
+
+                            app:lrb_checkedColor="@color/colorPrimary"
+                            app:lrb_unCheckedColor="@color/grayText"
+                            android:text="هر  ۸ ساعت ( ۳ نوبت در روز)"
+                            android:textSize="18sp"
+                            android:textColor="@color/grayText"
+                            />
+                        <me.omidh.liquidradiobutton.LiquidRadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:lrb_strokeWidth="1dp"
+                            app:lrb_explodeCount="3"
+                            app:lrb_outterPadding="8dp"
+                            app:lrb_strokeRadius="10dp"
+                            app:lrb_inAnimDuration="500"
+                            app:lrb_outAnimDuration="500"
+                            app:lrb_checkedColor="@color/colorPrimary"
+                            app:lrb_unCheckedColor="@color/grayText"
+                            android:text="هر  ۶ ساعت ( ۴ نوبت در روز)"
+                            android:textSize="18sp"
+                            android:textColor="@color/grayText"
+                            android:id="@+id/radio3"
+
+                            />
+
+                        <me.omidh.liquidradiobutton.LiquidRadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:lrb_strokeWidth="1dp"
+                            app:lrb_explodeCount="3"
+                            app:lrb_outterPadding="8dp"
+                            app:lrb_strokeRadius="10dp"
+                            app:lrb_inAnimDuration="500"
+                            app:lrb_outAnimDuration="500"
+                            app:lrb_checkedColor="@color/colorPrimary"
+                            app:lrb_unCheckedColor="@color/grayText"
+                            android:text="هر  ۴ ساعت ( ۶ نوبت در روز)"
+                            android:textSize="18sp"
+                            android:textColor="@color/grayText"
+                            android:id="@+id/radio5"
+
+                            />
+
+                        <me.omidh.liquidradiobutton.LiquidRadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:lrb_strokeWidth="1dp"
+                            app:lrb_explodeCount="3"
+                            app:lrb_outterPadding="8dp"
+                            app:lrb_strokeRadius="10dp"
+                            app:lrb_inAnimDuration="500"
+                            app:lrb_outAnimDuration="500"
+                            app:lrb_checkedColor="@color/colorPrimary"
+                            app:lrb_unCheckedColor="@color/grayText"
+                            android:text="هر  ۳ ساعت ( ۸ نوبت در روز)"
+                            android:textSize="18sp"
+                            android:textColor="@color/grayText"
+                            android:id="@+id/radio7"
+
+                            />
+                        <me.omidh.liquidradiobutton.LiquidRadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:lrb_strokeWidth="1dp"
+                            app:lrb_explodeCount="3"
+                            app:lrb_outterPadding="8dp"
+                            app:lrb_strokeRadius="10dp"
+                            app:lrb_inAnimDuration="500"
+                            app:lrb_outAnimDuration="500"
+                            app:lrb_checkedColor="@color/colorPrimary"
+                            app:lrb_unCheckedColor="@color/grayText"
+                            android:text="هر  ۲ ساعت (۱۲ نوبت در روز)"
+                            android:textSize="18sp"
+                            android:textColor="@color/grayText"
+                            android:id="@+id/radio8"
+
+                            />
+                        <me.omidh.liquidradiobutton.LiquidRadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:lrb_strokeWidth="1dp"
+                            app:lrb_explodeCount="3"
+                            app:lrb_outterPadding="8dp"
+                            app:lrb_strokeRadius="10dp"
+                            app:lrb_inAnimDuration="500"
+                            app:lrb_outAnimDuration="500"
+                            app:lrb_checkedColor="@color/colorPrimary"
+                            app:lrb_unCheckedColor="@color/grayText"
+                            android:text="هر  ۱ ساعت (۲۴ نوبت در روز)"
+                            android:textSize="18sp"
+                            android:textColor="@color/grayText"
+                            android:id="@+id/radio9"
+
+                            />
+                    </RadioGroup>
+
+                </LinearLayout>
+            </com.github.florent37.expansionpanel.ExpansionLayout>
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="0dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="16dp"
+        app:cardElevation="4dp"
         android:layout_marginBottom="16dp"
-        app:counterEnabled="true"
-        android:layout_height="wrap_content">
-        <android.support.design.widget.TextInputEditText
+        android:layout_marginTop="16dp">
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="توضیحات ( مثلا : بعد از غذا مصرف شود)"
-            android:maxLines="8"
-
-            android:maxLength="140"
-
-            android:enabled="false"
             android:layoutDirection="rtl"
-            android:id="@+id/edtDescription"
-            android:textColor="@color/grayText"
-            />
-    </android.support.design.widget.TextInputLayout>
+            android:orientation="vertical">
+            <com.github.florent37.expansionpanel.ExpansionHeader
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                app:expansion_headerIndicator="@id/headerIndicator4"
+                app:expansion_layout="@id/expansionLayout4"
+                android:layoutDirection="rtl"
+                app:expansion_toggleOnClick="true">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="56dp"
+                        android:gravity="center_vertical|right"
+                        android:layout_marginRight="16dp"
+                        android:id="@+id/txtTitleUsage"
+                        android:text="میزان مصرف در هر نوبت : "/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="56dp"
+                        android:id="@+id/txtUseCount"
+                        android:gravity="center_vertical|right"
+                        android:layout_marginRight="4dp"
+                        android:layout_toLeftOf="@id/txtTitleUsage"
+                        android:text="1"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="56dp"
+                        android:id="@+id/txtUsage"
+                        android:gravity="center_vertical|right"
+                        android:layout_marginRight="4dp"
+                        android:layout_toLeftOf="@id/txtUseCount"
+                        android:text="عدد"/>
+
+                    <android.support.v7.widget.AppCompatImageView
+                        android:adjustViewBounds="true"
+                        android:id="@+id/headerIndicator4"
+                        android:layout_alignParentLeft="true"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="16dp"
+                        android:layout_centerVertical="true"
+                        android:layout_width="wrap_content"
+                        app:srcCompat="@drawable/ic_right" />
+                </RelativeLayout>
+
+
+            </com.github.florent37.expansionpanel.ExpansionHeader>
+            <com.github.florent37.expansionpanel.ExpansionLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:id="@+id/expansionLayout4"
+
+                >
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layoutDirection="rtl"
+
+                    android:layout_marginRight="16dp"
+                    android:orientation="vertical">
+                    <android.support.design.widget.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:selectAllOnFocus="true"
+                        android:focusableInTouchMode="true"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="16dp"
+                        android:hint="تعداد"
+                        android:id="@+id/edtEachTime"
+                        android:layout_alignParentLeft="true"
+                        android:focusable="true"
+                        android:enabled="true"
+                        android:maxLength="5"
+                        android:inputType="numberDecimal"
+                        />
+                    <fr.ganfra.materialspinner.MaterialSpinner
+                        android:id="@+id/spinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginLeft="16dp"
+                        app:ms_enableFloatingLabel="false"
+                        app:ms_enableErrorLabel="false"
+                        app:ms_baseColor="@color/grayText"
+                        app:ms_thickness="1dp"
+                        app:ms_isRtl="true"
+                        app:ms_arrowColor="@color/colorPrimary"
+                        app:ms_arrowSize="14dp"
+                        app:ms_alignLabels="false"
+                        app:ms_floatingLabelColor="@color/grayText"/>
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:theme="@style/MyEditText"
+                        app:counterMaxLength="140"
+                        android:layout_marginBottom="16dp"
+                        android:layout_marginLeft="16dp"
+                        app:counterEnabled="true"
+                        android:layout_height="wrap_content">
+                        <android.support.design.widget.TextInputEditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="توضیحات ( مثلا : بعد از غذا مصرف شود)"
+                            android:maxLines="8"
+
+                            android:maxLength="140"
+
+                            android:enabled="false"
+                            android:layoutDirection="rtl"
+                            android:id="@+id/edtDescription"
+                            android:textColor="@color/grayText"
+                            />
+                    </android.support.design.widget.TextInputLayout>
+
+                </LinearLayout>
+            </com.github.florent37.expansionpanel.ExpansionLayout>
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+
+
 
 
 

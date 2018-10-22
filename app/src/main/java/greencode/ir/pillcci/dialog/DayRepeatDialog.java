@@ -236,7 +236,7 @@ public class DayRepeatDialog extends BottomSheetDialogFragment implements DateSe
                 final DaySelectedDialog dialog = new DaySelectedDialog(context, selectedDay);
                 dialog.setListener(new DayOfWeekInterface() {
                     @Override
-                    public void onSuccess(ArrayList<String> days) {
+                    public void onSuccess(ArrayList<String> days,PersianDate persianDate) {
                         selectedDay = days;
                         tagcontainer.setTags(days);
                         tagcontainer.setVisibility(View.VISIBLE);
@@ -321,7 +321,9 @@ public class DayRepeatDialog extends BottomSheetDialogFragment implements DateSe
         }else {
             radioBirth.setChecked(true);
             edtBirthlUse.setText(selectedDay.get(0));
-            edtBirthStop.setText(selectedDay.get(0));
+            edtBirthStop.setText(selectedDay.get(1));
+            if(selectedDay.size()>1)
+                edtPastDay.setText(selectedDay.get(2));
         }
         dayRepeat.setText(dayEachRepeat==0?"":dayEachRepeat+"");
     }

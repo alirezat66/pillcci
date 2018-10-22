@@ -156,6 +156,7 @@ public class ActivityEditPhone extends BaseActivity {
         book.setImg(b64Image);
         book.setPhone(edtPhone.getText().toString());
         book.setRelation(edtRelation.getText().toString());
+        book.setState(0);
         database.phoneBookDao().update(book);
         finish();
 

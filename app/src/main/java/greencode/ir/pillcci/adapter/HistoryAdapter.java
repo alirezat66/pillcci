@@ -113,28 +113,34 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
         String state = "";
         if(usageType==0){
             PersianDate pdate = new PersianDate(data.getUsageTime());
-            String usedTime = pdate.getShYear() + "/" + pdate.getShMonth() + "/" + pdate.getShDay() + " " + (pdate.getHour()>9?pdate.getHour():("0"+pdate.getHour())) + ":" + (pdate.getMinute()>9?pdate.getMinute():("0"+pdate.getMinute()));
+            String usedTime = pdate.getShYear() + "/" + pdate.getShMonth() + "/" + pdate.getShDay() ;
             holder.txtTime.setText(usedTime);
-            state="در انتظار مصرف";
+            state= "در انتظار مصرف" + " (" +   (pdate.getHour()>9?pdate.getHour():("0"+pdate.getHour())) + ":" + (pdate.getMinute()>9?pdate.getMinute():("0"+pdate.getMinute())) + ")";
             color = context.getResources().getColor(R.color.darkorange);
         }else if(usageType==1){
-            state="مصرف شد.";
+            state="مصرف شد";
             PersianDate pdate = new PersianDate(data.getUsedTime());
-            String usedTime = pdate.getShYear() + "/" + pdate.getShMonth() + "/" + pdate.getShDay() + " " + (pdate.getHour()>9?pdate.getHour():("0"+pdate.getHour())) + ":" + (pdate.getMinute()>9?pdate.getMinute():("0"+pdate.getMinute()));
+
+            String usedTime = pdate.getShYear() + "/" + pdate.getShMonth() + "/" + pdate.getShDay();
+            state = state  + " (" +   (pdate.getHour()>9?pdate.getHour():("0"+pdate.getHour())) + ":" + (pdate.getMinute()>9?pdate.getMinute():("0"+pdate.getMinute())) + ")";
             holder.txtTime.setText(usedTime);
             color = context.getResources().getColor(R.color.teal);
         }else if(usageType==2) {
             PersianDate pdate = new PersianDate(data.getUsageTime());
-            String usedTime = pdate.getShYear() + "/" + pdate.getShMonth() + "/" + pdate.getShDay() + " " + (pdate.getHour()>9?pdate.getHour():("0"+pdate.getHour())) + ":" + (pdate.getMinute()>9?pdate.getMinute():("0"+pdate.getMinute()));
+            String usedTime = pdate.getShYear() + "/" + pdate.getShMonth() + "/" + pdate.getShDay();
             holder.txtTime.setText(usedTime);
 
-            state="لغو مصرف توسط کاربر";
+            state="مصرف نشد";
+            state = state  + " (" +   (pdate.getHour()>9?pdate.getHour():("0"+pdate.getHour())) + ":" + (pdate.getMinute()>9?pdate.getMinute():("0"+pdate.getMinute())) + ")";
+
             color = context.getResources().getColor(R.color.colorAccent);
         }else {
             PersianDate pdate = new PersianDate(data.getUsageTime());
-            String usedTime = pdate.getShYear() + "/" + pdate.getShMonth() + "/" + pdate.getShDay() + " " + (pdate.getHour()>9?pdate.getHour():("0"+pdate.getHour())) + ":" + (pdate.getMinute()>9?pdate.getMinute():("0"+pdate.getMinute()));
+            String usedTime = pdate.getShYear() + "/" + pdate.getShMonth() + "/" + pdate.getShDay() ;
             holder.txtTime.setText(usedTime);
-            state="بلاتکلیف";
+            state="نامشخص";
+            state = state  + " (" +   (pdate.getHour()>9?pdate.getHour():("0"+pdate.getHour())) + ":" + (pdate.getMinute()>9?pdate.getMinute():("0"+pdate.getMinute())) + ")";
+
             color = context.getResources().getColor(R.color.colorAccent);
         }
         holder.catColor.setCardBackgroundColor(data.getCatColor());

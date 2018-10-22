@@ -28,6 +28,7 @@ import greencode.ir.pillcci.objects.RegisterRequest;
 import greencode.ir.pillcci.objects.RegisterResponse;
 import greencode.ir.pillcci.presenters.PresenterRegisterStepOne;
 import greencode.ir.pillcci.presenters.SetPassPresenter;
+import greencode.ir.pillcci.retrofit.reqobject.SignUpRequest;
 import greencode.ir.pillcci.utils.BaseActivity;
 import greencode.ir.pillcci.utils.Constants;
 import greencode.ir.pillcci.utils.NetworkStateReceiver;
@@ -124,17 +125,27 @@ public class RegisterActivity extends BaseActivity implements NetworkStateReceiv
 
     @Override
     public void onInvalid() {
+        disMissWaiting();
         showError("نام کاربری صحیح نمی باشد.");
     }
 
     @Override
-    public void onValid() {
+    public void onInvalid(String message) {
+        showError(message);
+    }
+
+
+    @Override
+    public void onValidPhone(SignUpRequest request) {
+        registerRequest = new RegisterRequest(request.getUsername(),"","",request.getReferrer());
         //fragment 1 voroode etelaat shomare tayid shod
         hiddenError();
-        presenterSetPass = new SetPassPresenter(this);
-        prepareNewPage();
-        state=2;
-        getSupportFragmentManager().beginTransaction().replace(R.id.container, fragments.get(1)).commit();
+        showWaiting();
+        presenter.callService(request);
+
+
+      /*
+       */
     }
     private void prepareNewPage(){
         error.setVisibility(View.GONE);
@@ -146,7 +157,19 @@ public class RegisterActivity extends BaseActivity implements NetworkStateReceiv
         showError("نام کاربری را وارد کنید.");
     }
 
+    @Override
+    public void onSuccessPhone(RegisterResponse resp) {
+        disMissWaiting();
+        presenterSetPass = new SetPassPresenter(this);
+        prepareNewPage();
+        state=2;
+        registerRequest.setCode(resp.getValidCode());
+        getSupportFragmentManager().beginTransaction().replace(R.id.container, fragments.get(2)).commit();
+
+    }
+
     public void showError(String str) {
+        disMissWaiting();
         error.setVisibility(View.VISIBLE);
         error.setText(str);
 
@@ -160,7 +183,7 @@ public class RegisterActivity extends BaseActivity implements NetworkStateReceiv
     @Override
     public void onRegisterButton(RegisterRequest request) {
         registerRequest = request;
-        presenter.checkUser(request.getUserName());
+        presenter.checkUser(request.getUserName(),request.getMoarefCode());
     }
 
     @Override
@@ -181,8 +204,7 @@ public class RegisterActivity extends BaseActivity implements NetworkStateReceiv
     @Override
     public void onValid(RegisterRequest request) {
         showWaiting();
-        registerRequest=request;
-        presenterSetPass.Register(registerRequest);
+        presenterSetPass.callService(request);
     }
 
     @Override
@@ -194,13 +216,16 @@ public class RegisterActivity extends BaseActivity implements NetworkStateReceiv
     @Override
     public void onSuccessRegister(RegisterResponse request) {
         disMissWaiting();
-        prepareNewPage();
-        registerRequest.setCode("12345");
+        Intent intent = new Intent(this,LoginActivity.class);
+        intent.putExtra(Constants.PREF_USER_NAME,request.getUserName());
+        startActivity(intent);
+        finish();
+        /*prepareNewPage();
+        registerRequest.setCode(request.getValidCode());
         state=2;
-        getSupportFragmentManager().beginTransaction().replace(R.id.container, fragments.get(2)).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.container, fragments.get(2)).commit();*/
 
     }
-
 
     public void disMissWaiting() {
         if (kProgressHUD != null) {
@@ -211,6 +236,7 @@ public class RegisterActivity extends BaseActivity implements NetworkStateReceiv
     @Override
     public void onSetPass(RegisterRequest request) {
         registerRequest=request;
+
         if (hasNet) {
             presenterSetPass.checkValidation(new RegisterRequest(request.getUserName(), request.getPass(), request.getRetryPass(), request.getMoarefCode()));
         } else {
@@ -227,10 +253,10 @@ public class RegisterActivity extends BaseActivity implements NetworkStateReceiv
 
     @Override
     public void onTruePass(RegisterRequest request) {
-        Intent intent = new Intent(this,LoginActivity.class);
-        intent.putExtra(Constants.PREF_USER_NAME,request.getUserName());
-        startActivity(intent);
-        finish();
+        prepareNewPage();
+        state=2;
+        getSupportFragmentManager().beginTransaction().replace(R.id.container, fragments.get(1)).commit();
+
     }
 
     @Override

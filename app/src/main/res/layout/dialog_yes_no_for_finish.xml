@@ -40,7 +40,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="16sp"
+                android:textSize="18sp"
                 android:id="@+id/yesBtn"
                 android:padding="16dp"
                 android:layout_alignParentLeft="true"
@@ -51,7 +51,6 @@
                 android:layout_height="wrap_content"
                 android:textSize="16sp"
                 android:padding="16dp"
-
                 android:layout_toRightOf="@id/yesBtn"
                 android:id="@+id/noBtn"
                 android:textColor="@color/VioletBlue"

@@ -31,6 +31,12 @@ public class PillAutoCompletePresenter extends RecyclerViewPresenter<String> {
         super(context);
 
         String[] pills = Constants.allPills.split(",");
+        String[] pills2 = Constants.allPills2.split("،");
+
+        for(String p :pills2){
+            pils.add(p);
+        }
+
         for(String p :pills){
             pils.add(p);
         }

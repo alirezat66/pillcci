@@ -17,6 +17,8 @@ public class PhoneBook {
     String phone;
     String relation;
     boolean isInitial;
+    int state; // 0  not send 1 == sent 2== deleted
+
 
     public long getid() {
         return id;
@@ -29,6 +31,11 @@ public class PhoneBook {
         this.phone = phone;
         this.relation = relation;
         this.isInitial = isInitial;
+        this.state = 0;
+    }
+
+    public void setState(int state) {
+        this.state = state;
     }
 
     public void setfName(String fName) {

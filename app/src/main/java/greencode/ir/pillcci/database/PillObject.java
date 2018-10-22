@@ -10,13 +10,12 @@ import saman.zamani.persiandate.PersianDate;
  * Created by alireza on 5/22/18.
  */
 @Entity(tableName = "pil")
-
 public class PillObject {
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey(autoGenerate = false)
     int id;
     String b64;// image of pill
     String midname; // name of pill
-    String couseOfUse;// reason of use;
+    String causeOfUse;// reason of use;
     String drName;// dr name that write this pill
 
     String catName; // category name : default value  is "public"
@@ -24,29 +23,29 @@ public class PillObject {
     String catring;// it has default too
 
     int typeOfUsage; // 1 = every day ## 2= some days with regular repeat ## 3= difrent days inweek // 4= birth control;
-    boolean isRegular;// if type 1 or 2 this is true and for 3 this is false
+    int isRegular;// if type 1 or 2 this is true and for 3 this is false
     int repeatUsageDay;// if type=2 this is reapeat of usage;
     String days; // list of days that we should use pill , it seprate with ,
     double diffrenceOfUsage;// diffrence between two usage per hours for example 3 means between this time and next time we has 3 hours
     int countOfUsagePerDay;//count of usage per day
-    int stardHour;// initial and first start hours
+    int startHour;// initial and first start hours
     int startMin;// initial and first start min
     String unitUse; // unit of usage
-    String unitsCount; // its amount of usage for each usage that seprate with ,
+    String unitCount; // its amount of usage for each usage that seprate with ,
     String unitTimes;//its time of usage time for each usage in day that seprate with ,
     int useType; //1= continuesly with unknown dead line ## 2=  finished by finish days ## 3 == finished by finish allusecount;
     int allUseDays;// days that we used this pill
     double totalAmounts;// amount that we finished usage of this pill
     long firstAlarmTime; // nearest time we should use this med
-    int daysOdUse; // days that we used pill
+    int daysOfUse; // days that we used pill
     double amountOfUse ; // amount pill that we used
     String description;
     int hasLight;
     int hasVibrate;
     int reminderDays;// tedade rooz hayi ke ghabl az etmam bayad yad avari konim
     double allPillCount;//tedade kole darooye mojood;
-    int state;// 1==active 2== deactive
-
+    int state;// 1==active 2== deactive 3==deleted 4==finished
+    int isSync;
     public void setAllPillCount(double allPillCount) {
         this.allPillCount = allPillCount;
     }
@@ -67,7 +66,7 @@ public class PillObject {
     }
 
     public String getCouseOfUse() {
-        return couseOfUse;
+        return causeOfUse;
     }
 
     public String getDrName() {
@@ -93,7 +92,7 @@ public class PillObject {
         return typeOfUsage;
     }
 
-    public boolean isRegular() {
+    public int isRegular() {
         return isRegular;
     }
 
@@ -110,7 +109,7 @@ public class PillObject {
     }
 
     public int getStardHour() {
-        return stardHour;
+        return startHour;
     }
 
     public int getStartMin() {
@@ -122,7 +121,7 @@ public class PillObject {
     }
 
     public String getUnitsCount() {
-        return unitsCount;
+        return unitCount;
     }
 
     public String getUnitTimes() {
@@ -147,8 +146,8 @@ public class PillObject {
         return date.getTime();
     }
 
-    public int getDaysOdUse() {
-        return daysOdUse;
+    public int getDaysOfUse() {
+        return daysOfUse;
     }
 
     public double getAmountOfUse() {
@@ -163,11 +162,11 @@ public class PillObject {
         return description;
     }
 
-    public PillObject(String b64, String midname, String couseOfUse, String drName, String catName,
+ /*   public PillObject(String b64, String midname, String couseOfUse, String drName, String catName,
                       int catColor, String catring, int typeOfUsage, boolean isRegular,
                       int repeatUsageDay, String days, double diffrenceOfUsage, int countOfUsagePerDay,
                       int stardHour, int startMin, String unitUse, String unitsCount, String unitTimes,
-                      int useType, int allUseDays, double totalAmounts, long firstAlarmTime, int daysOdUse,
+                      int useType, int allUseDays, double totalAmounts, long firstAlarmTime, int daysOfUse,
                       double amountOfUse, String description, int reminderDays, double allPillCount,
                       int hasLight,int hasVibrate) {
         this.b64 = b64;
@@ -192,7 +191,7 @@ public class PillObject {
         this.allUseDays = allUseDays;
         this.totalAmounts = totalAmounts;
         this.firstAlarmTime = firstAlarmTime;
-        this.daysOdUse = daysOdUse;
+        this.daysOfUse = daysOfUse;
         this.amountOfUse = amountOfUse;
         this.description = description;
         this.reminderDays = reminderDays;
@@ -200,7 +199,65 @@ public class PillObject {
         this.state = 1;
         this.hasLight=hasLight;
         this.hasVibrate=hasVibrate;
+        this.isSync = false;
+    }*/
+
+    public PillObject(int id, String b64, String midname,
+                      String causeOfUse, String drName,
+                      String catName, int catColor, String catring,
+                      int typeOfUsage, int isRegular,
+                      int repeatUsageDay, String days,
+                      double diffrenceOfUsage, int countOfUsagePerDay,
+                      int startHour, int startMin,
+                      String unitUse, String unitCount,
+                      String unitTimes, int useType, int allUseDays, double totalAmounts,
+                      long firstAlarmTime, int daysOfUse, double amountOfUse, String description,
+                      int hasLight, int hasVibrate, int reminderDays, double allPillCount, int state, int isSync) {
+        this.id = id;
+        this.b64 = b64;
+        this.midname = midname;
+        this.causeOfUse = causeOfUse;
+        this.drName = drName;
+        this.catName = catName;
+        this.catColor = catColor;
+        this.catring = catring;
+        this.typeOfUsage = typeOfUsage;
+        this.isRegular = isRegular;
+        this.repeatUsageDay = repeatUsageDay;
+        this.days = days;
+        this.diffrenceOfUsage = diffrenceOfUsage;
+        this.countOfUsagePerDay = countOfUsagePerDay;
+        this.startHour = startHour;
+        this.startMin = startMin;
+        this.unitUse = unitUse;
+        this.unitCount = unitCount;
+        this.unitTimes = unitTimes;
+        this.useType = useType;
+        this.allUseDays = allUseDays;
+        this.totalAmounts = totalAmounts;
+        this.firstAlarmTime = firstAlarmTime;
+        this.daysOfUse = daysOfUse;
+        this.amountOfUse = amountOfUse;
+        this.description = description;
+        this.hasLight = hasLight;
+        this.hasVibrate = hasVibrate;
+        this.reminderDays = reminderDays;
+        this.allPillCount = allPillCount;
+        this.state = state;
+        this.isSync = isSync;
     }
+
+
+
+    public void setSync(int sync) {
+        isSync = sync;
+    }
+
+    public int isSync() {
+        return isSync;
+    }
+
+
 
     public int getLight() {
         return hasLight;
@@ -250,7 +307,7 @@ public class PillObject {
     }
 
     public String getEachTime() {
-        String[]usageCount = unitsCount.split(",");
+        String[]usageCount = unitCount.split(",");
         boolean isSame = true;
         for(String usage : usageCount){
             if(!usage.equals(usageCount[0])){
@@ -277,7 +334,7 @@ public class PillObject {
 
             return usageCount[0] + " " + unitUse;
         }else {
-            return unitsCount+" "+unitUse;
+            return unitCount+" "+unitUse;
         }
 
 
@@ -308,7 +365,7 @@ public class PillObject {
     }
 
     public String getEachUseTime() {
-        String[]usageCount = unitsCount.split(",");
+        String[]usageCount = unitCount.split(",");
         String finalStr = "";
         boolean isSame = true;
         for(int i = 0 ; i<usageCount.length-1;i++){
@@ -362,7 +419,7 @@ public class PillObject {
     }
 
     public void setCouseOfUse(String couseOfUse) {
-        this.couseOfUse = couseOfUse;
+        this.causeOfUse = couseOfUse;
     }
 
     public void setDrName(String drName) {
@@ -385,7 +442,7 @@ public class PillObject {
         this.typeOfUsage = typeOfUsage;
     }
 
-    public void setRegular(boolean regular) {
+    public void setRegular(int regular) {
         isRegular = regular;
     }
 
@@ -402,7 +459,7 @@ public class PillObject {
     }
 
     public void setStardHour(int stardHour) {
-        this.stardHour = stardHour;
+        this.startHour = stardHour;
     }
 
     public void setStartMin(int startMin) {
@@ -414,7 +471,7 @@ public class PillObject {
     }
 
     public void setUnitsCount(String unitsCount) {
-        this.unitsCount = unitsCount;
+        this.unitCount = unitsCount;
     }
 
     public void setUnitTimes(String unitTimes) {
@@ -437,8 +494,8 @@ public class PillObject {
         this.firstAlarmTime = firstAlarmTime;
     }
 
-    public void setDaysOdUse(int daysOdUse) {
-        this.daysOdUse = daysOdUse;
+    public void setDaysOfUse(int daysOfUse) {
+        this.daysOfUse = daysOfUse;
     }
 
     public void setAmountOfUse(double amountOfUse) {

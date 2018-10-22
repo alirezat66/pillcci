@@ -1,10 +1,17 @@
-<RelativeLayout
+<android.support.v7.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:background="@color/white"
     android:layout_height="wrap_content"
+    app:cardCornerRadius="0dp"
+    app:cardElevation="6dp"
+
     >
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
     <FrameLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -28,9 +35,11 @@
             android:id="@+id/iv_camera"
             android:layout_width="32dp"
             android:layout_height="32dp"
+            android:elevation="6dp"
+
             android:background="@drawable/oval_accent_strok"
             app:srcCompat="@drawable/ic_add_white_24dp"
-            android:layout_gravity="top|right"
+            android:layout_gravity="bottom|right"
             android:layout_marginTop="20dp"
             />
     </FrameLayout>
@@ -43,6 +52,5 @@
         android:layout_marginTop="8dp"
         android:layout_marginBottom="16dp"
         android:layout_below="@id/lypic"/>
-
-
-</RelativeLayout>
+    </RelativeLayout>
+</android.support.v7.widget.CardView>

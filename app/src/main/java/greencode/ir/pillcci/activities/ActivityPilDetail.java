@@ -106,14 +106,15 @@ public class ActivityPilDetail extends BaseActivity {
             catName = bundle.getString("catName");
             txtMedName.setText(midName);
             object = database.pillObjectDao().specialPil(midName,catName);
-
             usage = database.pillUsageDao().listSpecialPillUsage(midName,catName);
         }
         txtCatName.setText(object.getCatName());
         txtCatName.setTextColor(object.getCatColor());
         txtUnitUsage.setText(object.getUnitUse());
         txtDrName.setText(object.getDrName());
-        txtRepeatCount.setText(usage.get(0).getCountPerDay());
+        if(usage.size()>0) {
+            txtRepeatCount.setText(usage.get(0).getCountPerDay());
+        }
         List<PillUsage> usedUsage = database.pillUsageDao().listSpecialUsedPillUsage(midName,catName);
         double amount =0 ;// masrafe ye rooz
         String[]amounts = object.getUnitsCount().split(",");
@@ -122,7 +123,7 @@ public class ActivityPilDetail extends BaseActivity {
         }
         double total = 0 ;
         double totalAmount = object.getAllPillCount();
-        if(totalAmount>0){
+        if(totalAmount>1){
             total = totalAmount;
         }else {
             if(object.getUseType()==2){

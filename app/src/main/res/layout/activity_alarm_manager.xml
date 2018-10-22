@@ -52,7 +52,7 @@
             android:layout_centerHorizontal="true"
             android:id="@+id/txtclock"
             android:visibility="visible"
-            android:textSize="22dp"
+            android:textSize="24dp"
             android:layout_below="@id/txtRemind"
             android:textColor="@color/colorAccent"
             android:text="ساعت : ۱۸:۳۰"
@@ -106,13 +106,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/layout_container"
+
                 android:orientation="vertical">
                 <android.support.v7.widget.AppCompatImageView
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:id="@+id/catImage"
                     android:layout_gravity="center_horizontal"
-                    app:srcCompat="@drawable/category"/>
+                    app:srcCompat="@drawable/ic_person_blue"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

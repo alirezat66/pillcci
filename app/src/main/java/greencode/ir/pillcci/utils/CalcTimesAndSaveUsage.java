@@ -13,6 +13,7 @@ import greencode.ir.pillcci.database.PillUsage;
 import greencode.ir.pillcci.objects.EndUseFields;
 import greencode.ir.pillcci.objects.GeneralFields;
 import greencode.ir.pillcci.objects.UsageFields;
+import greencode.ir.pillcci.retrofit.SyncController;
 import saman.zamani.persiandate.PersianDate;
 
 /**
@@ -21,7 +22,7 @@ import saman.zamani.persiandate.PersianDate;
 
 public class CalcTimesAndSaveUsage {
 
-    public static PillUsage makepillUsage(PillObject pillObject, long timeStamp, int j) {
+    public static PillUsage makepillUsage(PillObject pillObject, long timeStamp, int j,long id) {
 
         String pillName=pillObject.getMidname();
         PersianDate persianCalendar = new PersianDate(timeStamp);
@@ -31,7 +32,7 @@ public class CalcTimesAndSaveUsage {
         int state =0; // 0 = not used ## 1 = used
         String useTime="";// time that we use pill
         long usedTime = 0;
-        boolean hasDelay=false;
+        int hasDelay=0;
         String description=pillObject.getDescription();
         String catNme=pillObject.getCatName();
         int catColor=pillObject.getCatColor();
@@ -44,8 +45,9 @@ public class CalcTimesAndSaveUsage {
             int positionOdUnit = j % unitCount.length;
             unitAmount = unitCount[positionOdUnit];
         }
+
         String countPerDay=getCountPerDay(pillObject.getCountOfUsagePerDay());
-        return new PillUsage(pillObject.getid(),pillName,time,usageTime,state,useTime,hasDelay,description,
+        return new PillUsage(id,pillObject.getid(),pillName,time,usageTime,state,useTime,hasDelay,description,
                 catNme,catColor,catRingtone,drName,unit,unitAmount,countPerDay,usedTime,usageTime);
     }
 
@@ -88,18 +90,18 @@ public class CalcTimesAndSaveUsage {
 
 
 
-    public static PillObject makePillObject(GeneralFields generalFields, UsageFields usageFields, EndUseFields endUseFields) {
+    public static PillObject makePillObject(GeneralFields generalFields, UsageFields usageFields, EndUseFields endUseFields,int id) {
         String b64 = generalFields.getB64();// image of pill
         String midname=generalFields.getMidName(); // name of pill
         String couseOfUse=generalFields.getCouse();// reason of use;
         String drName=generalFields.getDrName();// dr name that write this pill
 
-        String catName=(generalFields.getCatName().length()==0) ?"عمومی":generalFields.getCatName(); // category name : default value  is "public"
+        String catName=(generalFields.getCatName().length()==0) ?"":generalFields.getCatName(); // category name : default value  is "public"
         int catColor=generalFields.getCatColour(); // it has default too
         String catring=generalFields.getAlarmUrl();// it has default too
 
         int typeOfUsage = usageFields.getTypeOfdayUsage(); // 1 = every day ## 2= some days with regular repeat ## 3= difrent days inweek;
-        boolean isRegular=usageFields.isRegular();// if type 1 or 2 this is true and for 3 this is false
+        int isRegular=usageFields.isRegular();// if type 1 or 2 this is true and for 3 this is false
 
         String days=""; // list of days that we should use pill , it seprate with ,
         for(String day:usageFields.getDays()){
@@ -146,17 +148,17 @@ public class CalcTimesAndSaveUsage {
         date.setSecond(0);
         int reminderDay = endUseFields.getDayReminder();
         double reminderCountPill = endUseFields.getRemindAllPill();
-        ReadAndWrite.appendLog("we make "+midname+" and this pill start time is :"+ date.getHour()+":"+date.getMinute()+":"+date.getSecond());
 
 
 
 
 
-        PillObject pillObject=  new PillObject(b64,midname,couseOfUse,drName,catName,catColor,catring,
-                typeOfUsage,isRegular,usageFields.getRepeatDays(),days,diffrenceOfUsage
+        PillObject pillObject=  new PillObject(id,b64,midname,couseOfUse,drName,catName,catColor,catring,
+                typeOfUsage,(isRegular),usageFields.getRepeatDays(),days,diffrenceOfUsage
                 ,countOfUsagePerDay,stardHour,startMin,unitUse,unitsCount,unitTimes,
                 useType,allUseDays,
-                totalAmounts,date.getTime(),0,0,usageFields.getDescription(),reminderDay,reminderCountPill,generalFields.getIsLight(),generalFields.getIsVibrate());
+                totalAmounts,date.getTime(),0,0,usageFields.getDescription(),generalFields.getIsLight(), generalFields.getIsVibrate(),reminderDay,reminderCountPill,
+               1,0);
         return pillObject;
 
     }
@@ -166,12 +168,12 @@ public class CalcTimesAndSaveUsage {
         String couseOfUse=generalFields.getCouse();// reason of use;
         String drName=generalFields.getDrName();// dr name that write this pill
 
-        String catName=(generalFields.getCatName().length()==0) ?"عمومی":generalFields.getCatName(); // category name : default value  is "public"
+        String catName=(generalFields.getCatName().length()==0) ?"":generalFields.getCatName(); // category name : default value  is "public"
         int catColor=generalFields.getCatColour(); // it has default too
         String catring=generalFields.getAlarmUrl();// it has default too
 
         int typeOfUsage = usageFields.getTypeOfdayUsage(); // 1 = every day ## 2= some days with regular repeat ## 3= difrent days inweek;
-        boolean isRegular=usageFields.isRegular();// if type 1 or 2 this is true and for 3 this is false
+        int isRegular=usageFields.isRegular();// if type 1 or 2 this is true and for 3 this is false
 
         String days=""; // list of days that we should use pill , it seprate with ,
         for(String day:usageFields.getDays()){
@@ -218,7 +220,6 @@ public class CalcTimesAndSaveUsage {
         date.setSecond(0);
         int reminderDay = endUseFields.getDayReminder();
         double reminderCountPill = endUseFields.getRemindAllPill();
-        ReadAndWrite.appendLog("we make "+midname+" and this pill start time is :"+ date.getHour()+":"+date.getMinute()+":"+date.getSecond());
 
 
         lastPill.setB64(b64);
@@ -249,7 +250,11 @@ public class CalcTimesAndSaveUsage {
         lastPill.setHasLight(generalFields.getIsLight());
         lastPill.setHasVibrate(generalFields.getIsVibrate());
         AppDatabase database = AppDatabase.getInMemoryDatabase(context);
+        lastPill.setSync(0);
         database.pillObjectDao().update(lastPill);
+
+        SyncController sync = new SyncController();
+        sync.checkDataBaseForUpdate();
         return lastPill;
 
     }
@@ -262,15 +267,21 @@ public class CalcTimesAndSaveUsage {
         for(String useTime : usageTime){
             usageTimeLong.add(Long.parseLong(useTime));
         }
-        if(pillObject.isRegular()){
+
+        AppDatabase database = AppDatabase.getInMemoryDatabase(context);
+        long lastLocal = database.pillUsageDao().getLastId();
+        if(pillObject.isRegular()==1){
             // monazame yani rooze shoro dare ya har rooz ya har chand rooz
             if(pillObject.getTypeOfUsage()==1){
                 // har rooz
+
+
                 for(int i = 0 ; i <30;/* mikhaym 30 rooz add konim*/ i++){
                     for( int j=0;j<usageTimeLong.size();j++){
                         PersianDate date = new PersianDate(usageTimeLong.get(j));
                         date = addDays(i,date);
-                        PillUsage pillUsage = makepillUsage(pillObject,date.getTime(),j);
+
+                        PillUsage pillUsage = makepillUsage(pillObject,date.getTime(),j, ++lastLocal);
                         usageList.add(pillUsage);
 
                     }
@@ -281,7 +292,7 @@ public class CalcTimesAndSaveUsage {
                     for( int j=0;j<usageTimeLong.size();j++){
                         PersianDate date = new PersianDate(usageTimeLong.get(j));
                         date = addDays(i,date);
-                        PillUsage pillUsage = makepillUsage(pillObject,date.getTime(),j);
+                        PillUsage pillUsage = makepillUsage(pillObject,date.getTime(),j, ++lastLocal);
                         usageList.add(pillUsage);
                     }
                 }
@@ -296,7 +307,7 @@ public class CalcTimesAndSaveUsage {
                     for( int j=0;j<usageTimeLong.size();j++){
                         PersianDate date = new PersianDate(usageTimeLong.get(j));
                         date = addDays(i,date);
-                        PillUsage pillUsage = makepillUsage(pillObject,date.getTime(),j);
+                        PillUsage pillUsage = makepillUsage(pillObject,date.getTime(),j, ++lastLocal);
                         usageList.add(pillUsage);
 
                     }
@@ -321,7 +332,7 @@ public class CalcTimesAndSaveUsage {
                     PersianDate date = new PersianDate(usageTimeLong.get(j));
                     date = addDays(distanceDay,date);
                     Log.d("HiLevel","حلقه داخلی پس از اضافه شدن روز"+PersianCalculater.getMonthAndDay(date.getTime())+"---"+PersianCalculater.getHourseAndMin(date.getTime()));
-                    PillUsage pillUsage = makepillUsage(pillObject, date.getTime(), j);
+                    PillUsage pillUsage = makepillUsage(pillObject, date.getTime(), j, ++lastLocal);
                     usageList.add(pillUsage);
                     if(j==0){
                         startDateEachCount=date;
@@ -349,6 +360,9 @@ public class CalcTimesAndSaveUsage {
                     distanceDay++;
 
                 }
+                if(dayArr.size()==1){
+                    distanceDay+=7;
+                }
                 Log.d("HiLevel","روزهای بعدی "+distanceDay+" "+startDateEachCount.dayName()+"---"+next);
 
             }
@@ -366,7 +380,10 @@ public class CalcTimesAndSaveUsage {
         for(String useTime : usageTime){
             usageTimeLong.add(Long.parseLong(useTime));
         }
-        if(pillObject.isRegular()){
+        AppDatabase database = AppDatabase.getInMemoryDatabase(context);
+        long lastLocal = database.pillUsageDao().getLastId();
+
+        if(pillObject.isRegular()==1){
             // monazame yani rooze shoro dare ya har rooz ya har chand rooz
             if(pillObject.getTypeOfUsage()==1){
                 // har rooz
@@ -374,7 +391,7 @@ public class CalcTimesAndSaveUsage {
                     for( int j=0;j<usageTimeLong.size();j++){
                         PersianDate date = new PersianDate(usageTimeLong.get(j));
                         date = addDays(i,date);
-                        PillUsage pillUsage = makepillUsage(pillObject,date.getTime(),j);
+                        PillUsage pillUsage = makepillUsage(pillObject,date.getTime(),j,++lastLocal);
                         usageList.add(pillUsage);
 
                     }
@@ -385,7 +402,7 @@ public class CalcTimesAndSaveUsage {
                     for( int j=0;j<usageTimeLong.size();j++){
                         PersianDate date = new PersianDate(usageTimeLong.get(j));
                         date = addDays(i,date);
-                        PillUsage pillUsage = makepillUsage(pillObject,date.getTime(),j);
+                        PillUsage pillUsage = makepillUsage(pillObject,date.getTime(),j,++lastLocal);
                         usageList.add(pillUsage);
                     }
                 }
@@ -400,7 +417,7 @@ public class CalcTimesAndSaveUsage {
                     for( int j=0;j<usageTimeLong.size();j++){
                         PersianDate date = new PersianDate(usageTimeLong.get(j));
                         date = addDays(i,date);
-                        PillUsage pillUsage = makepillUsage(pillObject,date.getTime(),j);
+                        PillUsage pillUsage = makepillUsage(pillObject,date.getTime(),j,++lastLocal);
                         usageList.add(pillUsage);
 
                     }
@@ -425,7 +442,7 @@ public class CalcTimesAndSaveUsage {
                     PersianDate date = new PersianDate(usageTimeLong.get(j));
                     date = addDays(distanceDay,date);
                     Log.d("HiLevel","حلقه داخلی پس از اضافه شدن روز"+PersianCalculater.getMonthAndDay(date.getTime())+"---"+PersianCalculater.getHourseAndMin(date.getTime()));
-                    PillUsage pillUsage = makepillUsage(pillObject, date.getTime(), j);
+                    PillUsage pillUsage = makepillUsage(pillObject, date.getTime(), j,++lastLocal);
                     usageList.add(pillUsage);
                     if(j==0){
                         startDateEachCount=date;
@@ -471,7 +488,10 @@ public class CalcTimesAndSaveUsage {
         }
         usageTimeLong = calcNewUsageTime(usageTimeLong);
         long currentTimeStamp = System.currentTimeMillis();
-        if(pillObject.isRegular()){
+
+        AppDatabase database = AppDatabase.getInMemoryDatabase(context);
+        long lastLocal = database.pillUsageDao().getLastId();
+        if(pillObject.isRegular()==1){
             // monazame yani rooze shoro dare ya har rooz ya har chand rooz
             if(pillObject.getTypeOfUsage()==1){
                 // har rooz
@@ -481,7 +501,7 @@ public class CalcTimesAndSaveUsage {
                         if(i!=0||currentTimeStamp<=date.getTime()) {
 
                             date = addDays(i, date);
-                            PillUsage pillUsage = makepillUsage(pillObject, date.getTime(), j);
+                            PillUsage pillUsage = makepillUsage(pillObject, date.getTime(), j,++lastLocal);
                             usageList.add(pillUsage);
                         }
                     }
@@ -493,7 +513,7 @@ public class CalcTimesAndSaveUsage {
                         PersianDate date = new PersianDate(usageTimeLong.get(j));
                         if (i != 0 || currentTimeStamp <= date.getTime()) {
                             date = addDays(i, date);
-                            PillUsage pillUsage = makepillUsage(pillObject, date.getTime(), j);
+                            PillUsage pillUsage = makepillUsage(pillObject, date.getTime(), j,++lastLocal);
                             usageList.add(pillUsage);
                         }
                     }
@@ -519,7 +539,7 @@ public class CalcTimesAndSaveUsage {
                     if(i!=0||currentTimeStamp<=date.getTime()) {
                         date = addDays(distanceDay, date);
                         Log.d("HiLevel", "حلقه داخلی پس از اضافه شدن روز" + PersianCalculater.getMonthAndDay(date.getTime()) + "---" + PersianCalculater.getHourseAndMin(date.getTime()));
-                        PillUsage pillUsage = makepillUsage(pillObject, date.getTime(), j);
+                        PillUsage pillUsage = makepillUsage(pillObject, date.getTime(), j,++lastLocal);
                         usageList.add(pillUsage);
                         if (j == 0) {
                             startDateEachCount = date;
@@ -588,7 +608,7 @@ public class CalcTimesAndSaveUsage {
 
 
 
-    public static ArrayList<PillUsage> makePillUsageInPerAmountMood(PillObject pillObject) {
+    public static ArrayList<PillUsage> makePillUsageInPerAmountMood(PillObject pillObject,Context context) {
         ArrayList<PillUsage>usageList = new ArrayList<>();
         long startTimeStamp=pillObject.getFirstAlarmTime();
         String[] usageTime=pillObject.getUnitTimes().split(",");
@@ -601,8 +621,9 @@ public class CalcTimesAndSaveUsage {
         double countingAmount = 0;
         int usageDay = 0;
 
-
-        if(pillObject.isRegular()){
+        AppDatabase database = AppDatabase.getInMemoryDatabase(context);
+        long lastLocal = database.pillUsageDao().getLastId();
+        if(pillObject.isRegular()==1){
             // monazame yani rooze shoro dare ya har rooz ya har chand rooz
             if(pillObject.getTypeOfUsage()==1){
                 // har rooz
@@ -610,7 +631,7 @@ public class CalcTimesAndSaveUsage {
                    for (int j = 0; j < usageTimeLong.size(); j++) {
                        PersianDate date = new PersianDate(usageTimeLong.get(j));
                        date = addDays(usageDay, date);
-                       PillUsage pillUsage = makepillUsage(pillObject, date.getTime(), j);
+                       PillUsage pillUsage = makepillUsage(pillObject, date.getTime(), j,++lastLocal);
                        usageList.add(pillUsage);
                        countingAmount += Double.parseDouble(pillUsage.getUnitAmount());
                    }
@@ -623,7 +644,7 @@ public class CalcTimesAndSaveUsage {
                     for( int j=0;j<usageTimeLong.size();j++){
                         PersianDate date = new PersianDate(usageTimeLong.get(j));
                         date = addDays(usageDay*pillObject.getRepeatUsageDay(),date);
-                        PillUsage pillUsage = makepillUsage(pillObject,date.getTime(),j);
+                        PillUsage pillUsage = makepillUsage(pillObject,date.getTime(),j,++lastLocal);
                         usageList.add(pillUsage);
                         countingAmount+=Double.parseDouble(pillUsage.getUnitAmount());
                     }
@@ -642,7 +663,7 @@ public class CalcTimesAndSaveUsage {
                     for (int j = 0; j < usageTimeLong.size(); j++) {
                         PersianDate date = new PersianDate(usageTimeLong.get(j));
                         date = addDays(usageDay, date);
-                        PillUsage pillUsage = makepillUsage(pillObject, date.getTime(), j);
+                        PillUsage pillUsage = makepillUsage(pillObject, date.getTime(), j,++lastLocal);
                         usageList.add(pillUsage);
                         countingAmount += Double.parseDouble(pillUsage.getUnitAmount());
                     }
@@ -664,7 +685,7 @@ public class CalcTimesAndSaveUsage {
                     PersianDate date = new PersianDate(usageTimeLong.get(j));
                     date = addDays(distanceDay,date);
                     Log.d("HiLevel","حلقه داخلی پس از اضافه شدن روز"+PersianCalculater.getMonthAndDay(date.getTime())+"---"+PersianCalculater.getHourseAndMin(date.getTime()));
-                    PillUsage pillUsage = makepillUsage(pillObject, date.getTime(), j);
+                    PillUsage pillUsage = makepillUsage(pillObject, date.getTime(), j,++lastLocal);
                     usageList.add(pillUsage);
                     countingAmount+=Double.parseDouble(pillUsage.getUnitAmount());
                     if(j==0){
@@ -715,6 +736,7 @@ public class CalcTimesAndSaveUsage {
         double amountOfUse = pillObject.getTotalAmounts();
         AppDatabase database = AppDatabase.getInMemoryDatabase(context);
         ArrayList<PillUsage>usedPill = new ArrayList<>(database.pillUsageDao().listSpecialUsedPillUsage(pillObject.getMidname(),pillObject.getCatName()));
+        long lastLocal = database.pillUsageDao().getLastId();
         double allAmount = 0;
         for(PillUsage usage :usedPill){
             allAmount += Double.parseDouble(usage.getUnitAmount());
@@ -722,8 +744,7 @@ public class CalcTimesAndSaveUsage {
         double countingAmount =allAmount;
         int usageDay=0;
         long currentTimeStamp = System.currentTimeMillis();
-
-        if(pillObject.isRegular()){
+        if(pillObject.isRegular()==1){
             // monazame yani rooze shoro dare ya har rooz ya har chand rooz
 
             if(pillObject.getTypeOfUsage()==1){
@@ -733,7 +754,7 @@ public class CalcTimesAndSaveUsage {
                        PersianDate date = new PersianDate(usageTimeLong.get(j));
                        if(usageDay!=0||currentTimeStamp<=date.getTime()) {
                            date = addDays(usageDay, date);
-                           PillUsage pillUsage = makepillUsage(pillObject, date.getTime(), j);
+                           PillUsage pillUsage = makepillUsage(pillObject, date.getTime(), j,++lastLocal);
                            usageList.add(pillUsage);
                            countingAmount += Double.parseDouble(pillUsage.getUnitAmount());
                        }
@@ -751,7 +772,7 @@ public class CalcTimesAndSaveUsage {
                         if(usageDay!=0||currentTimeStamp<=date.getTime()) {
 
                             date = addDays(usageDay * pillObject.getRepeatUsageDay(), date);
-                            PillUsage pillUsage = makepillUsage(pillObject, date.getTime(), j);
+                            PillUsage pillUsage = makepillUsage(pillObject, date.getTime(), j,++lastLocal);
                             usageList.add(pillUsage);
                             countingAmount += Double.parseDouble(pillUsage.getUnitAmount());
                         }
@@ -778,7 +799,7 @@ public class CalcTimesAndSaveUsage {
 
                         date = addDays(distanceDay, date);
                         Log.d("HiLevel", "حلقه داخلی پس از اضافه شدن روز" + PersianCalculater.getMonthAndDay(date.getTime()) + "---" + PersianCalculater.getHourseAndMin(date.getTime()));
-                        PillUsage pillUsage = makepillUsage(pillObject, date.getTime(), j);
+                        PillUsage pillUsage = makepillUsage(pillObject, date.getTime(), j,++lastLocal);
                         usageList.add(pillUsage);
                         countingAmount += Double.parseDouble(pillUsage.getUnitAmount());
                     }
@@ -834,7 +855,9 @@ public class CalcTimesAndSaveUsage {
         for(String useTime : usageTime){
             usageTimeLong.add(Long.parseLong(useTime));
         }
-        if(pillObject.isRegular()){
+        AppDatabase database = AppDatabase.getInMemoryDatabase(context);
+        long lastLocal = database.pillUsageDao().getLastId();
+        if(pillObject.isRegular()==1){
             // monazame yani rooze shoro dare ya har rooz ya har chand rooz
             if(pillObject.getTypeOfUsage()==1){
                 // har rooz
@@ -842,7 +865,7 @@ public class CalcTimesAndSaveUsage {
                     for( int j=0;j<usageTimeLong.size();j++){
                         PersianDate date = new PersianDate(usageTimeLong.get(j));
                         date = addDays(i,date);
-                        PillUsage pillUsage = makepillUsage(pillObject,date.getTime(),j);
+                        PillUsage pillUsage = makepillUsage(pillObject,date.getTime(),j,++lastLocal);
                         usageList.add(pillUsage);
                     }
                 }
@@ -852,7 +875,7 @@ public class CalcTimesAndSaveUsage {
                     for( int j=0;j<usageTimeLong.size();j++){
                         PersianDate date = new PersianDate(usageTimeLong.get(j));
                         date = addDays(i,date);
-                        PillUsage pillUsage = makepillUsage(pillObject,date.getTime(),j);
+                        PillUsage pillUsage = makepillUsage(pillObject,date.getTime(),j,++lastLocal);
                         usageList.add(pillUsage);
                     }
                 }
@@ -866,7 +889,7 @@ public class CalcTimesAndSaveUsage {
                     for( int j=0;j<usageTimeLong.size();j++){
                         PersianDate date = new PersianDate(usageTimeLong.get(j));
                         date = addDays(i,date);
-                        PillUsage pillUsage = makepillUsage(pillObject,date.getTime(),j);
+                        PillUsage pillUsage = makepillUsage(pillObject,date.getTime(),j,++lastLocal);
                         usageList.add(pillUsage);
                     }
                 }
@@ -888,7 +911,7 @@ public class CalcTimesAndSaveUsage {
                     PersianDate date = new PersianDate(usageTimeLong.get(j));
                     date = addDays(distanceDay,date);
                     Log.d("HiLevel","حلقه داخلی پس از اضافه شدن روز"+PersianCalculater.getMonthAndDay(date.getTime())+"---"+PersianCalculater.getHourseAndMin(date.getTime()));
-                    PillUsage pillUsage = makepillUsage(pillObject, date.getTime(), j);
+                    PillUsage pillUsage = makepillUsage(pillObject, date.getTime(), j,++lastLocal);
                     usageList.add(pillUsage);
                     if(j==0){
                         startDateEachCount=date;
@@ -922,8 +945,7 @@ public class CalcTimesAndSaveUsage {
         int usageCount = 0;
         AppDatabase database = AppDatabase.getInMemoryDatabase(context);
         List<PillUsage> lastUsages = database.pillUsageDao().listSpecialPillUsage(pillObject.getMidname(),pillObject.getCatName());
-
-
+        long lastLocal = database.pillUsageDao().getLastId();
         long startTimeStamp=pillObject.getFirstAlarmTime();
         String[] usageTime=pillObject.getUnitTimes().split(",");
         ArrayList<Long>usageTimeLong = new ArrayList<>();
@@ -946,7 +968,7 @@ public class CalcTimesAndSaveUsage {
         }
         usageTimeLong = calcNewUsageTime(usageTimeLong);
         long currentTime = System.currentTimeMillis();
-        if(pillObject.isRegular()){
+        if(pillObject.isRegular()==1){
             // monazame yani rooze shoro dare ya har rooz ya har chand rooz
             if(pillObject.getTypeOfUsage()==1){
                 // har rooz
@@ -955,7 +977,7 @@ public class CalcTimesAndSaveUsage {
                         if(i!=0 || currentTime<usageTimeLong.get(j)) {
                             PersianDate date = new PersianDate(usageTimeLong.get(j));
                             date = addDays(i, date);
-                            PillUsage pillUsage = makepillUsage(pillObject, date.getTime(), j);
+                            PillUsage pillUsage = makepillUsage(pillObject, date.getTime(), j,++lastLocal);
                             usageList.add(pillUsage);
                         }
                     }
@@ -967,7 +989,7 @@ public class CalcTimesAndSaveUsage {
                         if(i!=0 || currentTime<usageTimeLong.get(j)) {
                             PersianDate date = new PersianDate(usageTimeLong.get(j));
                             date = addDays(i, date);
-                            PillUsage pillUsage = makepillUsage(pillObject, date.getTime(), j);
+                            PillUsage pillUsage = makepillUsage(pillObject, date.getTime(), j,++lastLocal);
                             usageList.add(pillUsage);
                         }
                     }
@@ -990,7 +1012,7 @@ public class CalcTimesAndSaveUsage {
                         PersianDate date = new PersianDate(usageTimeLong.get(j));
                         date = addDays(distanceDay, date);
                         Log.d("HiLevel", "حلقه داخلی پس از اضافه شدن روز" + PersianCalculater.getMonthAndDay(date.getTime()) + "---" + PersianCalculater.getHourseAndMin(date.getTime()));
-                        PillUsage pillUsage = makepillUsage(pillObject, date.getTime(), j);
+                        PillUsage pillUsage = makepillUsage(pillObject, date.getTime(), j,++lastLocal);
                         usageList.add(pillUsage);
                         if (j == 0) {
                             startDateEachCount = date;

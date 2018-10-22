@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.kaopiz.kprogresshud.KProgressHUD;
 
@@ -19,9 +20,9 @@ import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
 import greencode.ir.pillcci.R;
 import greencode.ir.pillcci.interfaces.ChangePassOneInterface;
-import greencode.ir.pillcci.objects.ChangePassStepOneReq;
-import greencode.ir.pillcci.objects.ChangePassStepOneRes;
 import greencode.ir.pillcci.presenters.ChangePassOnePresenter;
+import greencode.ir.pillcci.retrofit.reqobject.ChangePassStepOneReq;
+import greencode.ir.pillcci.retrofit.respObject.ChangePassStepOneRes;
 import greencode.ir.pillcci.utils.BaseActivity;
 import greencode.ir.pillcci.utils.Constants;
 import greencode.ir.pillcci.utils.Utility;
@@ -142,6 +143,7 @@ public class ForgetPassOneActivity extends BaseActivity implements ChangePassOne
         disMissWaiting();
         Intent forgetPassTwoIntent = new Intent(this,ForgetPassTwoActivity.class);
         forgetPassTwoIntent.putExtra(Constants.PREF_USER_NAME,edtUser.getText().toString());
+        forgetPassTwoIntent.putExtra(Constants.PREF_CODE,response.getCode());
         startActivity(forgetPassTwoIntent);
         finish();
     }
@@ -149,10 +151,7 @@ public class ForgetPassOneActivity extends BaseActivity implements ChangePassOne
     @Override
     public void onError(String error) {
         disMissWaiting();
-        Intent forgetPassTwoIntent = new Intent(this,ForgetPassTwoActivity.class);
-        forgetPassTwoIntent.putExtra(Constants.PREF_USER_NAME,edtUser.getText().toString());
-        startActivity(forgetPassTwoIntent);
-        finish();
+        Toast.makeText(this, error, Toast.LENGTH_LONG).show();
 
     }
 

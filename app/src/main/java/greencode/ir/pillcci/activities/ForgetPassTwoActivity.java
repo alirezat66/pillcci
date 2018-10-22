@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.kaopiz.kprogresshud.KProgressHUD;
 
@@ -19,8 +20,8 @@ import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
 import greencode.ir.pillcci.R;
 import greencode.ir.pillcci.interfaces.ChangePassTwoInterface;
-import greencode.ir.pillcci.objects.ChangePassStepTwoReq;
-import greencode.ir.pillcci.objects.ChangePassStepTwoRes;
+import greencode.ir.pillcci.retrofit.reqobject.ChangePassStepTwoReq;
+import greencode.ir.pillcci.retrofit.respObject.ChangePassStepTwoRes;
 import greencode.ir.pillcci.presenters.ChangePassTwoPresenter;
 import greencode.ir.pillcci.utils.BaseActivity;
 import greencode.ir.pillcci.utils.Constants;
@@ -53,6 +54,7 @@ public class ForgetPassTwoActivity extends BaseActivity implements ChangePassTwo
     Button btnLogin;
     @BindView(R.id.edtCode)
     EditText edtCode;
+    String code;
     KProgressHUD kProgressHUD;
     ChangePassTwoPresenter presenter;
     @Override
@@ -65,6 +67,7 @@ public class ForgetPassTwoActivity extends BaseActivity implements ChangePassTwo
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
             edtUser.setText(bundle.getString(Constants.PREF_USER_NAME));
+            code = bundle.getString(Constants.PREF_CODE);
             if (edtUser.getText().length() == 11) {
                 btnGetCode.setEnabled(true);
                 btnGetCode.setBackground(getResources().getDrawable(R.drawable.ripple_blue));
@@ -117,7 +120,12 @@ public class ForgetPassTwoActivity extends BaseActivity implements ChangePassTwo
             case R.id.btnGetCode:
                 Utility.hideKeyboard();
                 showWaiting();
-                presenter.chechPass(new ChangePassStepTwoReq(1,"123456",edtUser.getText().toString()));
+                if(edtCode.getText().toString().equals(code)) {
+                    presenter.chechPass(new ChangePassStepTwoReq(code,edtUser.getText().toString()));
+                }else {
+                    Toast.makeText(this, "کد وارد شده صحبح نمی باشد.", Toast.LENGTH_SHORT).show();
+                    edtCode.setText("");
+                }
                 break;
             case R.id.btnRegiser:
                 Intent registerIntent = new Intent(this, RegisterActivity.class);
@@ -139,6 +147,7 @@ public class ForgetPassTwoActivity extends BaseActivity implements ChangePassTwo
         disMissWaiting();
         Intent intent = new Intent(this,ChangePassActivity.class);
         intent.putExtra(Constants.PREF_USER_NAME,edtUser.getText().toString());
+        intent.putExtra(Constants.PREF_USER_ID,response.getUser_id());
         startActivity(intent);
         finish();
     }
@@ -155,5 +164,6 @@ public class ForgetPassTwoActivity extends BaseActivity implements ChangePassTwo
     @Override
     public void onError(String error) {
         disMissWaiting();
+        Toast.makeText(this, error, Toast.LENGTH_LONG).show();
     }
 }

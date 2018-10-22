@@ -4,136 +4,146 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:toggle="http://schemas.android.com/apk/res-auto"
-    android:layout_marginTop="16dp"
     android:orientation="vertical"
     android:descendantFocusability="beforeDescendants"
     android:focusableInTouchMode="true"
     android:background="@color/backColor">
-    <TextView
-        style="@style/BigBlue_18"
-        android:text="بازه مصرف"
-        android:layout_gravity="right"
-        android:layout_alignParentRight="true"
-        />
 
-
-    <me.omidh.liquidradiobutton.LiquidRadioButton
+    <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:lrb_strokeWidth="1dp"
-        app:lrb_explodeCount="3"
-        android:gravity="right|center_vertical"
-        app:lrb_outterPadding="8dp"
-        app:lrb_strokeRadius="10dp"
-        app:lrb_inAnimDuration="500"
-        app:lrb_outAnimDuration="500"
-
-            app:lrb_checkedColor="@color/colorPrimary"
-             app:lrb_unCheckedColor="@color/grayText"
-        android:textColor="@color/grayText"
-
-        android:text="مصرف مداوم"
-            android:textSize="16sp"
-            android:checked="true"
-            android:id="@+id/radioAll"
-            android:layoutDirection="rtl"
-            />
+        app:cardCornerRadius="0dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="16dp"
+        app:cardElevation="4dp"
+        android:layout_marginTop="16dp">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:layoutDirection="rtl"
-            >
-            <me.omidh.liquidradiobutton.LiquidRadioButton
-                android:layout_width="wrap_content"
+            android:orientation="vertical">
+            <com.github.florent37.expansionpanel.ExpansionHeader
                 android:layout_height="wrap_content"
-                app:lrb_strokeWidth="1dp"
-                app:lrb_explodeCount="3"
-                app:lrb_outterPadding="8dp"
-                app:lrb_strokeRadius="10dp"
-                app:lrb_inAnimDuration="500"
-                app:lrb_outAnimDuration="500"
-
-                app:lrb_checkedColor="@color/colorPrimary"
-                app:lrb_unCheckedColor="@color/grayText"
-                android:textColor="@color/grayText"
-                android:text="مدت زمان مصرف"
-                android:textSize="16sp"
-                android:id="@+id/radioTime"
+                android:layout_width="match_parent"
+                app:expansion_headerIndicator="@id/headerIndicator"
+                app:expansion_layout="@id/expansionLayout"
                 android:layoutDirection="rtl"
-                />
-            <android.support.design.widget.TextInputEditText
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:maxLines="1"
-                android:ems="4"
-                android:imeOptions="actionDone"
-                android:selectAllOnFocus="true"
+                app:expansion_toggleOnClick="true">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="56dp"
+                        android:id="@+id/txtUseTypeTitle"
+                        android:gravity="center_vertical|right"
+                        android:layout_marginRight="16dp"
+                        android:text="بازه مصرف :  "/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="56dp"
+                        android:id="@+id/txtUseType"
+                        android:gravity="center_vertical|right"
+                        android:layout_marginRight="4dp"
+                        android:layout_toLeftOf="@id/txtUseTypeTitle"
+                        android:text="مصرف همیشگی"/>
+                    <android.support.v7.widget.AppCompatImageView
+                        android:adjustViewBounds="true"
+                        android:id="@+id/headerIndicator"
+                        android:layout_alignParentLeft="true"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="16dp"
+                        android:layout_centerVertical="true"
+                        android:layout_width="wrap_content"
+                        app:srcCompat="@drawable/ic_right" />
+                </RelativeLayout>
 
-                android:gravity="center_horizontal"
-                android:textSize="16sp"
-                android:layout_marginTop="-10dp"
-                android:id="@+id/totalTimeUseDay"
-                android:inputType="number"
-                android:enabled="true"
-                android:textColor="@color/grayText"
-                />
-            <TextView
-                android:layout_width="wrap_content"
+
+            </com.github.florent37.expansionpanel.ExpansionHeader>
+            <com.github.florent37.expansionpanel.ExpansionLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/grayText"
-                android:textSize="16sp"
-                android:text="روز"/>
+                android:orientation="vertical"
+                android:id="@+id/expansionLayout"
+                app:expansion_expanded="true"
+
+                >
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layoutDirection="rtl"
+                    android:orientation="vertical">
+                    <RadioGroup
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layoutDirection="rtl">
+                        <me.omidh.liquidradiobutton.LiquidRadioButton
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:lrb_strokeWidth="1dp"
+                            app:lrb_explodeCount="3"
+                            android:gravity="right|center_vertical"
+                            app:lrb_outterPadding="8dp"
+                            app:lrb_strokeRadius="10dp"
+                            app:lrb_inAnimDuration="500"
+                            app:lrb_outAnimDuration="500"
+
+                            app:lrb_checkedColor="@color/colorPrimary"
+                            app:lrb_unCheckedColor="@color/grayText"
+                            android:textColor="@color/grayText"
+
+                            android:text="مصرف همیشگی"
+                            android:textSize="16sp"
+                            android:checked="true"
+                            android:id="@+id/radioAll"
+                            android:layoutDirection="rtl"
+                            />
+                        <me.omidh.liquidradiobutton.LiquidRadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:lrb_strokeWidth="1dp"
+                            app:lrb_explodeCount="3"
+                            app:lrb_outterPadding="8dp"
+                            app:lrb_strokeRadius="10dp"
+                            app:lrb_inAnimDuration="500"
+                            app:lrb_outAnimDuration="500"
+
+                            app:lrb_checkedColor="@color/colorPrimary"
+                            app:lrb_unCheckedColor="@color/grayText"
+                            android:textColor="@color/grayText"
+                            android:text="تعداد روزهای محدود"
+                            android:textSize="16sp"
+                            android:id="@+id/radioTime"
+                            android:layoutDirection="rtl"
+                            />
+                        <me.omidh.liquidradiobutton.LiquidRadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:lrb_strokeWidth="1dp"
+                            app:lrb_explodeCount="3"
+                            app:lrb_outterPadding="8dp"
+                            app:lrb_strokeRadius="10dp"
+                            app:lrb_inAnimDuration="500"
+                            app:lrb_outAnimDuration="500"
+
+                            app:lrb_checkedColor="@color/colorPrimary"
+                            app:lrb_unCheckedColor="@color/grayText"
+                            android:textColor="@color/grayText"
+                            android:text="مصرف به مقدار داروی مشخص"
+                            android:textSize="16sp"
+                            android:id="@+id/radioCount"
+                            android:layoutDirection="rtl"
+                            />
+
+                    </RadioGroup>
+                </LinearLayout>
+            </com.github.florent37.expansionpanel.ExpansionLayout>
         </LinearLayout>
+    </android.support.v7.widget.CardView>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layoutDirection="rtl"
-            >
-            <me.omidh.liquidradiobutton.LiquidRadioButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:lrb_strokeWidth="1dp"
-                app:lrb_explodeCount="3"
-                app:lrb_outterPadding="8dp"
-                app:lrb_strokeRadius="10dp"
-                app:lrb_inAnimDuration="500"
-                app:lrb_outAnimDuration="500"
 
-                app:lrb_checkedColor="@color/colorPrimary"
-                app:lrb_unCheckedColor="@color/grayText"
-                android:textColor="@color/grayText"
-                android:text="مقدار کل تجویز شده"
-                android:textSize="16sp"
-                android:id="@+id/radioCount"
-                android:layoutDirection="rtl"
-                />
-            <android.support.design.widget.TextInputEditText
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:maxLines="1"
-                android:ems="4"
-                android:imeOptions="actionDone"
-                android:gravity="center_horizontal"
-                android:layout_marginTop="-10dp"
-                android:id="@+id/edtCountDay"
-                android:enabled="true"
-                android:selectAllOnFocus="true"
-                android:maxLength="5"
-                android:textSize="16sp"
-                android:inputType="numberDecimal"
-                android:textColor="@color/grayText"
-                />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/grayText"
-                android:textSize="16sp"
-                android:text=""
-                android:id="@+id/txtUnit"/>
-        </LinearLayout>
+
+
 
 
 

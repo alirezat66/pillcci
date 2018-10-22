@@ -8,7 +8,7 @@ import android.arch.persistence.room.PrimaryKey;
  */
 @Entity(tableName = "profile")
 public class Profile {
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey(autoGenerate = false)
     int id;
     String phone;
     String fName;
@@ -22,7 +22,7 @@ public class Profile {
     String sickness;
     String alergy;
     String img;
-
+    boolean isSync;
     public Profile(String phone, String fName, String lName, int sex,int blood, String birthDay, String age, String height, String weight, String sickness, String alergy) {
         this.phone = phone;
         this.fName = fName;
@@ -36,10 +36,25 @@ public class Profile {
         this.alergy = alergy;
         this.blood = blood;
         this.img ="";
+        this.isSync = false;
+    }
+    public String getMyId(){
+        return  this.id+"";
+    }
+    public boolean isSync() {
+        return isSync;
+    }
+
+    public void setSync(boolean sync) {
+        isSync = sync;
     }
 
     public String getImg() {
-        return img;
+        if(img==null){
+            return "";
+        }else {
+            return img;
+        }
     }
 
     public void setPhone(String phone) {

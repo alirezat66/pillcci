@@ -11,8 +11,8 @@ import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 
-import butterknife.BindView;
 import greencode.ir.pillcci.R;
+import saman.zamani.persiandate.PersianDate;
 
 /**
  * Created by alireza on 5/18/18.
@@ -126,7 +126,12 @@ public class DaySelectedDialog extends Dialog {
                         }
                     }
                 }
-                myInterface.onSuccess(daySelected);
+                PersianDate persianDate = new PersianDate(System.currentTimeMillis());
+                while (!daySelected.contains(persianDate.dayName())){
+                    persianDate.addDay(1);
+                }
+
+                myInterface.onSuccess(daySelected,persianDate);
             }
         });
 

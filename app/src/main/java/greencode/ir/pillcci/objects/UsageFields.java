@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class UsageFields {
     int typedayUsage;
     String usageStartDate;
-    boolean isRegular;
+    int isRegular;
     ArrayList<String>days;
     int typeOfdayUsage;
     int repeatDays ;
@@ -22,7 +22,7 @@ public class UsageFields {
     ArrayList<String>unitsCount;
     ArrayList<Long>unitTimes;
     String description;
-    public UsageFields(int typedayUsage, String usageStartDate, int repeatDays,boolean isRegular, ArrayList<String> days, int typeOfdayUsage, double diffrenceOfUsage, int countOfUsagePerDay, int startHour, int startMin, String unitUsage, ArrayList<String> unitsCount, ArrayList<Long> unitTimes,String description,long startTimeStamp) {
+    public UsageFields(int typedayUsage, String usageStartDate, int repeatDays,int isRegular, ArrayList<String> days, int typeOfdayUsage, double diffrenceOfUsage, int countOfUsagePerDay, int startHour, int startMin, String unitUsage, ArrayList<String> unitsCount, ArrayList<Long> unitTimes,String description,long startTimeStamp) {
         this.typedayUsage = typedayUsage;
         this.usageStartDate = usageStartDate;
         this.isRegular = isRegular;
@@ -60,7 +60,7 @@ public class UsageFields {
         return usageStartDate;
     }
 
-    public boolean isRegular() {
+    public int isRegular() {
         return isRegular;
     }
 

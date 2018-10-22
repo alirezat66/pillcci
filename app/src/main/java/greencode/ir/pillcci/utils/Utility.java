@@ -20,6 +20,8 @@ import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
+import com.kaopiz.kprogresshud.KProgressHUD;
+
 import greencode.ir.pillcci.R;
 import greencode.ir.pillcci.controler.AppController;
 import greencode.ir.pillcci.controler.AppDatabase;
@@ -35,6 +37,18 @@ import saman.zamani.persiandate.PersianDate;
  */
 
 public class Utility {
+
+    public static KProgressHUD makeWaiting(String title , String desc, Context context){
+        KProgressHUD kProgressHUD=  KProgressHUD.create(context)
+                .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
+                .setLabel(title)
+                .setDetailsLabel(desc)
+                .setCancellable(false)
+                .setAnimationSpeed(2)
+                .setDimAmount(0.8f)
+                .setBackgroundColor(context.getResources().getColor(R.color.colorPrimaryDark));
+        return kProgressHUD;
+    }
     public static String getDoubleStringValue(double value){
 
             int count = (int)value;
@@ -69,6 +83,21 @@ public class Utility {
                 .setThemeColor(color)
                 .setTitleStringId("یادآوری کن در ساعت")
                 .setSureStringId("انتخاب")
+                .setType(Type.HOURS_MINS)
+               .setCurrentMillseconds(System.currentTimeMillis())
+
+                .setCallBack(listener)
+                .build();
+    }
+    public static TimePickerDialog getTimeDialogUsage(OnDateSetListener listener,int color){
+       return new TimePickerDialog.Builder()
+                .setHourText("")
+                .setMinuteText("")
+                .setWheelItemTextSize(16)
+                .setCancelStringId("انصراف")
+                .setThemeColor(color)
+                .setTitleStringId("")
+                .setSureStringId("تایید")
                 .setType(Type.HOURS_MINS)
                .setCurrentMillseconds(System.currentTimeMillis())
 
@@ -161,7 +190,6 @@ public class Utility {
         if(pillUsage!=null) {
             PersianDate date = new PersianDate(pillUsage.getUsageTime());
             date.setSecond(0);
-            ReadAndWrite.appendLog("we set time for  pill usage " +ReadAndWrite.getHMS(date));
 
             startAlarmPillReminder(pillUsage, context);
         }else {
@@ -187,8 +215,6 @@ public class Utility {
         alarmManager.setExact(AlarmManager.RTC_WAKEUP, date.getTime(), pendingIntent);
         long reminder = (date.getTime() - System.currentTimeMillis());
         reminder/=1000;
-        ReadAndWrite.appendLog("we set alarm manager at  " + reminder +" second ");
-        ReadAndWrite.appendLog("our usage is   " + date.getHour()+":"+date.getMinute()+":"+date.getSecond());
 
     }
     public static void setKeyboardFocus(final EditText primaryTextField) {
@@ -207,4 +233,7 @@ public class Utility {
                 .replace("6", "۶").replace("7", "٧").replace("8", "٨").replace("9", "٩").replace("0","٠");
     }
 
+    public static String getPhoneNumber(Context context) {
+       return AppDatabase.getInMemoryDatabase(context).profileDao().getMyProfile().getPhone();
+    }
 }

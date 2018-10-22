@@ -1,9 +1,7 @@
 package greencode.ir.pillcci.interfaces;
 
-import greencode.ir.pillcci.objects.ChangePassReq;
-import greencode.ir.pillcci.objects.ChangePassRes;
-import greencode.ir.pillcci.objects.RegisterRequest;
-import greencode.ir.pillcci.objects.RegisterResponse;
+import greencode.ir.pillcci.retrofit.reqobject.ChangePassReq;
+import greencode.ir.pillcci.retrofit.respObject.ChangePassRes;
 
 /**
  * Created by alireza on 5/11/18.

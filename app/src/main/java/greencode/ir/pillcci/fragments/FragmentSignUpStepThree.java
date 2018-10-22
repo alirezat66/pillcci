@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nirigo.mobile.view.passcode.PasscodeIndicator;
 import com.nirigo.mobile.view.passcode.PasscodeView;
@@ -22,13 +23,15 @@ import butterknife.OnClick;
 import greencode.ir.pillcci.R;
 import greencode.ir.pillcci.activities.RegisterActivity;
 import greencode.ir.pillcci.adapter.KeyAdapter;
+import greencode.ir.pillcci.interfaces.ValidationInterface;
 import greencode.ir.pillcci.objects.RegisterRequest;
+import greencode.ir.pillcci.presenters.ValidationPresenter;
 
 /**
  * Created by alireza on 5/15/18.
  */
 
-public class FragmentSignUpStepThree extends Fragment {
+public class FragmentSignUpStepThree extends Fragment implements ValidationInterface {
     onActionStepThree onAction;
     public RegisterRequest request;
     @BindView(R.id.txtUser)
@@ -49,7 +52,7 @@ public class FragmentSignUpStepThree extends Fragment {
     Button btnChangePhone;
     KeyAdapter iosPasscodeAdapter;
     private StringBuilder yourCurrentPasscode = new StringBuilder();
-
+    ValidationPresenter presenter;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,6 +64,9 @@ public class FragmentSignUpStepThree extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_sign_up_three, container, false);
         ButterKnife.bind(this, view);
+
+        presenter = new ValidationPresenter(this);
+
         request = RegisterActivity.getRequest();
         iosPasscodeAdapter = new KeyAdapter(getContext());
         passcodeView.setAdapter(iosPasscodeAdapter);
@@ -126,7 +132,7 @@ public class FragmentSignUpStepThree extends Fragment {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btnSendAgain:
-                startCountDown();
+                presenter.resend(request.getUserName(),request.getMoarefCode());
                 break;
             case R.id.btnChangePhone:
                 onAction.onChangePhone();
@@ -158,6 +164,17 @@ public class FragmentSignUpStepThree extends Fragment {
             }
         });
 
+    }
+
+    @Override
+    public void onCodeReady(String validCode) {
+        request.setCode(validCode);
+        startCountDown();
+    }
+
+    @Override
+    public void onError(String message) {
+        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
     }
 
     public interface onActionStepThree {

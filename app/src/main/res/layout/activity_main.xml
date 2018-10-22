@@ -16,6 +16,7 @@
             android:layout_height="56dp"
             android:layoutDirection="rtl"
             android:layout_alignParentBottom="true"
+
             android:background="@color/colorPrimaryDark">
             <com.ss.bottomnavigation.TabItem
                 android:id="@+id/tab_home"

@@ -2,8 +2,8 @@ package greencode.ir.pillcci.presenters;
 
 import greencode.ir.pillcci.Model.POJOModel;
 import greencode.ir.pillcci.interfaces.ChangePassOneInterface;
-import greencode.ir.pillcci.objects.ChangePassStepOneReq;
-import greencode.ir.pillcci.objects.ChangePassStepOneRes;
+import greencode.ir.pillcci.retrofit.reqobject.ChangePassStepOneReq;
+import greencode.ir.pillcci.retrofit.respObject.ChangePassStepOneRes;
 
 /**
  * Created by alireza on 5/12/18.
@@ -21,10 +21,11 @@ public class ChangePassOnePresenter {
     }
 
     public void responseReady(ChangePassStepOneRes response) {
-        if(response.isSuccess()){
-            myInterface.onSuccess(response);
-        }else {
-            myInterface.onError(response.getError());
-        }
+        myInterface.onSuccess(response);
+
+    }
+
+    public void sendError(String message) {
+        myInterface.onError(message);
     }
 }

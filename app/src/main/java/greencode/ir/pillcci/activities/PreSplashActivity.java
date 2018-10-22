@@ -5,9 +5,14 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.LoginEvent;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.util.List;
 
@@ -28,6 +33,7 @@ import greencode.ir.pillcci.utils.Utility;
 
 public class PreSplashActivity extends BaseActivity {
 
+    private FirebaseAnalytics mFirebaseAnalytics;
 
     String[] mPermission = {
             Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.CAMERA
@@ -37,7 +43,16 @@ public class PreSplashActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pre_splash);
-        welcomeScreen();
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+        new Handler().postDelayed(new Runnable(){
+            @Override
+            public void run() {
+                /* Create an Intent that will start the Menu-Activity. */
+                welcomeScreen();
+            }
+        }, 4000);
+
+
 
 
 
@@ -82,6 +97,11 @@ public class PreSplashActivity extends BaseActivity {
         }else if(PreferencesData.getBoolean(Constants.PREF_LOGIN,this)){
             List<PillUsage>expendedUsage = DatabaseManager.getAllExpendedPillUsage(this);
             DatabaseManager.updateToExpendedMode(this,expendedUsage);
+            Answers.getInstance().logLogin(new LoginEvent());
+            Bundle params = new Bundle();
+            params.putString("phoneNumber", AppDatabase.getInMemoryDatabase(this).profileDao().getMyProfile().getPhone());
+            mFirebaseAnalytics.logEvent("back_to_app", params);
+
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
             finish();

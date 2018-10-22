@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.design.widget.TextInputEditText;
+import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -90,7 +91,7 @@ public class EachTimeDialog extends BottomSheetDialogFragment {
                         Toast.makeText(context, "واحد انتخاب نشده است.", Toast.LENGTH_LONG).show();
                     }
                 } else {
-                    Toast.makeText(context, "مقدار هر بار مصرف ذکر نشده است.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, "دوز مصرف را وارد کن.", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -104,15 +105,15 @@ public class EachTimeDialog extends BottomSheetDialogFragment {
             edtEachTime.setText(countOfEachUse+"");
         }
 
-        edtEachTime.requestFocus();
         new KeyboardUtil(getActivity(),view);
+
 
         return view;
     }
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //     setStyle(DialogFragment.STYLE_NORMAL, R.style.DialogStyle);
+             setStyle(DialogFragment.STYLE_NORMAL, R.style.DialogStyle);
 
 
     }

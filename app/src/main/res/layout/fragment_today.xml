@@ -2,37 +2,57 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:isScrollContainer="true"
-    android:background="@color/white"
+    android:background="@color/backColor"
     android:fillViewport="true"
     android:layoutDirection="rtl"
     xmlns:android="http://schemas.android.com/apk/res/android">
    <RelativeLayout
        android:layout_width="match_parent"
        android:layout_height="match_parent"
-       android:orientation="vertical">
+       >
+       <android.support.v7.widget.CardView
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:id="@+id/lyTwo"
+           app:cardElevation="6dp">
        <LinearLayout
            android:layout_width="match_parent"
            android:layout_height="wrap_content"
+           android:background="@color/colorPrimary"
            android:id="@+id/lyOne"
            android:orientation="vertical">
            <RelativeLayout
                android:layout_width="match_parent"
-               android:layout_height="?attr/actionBarSize">
+               android:background="@color/colorPrimary"
+
+               android:layout_height="wrap_content">
                <android.support.v7.widget.AppCompatImageView
                    android:layout_width="wrap_content"
                    android:layout_height="wrap_content"
-                   app:srcCompat="@drawable/ic_close_grey"
+                   app:srcCompat="@drawable/ic_close_white"
                    android:id="@+id/imgClose"
                    android:visibility="gone"
                    android:padding="16dp"
                    android:layout_alignParentLeft="true"
                    android:layout_marginLeft="16dp"/>
+               <TextView
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:layout_alignParentRight="true"
+
+                   android:textColor="@color/white"
+                   android:textSize="18sp"
+                   android:id="@+id/txtTitle"
+                   android:layout_marginRight="16dp"
+                   android:layout_centerVertical="true"
+                   android:text="صفحه اصلی "/>
                <EditText
                    android:layout_width="match_parent"
-                   android:layout_height="match_parent"
+                   android:layout_height="wrap_content"
                    android:background="#00000000"
                     android:hint="جستجو"
                    android:textSize="16sp"
+                   android:layout_centerVertical="true"
                    android:layout_toRightOf="@id/imgClose"
                    android:visibility="gone"
                    android:inputType="text"
@@ -40,90 +60,189 @@
                    android:selectAllOnFocus="true"
 
                    android:imeOptions="actionSearch"
-                   android:textColor="@color/black"
+                   android:textColor="@color/white"
+
                    android:paddingRight="16dp"
-                   android:textColorHint="@color/grayLiteText"
+                   android:textColorHint="@color/white"
                    android:paddingLeft="16dp"
                    />
-               <TextView
-                   style="@style/BigBlue_18"
-                   android:textSize="24sp"
-                   android:layout_marginRight="16dp"
-                   android:layout_marginTop="16dp"
-                   android:id="@+id/txtToday"
-                   android:text="چهارشنبه ۲۲ فروردین"/>
+
                     <ImageView
-                   android:layout_width="?attr/actionBarSize"
-                   android:layout_height="?attr/actionBarSize"
-                   android:src="@drawable/search"
+                   android:layout_width="56dp"
+                   android:layout_height="56dp"
+                   android:src="@drawable/ic_search_white"
                    android:padding="16dp"
                    android:id="@+id/imgSearch"
                    android:layout_alignParentLeft="true"
                    />
            </RelativeLayout>
+           <android.support.v7.widget.CardView
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_margin="16dp"
+               app:cardCornerRadius="4dp"
+               app:cardBackgroundColor="@color/white">
+               <RelativeLayout
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content">
+               <LinearLayout
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:orientation="vertical"
+                   android:layoutDirection="rtl"
+                   android:id="@+id/firsLy"
+                   >
+                   <RelativeLayout
+                       android:layout_width="match_parent"
+                       android:layout_height="wrap_content"
+                       android:layout_marginRight="16dp"
+                       android:layout_marginLeft="16dp"
+                       android:layout_gravity="center_horizontal"
+                       android:gravity="center_horizontal"
+                       android:layout_marginTop="16dp"
+                      >
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginRight="16dp"
-        android:orientation="horizontal">
-        <TextView
-            style="@style/NormalTextBlack"
-            android:id="@+id/countOfDay"/>
-        <TextView
-            style="@style/NormalTextBlack"
-            android:text="دارو ثبت شده برای امروز"
-            />
-        <TextView
-            style="@style/NormalTextBlack"
-            android:text=" | "/>
-        <TextView
-            style="@style/NormalTextBlack"
-            android:id="@+id/countOfUsed"/>
-        <TextView
-            style="@style/NormalTextBlack"
-            android:text="دارو مصرف شده"
-            />
-    </LinearLayout>
-       <LinearLayout
-           android:layout_width="match_parent"
-           android:layout_height="wrap_content"
-           android:layout_marginTop="10dp"
-           android:id="@+id/difrenceLayout"
+                       <TextView
+                           style="@style/BigBlue_18"
+                           android:textColor="@color/colorPrimaryDark"
+                           android:textSize="20sp"
+                           android:layout_toLeftOf="@id/btnPrev"
+                           android:id="@+id/txtParsDay"
+                           android:layout_centerVertical="true"
+                           android:text="24"/>
 
-           android:layout_marginRight="16dp"
-           android:orientation="horizontal">
+                       <ImageView
+                           android:layout_width="32dp"
+                           android:layout_height="32dp"
+                           android:padding="6dp"
+                           android:layout_marginLeft="16dp"
+                           android:id="@+id/btnPrev"
+                           android:layout_alignParentRight="true"
+                           android:src="@drawable/ic_arrow_forward_grey"
+                           android:background="@drawable/oval_white_strok"
+                           />
+                       <ImageView
+                           android:layout_width="32dp"
+                           android:layout_height="32dp"
+                           android:padding="6dp"
+                           android:layout_toLeftOf="@id/txtParsDay"
+                           android:layout_marginRight="16dp"
+                           android:id="@+id/btnNext"
+                           android:src="@drawable/ic_arrow_back_blue"
+                           android:background="@drawable/oval_white_strok"
+                           />
 
-           <TextView
-        style="@style/AccentTextNormal"
-        android:id="@+id/txtNextRemind"/>
-           <TextView
-        style="@style/AccentTextNormal"
-        android:text=" تا زمان مصرف داروی بعدی"/>
+                   </RelativeLayout>
+                   <LinearLayout
+                       android:layout_width="match_parent"
+                       android:layout_height="wrap_content"
+                       android:layout_gravity="center_vertical"
+                       android:gravity="center_horizontal"
+                       android:orientation="vertical">
+                       <LinearLayout
+                           android:layout_width="match_parent"
+                           android:layout_height="wrap_content"
+                           android:layout_marginRight="16dp"
+                           android:layout_marginLeft="16dp"
+                           android:gravity="center_horizontal"
+                           android:orientation="horizontal">
 
+                           <TextView
+                               style="@style/NormalTextBlack"
+                               android:text="مصرف شده: "
+
+                               />
+                           <TextView
+                               style="@style/NormalTextBlack"
+                               android:id="@+id/countOfUsed"
+                               android:textColor="@color/colorPrimaryDark"
+                               android:textSize="18sp"/>
+
+                           <TextView
+                               style="@style/NormalTextBlack"
+                               android:text=" از "/>
+                           <TextView
+                               style="@style/NormalTextBlack"
+                               android:id="@+id/countOfDay"
+                               android:textSize="18sp"
+                               android:textColor="@color/colorPrimaryDark"/>
+                       </LinearLayout>
+                       <ProgressBar
+                           android:layout_width="match_parent"
+                           android:layout_height="6dp"
+                           android:layout_marginRight="16dp"
+                           android:max="100"
+                           android:id="@+id/progressBar"
+                           android:progress="0"
+                           android:layout_marginBottom="16dp"
+                           android:layout_marginLeft="16dp"
+                           android:layout_marginTop="8dp"
+                           style="@android:style/Widget.ProgressBar.Horizontal"
+
+                           />
+                   </LinearLayout>
+
+
+
+               </LinearLayout>
+
+               <LinearLayout
+                   android:id="@+id/difrenceLayout"
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:layout_marginRight="16dp"
+                   android:visibility="gone"
+                   android:layout_marginTop="10dp"
+                   android:orientation="horizontal">
+
+                   <TextView
+                       android:id="@+id/txtNextRemind"
+                       style="@style/AccentTextNormal" />
+
+                   <TextView
+                       style="@style/AccentTextNormal"
+                       android:text=" تا زمان مصرف داروی بعدی" />
+
+
+               </LinearLayout>
+
+                   <Button
+                       android:id="@+id/btnDateChange"
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:layout_below="@id/firsLy"
+                       android:background="@color/transparent"
+                       android:text="   تغییر تاریخ"
+                       android:visibility="gone"
+                       android:textColor="@color/blueberry"
+                       android:textSize="16sp" />
+               </RelativeLayout>
+           </android.support.v7.widget.CardView>
 
        </LinearLayout>
-       </LinearLayout>
+       </android.support.v7.widget.CardView>
        <android.support.design.widget.FloatingActionButton
-           android:layout_width="56.0dp"
-           android:layout_height="56.0dp"
-           app:srcCompat="@drawable/ic_add_white_24dp"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
            android:layout_alignParentBottom="true"
-           android:layout_centerHorizontal="true"
-           android:layout_marginRight="16dp"
            android:layout_alignParentRight="true"
-           app:backgroundTint="@color/VioletBlue"
-           android:layout_marginBottom="12dp"
+           android:layout_marginBottom="16dp"
+           app:srcCompat="@drawable/ic_add_white_24dp"
+           android:layout_marginRight="16dp"
+           app:elevation="21dp"
+
+           app:borderWidth="0dp"
+           app:rippleColor="@color/VioletBlue"
+           app:backgroundTint="@color/blueberry"
            android:id="@+id/fabBtn"
            />
        <android.support.v7.widget.RecyclerView
            android:layout_width="match_parent"
            android:layout_height="match_parent"
-           android:layout_below="@id/lyOne"
-           android:layout_marginTop="12dp"
+           android:layout_below="@id/lyTwo"
            android:clipToPadding="false"
            android:paddingBottom="100dp"
+
            android:id="@+id/list"></android.support.v7.widget.RecyclerView>
    </RelativeLayout>
 </RelativeLayout>

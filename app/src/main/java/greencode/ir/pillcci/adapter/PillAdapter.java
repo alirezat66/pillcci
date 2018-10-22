@@ -104,7 +104,11 @@ public class PillAdapter extends RecyclerView.Adapter<PillAdapter.ViewHolder>  {
 
 
         holder.txtMedName.setText(data.getName() );
-        holder.txtUseTime.setText("دسته : "+data.getCatName());
+
+        if (data.getCatName().equals("")){
+            holder.txtUseTime.setVisibility(View.GONE);
+        }
+        holder.txtUseTime.setText("مصرف کننده : "+data.getCatName());
         holder.txtUseTime.setTextColor(data.getCatColer());
         holder.catColor.setCardBackgroundColor(data.getCatColer());
         if (!data.getImg().equals("")) {
@@ -123,11 +127,12 @@ public class PillAdapter extends RecyclerView.Adapter<PillAdapter.ViewHolder>  {
         });
         if(data.getState()==1){
             holder.txtStop.setText("توقف مصرف");
+            holder.txtStop.setTextColor(context.getResources().getColor(R.color.colorPrimaryDark));
 
         }else {
-            holder.txtStop.setText("شروع مصرف");
+            holder.txtStop.setText("شروع مجدد");
             if(data.getUsageType()==4){
-                holder.txtStop.setTextColor(context.getResources().getColor(R.color.grayText));
+                holder.txtStop.setTextColor(context.getResources().getColor(R.color.grayLiteText));
             }else {
                 holder.txtStop.setTextColor(context.getResources().getColor(R.color.colorPrimaryDark));
 

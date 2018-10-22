@@ -55,11 +55,6 @@ public class EachTimeEditPartDialog extends BottomSheetDialogFragment implements
 
     FragmentManager supportedFragmentManager;
     EachUsage data;
-
-    int minMinute = -1;
-    int minHours = -1;
-    int maxMinute = -1;
-    int maxHours = -1;
     long startTimeDate;
     @BindView(R.id.edtStartEvrayDay)
     TextInputEditText edtStartEvrayDay;

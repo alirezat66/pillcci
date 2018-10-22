@@ -2,11 +2,13 @@ package greencode.ir.pillcci.objects;
 
 import android.support.annotation.NonNull;
 
+import java.io.Serializable;
+
 /**
  * Created by alireza on 5/21/18.
  */
 
-public class EachUsage implements Comparable<EachUsage>{
+public class EachUsage implements Comparable<EachUsage>, Serializable {
     String timeStr;
     String unit;
     String EachUse;

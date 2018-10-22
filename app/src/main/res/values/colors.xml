@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
   <color name="colorPrimary">#8D96D1</color>
-  <color name="colorPrimaryDark">#8E24AA</color>
+  <color name="colorPrimaryDark">#575d84</color>
   <color name="colorAccent">#D0021B</color>
   <color name="white">#fefefe</color>
   <color name="hintColor">#D0021B</color>
@@ -10,6 +10,7 @@
   <color name="grayText">#646464</color>
   <color name="grayTextopac">#58646464</color>
   <color name="grayLiteText">#9f9f9f</color>
+  <color name="grayDivider">#b9b9b9</color>
   <color name="baseBoarderColor">#f4f4f4</color>
   <color name="transparent">#00000000</color>
   <color name="darkorange">#FFFB8C00</color>

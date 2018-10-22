@@ -13,19 +13,30 @@ import saman.zamani.persiandate.PersianDate;
  */
 @Entity(tableName = "pilusage")
 public class PillUsage {
-    @PrimaryKey(autoGenerate = true)
+
+    @PrimaryKey(autoGenerate = false)
     long id;
+    public boolean isCancelable = true;
+
+    public void setCancelable(boolean cancelable) {
+        isCancelable = cancelable;
+    }
+
+    public boolean isCancelable() {
+        return isCancelable;
+    }
+
     int pillId;
     String pillName;//name of pill
     String time;
     long usageTime;// time of usage
-    int state ; // 0 = not used ## 1 = used ## 2=canceled by user ## 3= any action not set
+    int state ; // 0 = not used ## 1 = used ## 2=canceled by user ## 3= any action not set ## 4 == temp delete
     String useTime;// time that we use pill
-    boolean hasDelay;// has any delay
+    int hasDelay;// has any delay
     String description;
-    String catNme;
+    String catName;
     int catColor;
-    String catRingtone;
+    String catring;
     String drName;
     String unit;
     String unitAmount;//unit use amount
@@ -33,10 +44,17 @@ public class PillUsage {
     long usedTime;
     int snoozCount;
     long setedTime;
-    public PillUsage(int pillId,String pillName, String time, long usageTime,
-                     int state, String useTime, boolean hasDelay, String description, String catNme,
-                     int catColor, String catRingtone, String drName, String unit, String unitAmount,
+    int isSync ;
+    public void setIsSync(int isSync) {
+        this.isSync = isSync;
+    }
+
+
+    public PillUsage(long id,int pillId,String pillName, String time, long usageTime,
+                     int state, String useTime, int hasDelay, String description, String catName,
+                     int catColor, String catring, String drName, String unit, String unitAmount,
                      String countPerDay,long usedTime,long setedTime) {
+        this.id = id;
         this.pillId = pillId;
         this.pillName = pillName;
         this.time = time;
@@ -45,9 +63,9 @@ public class PillUsage {
         this.useTime = useTime;
         this.hasDelay = hasDelay;
         this.description = description;
-        this.catNme = catNme;
+        this.catName = catName;
         this.catColor = catColor;
-        this.catRingtone = catRingtone;
+        this.catring = catring;
         this.drName = drName;
         this.unit = unit;
         this.unitAmount = unitAmount;
@@ -55,6 +73,7 @@ public class PillUsage {
         this.usedTime=usedTime;
         this.snoozCount =0;
         this.setedTime = setedTime;
+        this.isSync = 0;
     }
 
     public long getSetedTime() {
@@ -89,7 +108,7 @@ public class PillUsage {
         return useTime;
     }
 
-    public boolean isHasDelay() {
+    public int isHasDelay() {
         return hasDelay;
     }
 
@@ -98,7 +117,7 @@ public class PillUsage {
     }
 
     public String getCatNme() {
-        return catNme;
+        return catName;
     }
 
     public int getCatColor() {
@@ -106,7 +125,7 @@ public class PillUsage {
     }
 
     public String getCatRingtone() {
-        return catRingtone;
+        return catring;
     }
 
     public String getDrName() {
@@ -162,7 +181,7 @@ public class PillUsage {
         this.useTime = useTime;
     }
 
-    public void setHasDelay(boolean hasDelay) {
+    public void setHasDelay(int hasDelay) {
         this.hasDelay = hasDelay;
     }
 
@@ -171,7 +190,7 @@ public class PillUsage {
     }
 
     public void setCatNme(String catNme) {
-        this.catNme = catNme;
+        this.catName = catNme;
     }
 
     public void setCatColor(int catColor) {
@@ -179,7 +198,7 @@ public class PillUsage {
     }
 
     public void setCatRingtone(String catRingtone) {
-        this.catRingtone = catRingtone;
+        this.catring = catRingtone;
     }
 
     public void setDrName(String drName) {

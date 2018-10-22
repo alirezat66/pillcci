@@ -1,13 +1,20 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="app_name">pillcci</string>
     <string name="app_name_fa">پیلچی</string>
-    <string name="onboarding_page_one">اینجا شعار محصول ثبت شود در اینجا شعار محصول ثبت شود.اینجا شعار محصول ثبت می‌شود.در اینجا شعار محصول ثبت می‌شود.</string>
-    <string name="color_picker">انتخاب رنگ دسته</string>
+    <string name="onboarding_page_title_one">پیلچی حواسش جمع سلامتیه!</string>
+    <string name="onboarding_page_title_two">دیگه نگرانی بسه!</string>
+    <string name="onboarding_page_title_three">پرونده داروییت همیشه همراهته!</string>
+    <string name="onboarding_page_title_four"> پیلچی امین شماست!</string>
+    <string name="onboarding_page_one">و مصرف به‌موقع داروهای خودت و عزیزانت رو یادآوری می‌کنه.</string>
+    <string name="onboarding_page_two">پیلچی مصرف کردن یا نکردن داروها رو از طریق تلگرام به اونهایی که بخوای خبر میده.</string>
+    <string name="onboarding_page_three">پیچلی سابقه کاملی از مصرف داروها رو برات نگه می‌داره.</string>
+    <string name="onboarding_page_four">و مصرف به‌موقع داروهای خودت و عزیزانت رو یادآوری می‌کنه.</string>
+    <string name="color_picker">طلاعات شخصیت همیشه محفوظ میمونه! مقررات و شرایط ما رو بخون و ببین چطور مراقب حریم خصوصیت هستیم.</string>
     <string name="menu_delete_task">حذف</string>
     <string name="menu_cancel">کنسل</string>
     <string name="use">مصرف شد</string>
     <string name="skip">پرش</string>
-    <string name="dontuse">عدم مصرف</string>
+    <string name="dontuse">این دوز را مصرف نمی کنم</string>
     <string name="infinity">&#8734;</string>
     <string  name="google_maps_key">adasdasd</string>
     <string-array name="days_list">
@@ -96,6 +103,7 @@
     <string name="mdtp_day_of_week_label_typeface" translatable="false">sans-serif</string>
     <string name="am_label">قبل‌ازظهر</string>
     <string name="pm_label">بعدازظهر</string>
-    <string name="editInfo">در صورت ویرایش فیلدهای مرتبط با نحوه مصرف و بازه مصرف ، تمامی یادآوری های پیش رو حذف شده و مجددا دارو براساس فیلدهای وارد شده ایجاد می شود. لذا در صورتی که مایل به اصلاح این فیلدها هستید، در اصلاح آنها دقت نمایید.
-        برای مثال در صورتی که تمایل دارید فیلد مدت زمان مصرف را اصلاح نمایید، روزهای باقی مانده از مصرف را وارد نمایید  ، یا اگر نوع مصرف شما چرخه ضد بارداری می باشد، حتما فیلد مرتبط با روزهای گذشته از مصرف را اصلاح نمایید.</string>
+    <string name="editInfo"></string>
+    <string name="masraf">مصرف می‌کنم</string>
+    <string name="adammasraf">مصرف نمی‌کنم</string>
 </resources>

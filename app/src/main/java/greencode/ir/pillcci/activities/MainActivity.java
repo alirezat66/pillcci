@@ -22,6 +22,7 @@ import greencode.ir.pillcci.fragments.FragmentMore;
 import greencode.ir.pillcci.fragments.FragmentPills;
 import greencode.ir.pillcci.fragments.FragmentToday;
 import greencode.ir.pillcci.utils.BaseActivity;
+import greencode.ir.pillcci.utils.Utility;
 
 public class MainActivity extends BaseActivity /*implements MultiDatePickerDialog.OnDateSetListener*/{
     boolean doubleBackToExitPressedOnce = false;
@@ -57,7 +58,7 @@ public class MainActivity extends BaseActivity /*implements MultiDatePickerDialo
         //  spaceTabLayout.initialize(viewPager, getSupportFragmentManager(), fragmentList, savedInstanceState);
        /* Intent service = new Intent(this, ControlServices.class);
         startService(service);*/
-
+        bottomNavigation.setTypeface(Utility.getRegularTypeFace(this));
         bottomNavigation.setOnSelectedItemChangeListener(new OnSelectedItemChangeListener() {
             @Override
             public void onSelectedItemChanged(int itemId) {
@@ -149,7 +150,7 @@ public class MainActivity extends BaseActivity /*implements MultiDatePickerDialo
         }
 
         this.doubleBackToExitPressedOnce = true;
-        Toast.makeText(this, "لطفا برای خروج دوبار دکمه بازگشت را فشار دهید.", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "برای خروج کلید بازگشت را دوبار فشار بده.", Toast.LENGTH_LONG).show();
 
         new Handler().postDelayed(new Runnable() {
 

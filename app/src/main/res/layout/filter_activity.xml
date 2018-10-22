@@ -24,14 +24,14 @@
                     <com.isapanah.awesomespinner.AwesomeSpinner
                     android:id="@+id/pill_spinner"
                         app:spinnerDirection="rtl"
-                        app:spinnerHint="داروی خود را انتخاب کنید"
+                        app:spinnerHint="دارو"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
                     <com.isapanah.awesomespinner.AwesomeSpinner
                         android:id="@+id/cat_spinner"
                         android:layout_marginTop="8dp"
                         app:spinnerDirection="rtl"
-                        app:spinnerHint="دسته داروی خود را انتخاب کنید"
+                        app:spinnerHint="مصرف کننده"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
                     <EditText
@@ -40,14 +40,14 @@
                         android:layout_marginTop="8dp"
                         android:focusable="false"
                         android:id="@+id/edtStartDate"
-                        android:hint="شروع بازه مصرف"/>
+                        android:hint="تاریخ شروع گزارش"/>
                     <EditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:focusable="false"
                         android:id="@+id/edtFinishDate"
-                        android:hint="پایان بازه مصرف"/>
+                        android:hint="تاریخ پایان گزارش"/>
                 </LinearLayout>
 
 
@@ -75,7 +75,7 @@
                     <Button
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="لغو"
+                        android:text="انصراف"
                         android:layout_marginBottom="16dp"
                         android:layout_marginRight="16dp"
                         android:layout_marginLeft="16dp"

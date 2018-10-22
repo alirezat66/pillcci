@@ -17,6 +17,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,6 +59,7 @@ public class FragmentHistory extends Fragment implements HistoryAdapter.UsageInt
     @BindView(R.id.imgSearch)
     ImageView imgSearch;
     HistoryAdapter adapter;
+    FirebaseAnalytics firebaseAnalytics;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,6 +96,7 @@ public class FragmentHistory extends Fragment implements HistoryAdapter.UsageInt
                 String pillName = data.getStringExtra("pilName");
                 String catName = data.getStringExtra("catName");
 
+
                 PersianDate startDate = new PersianDate();
 
 
@@ -121,7 +125,9 @@ public class FragmentHistory extends Fragment implements HistoryAdapter.UsageInt
                 {
                     hasCat=true;
                 }
-
+                if(catName.equals("خودم")){
+                    catName = "";
+                }
                 ArrayList<PillUsage> temp = new ArrayList<>();
 
                 for(PillUsage usage :adapter.getFullPill()){
@@ -168,7 +174,7 @@ public class FragmentHistory extends Fragment implements HistoryAdapter.UsageInt
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_history, container, false);
         ButterKnife.bind(this, view);
-
+        firebaseAnalytics = FirebaseAnalytics.getInstance(getContext());
         imgSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -223,7 +229,7 @@ public class FragmentHistory extends Fragment implements HistoryAdapter.UsageInt
             nowDate.addDay(1);
         }
         PersianDate persianDate = new PersianDate(System.currentTimeMillis());
-        pillUsages = database.pillUsageDao().getHistory(persianDate.getTime());
+        pillUsages = database.pillUsageDao().getHistory(nowDate.getTime());
         list.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         adapter = new HistoryAdapter(getContext(), pillUsages,this);
         list.setAdapter(adapter);
@@ -264,65 +270,71 @@ public class FragmentHistory extends Fragment implements HistoryAdapter.UsageInt
         if (item.getState() !=0 ) {
             AppDatabase database = AppDatabase.getInMemoryDatabase(getContext());
             PillObject pillObject = database.pillObjectDao().specialPil(item.getPillName(),item.getCatNme());
-            final CancelEditDialog dialog = new CancelEditDialog(getContext(),pillObject);
-            dialog.setListener(new CancelListener() {
-                @Override
-                public void onReject() {
-                    dialog.dismiss();
-                }
+            if(pillObject!=null) {
+                Bundle params = new Bundle();
+                params.putString("phoneNumber", Utility.getPhoneNumber(getContext()));
+                firebaseAnalytics.logEvent("history_edit_with_button", params);
+                final CancelEditDialog dialog = new CancelEditDialog(getContext(), pillObject);
+                dialog.setListener(new CancelListener() {
+                    @Override
+                    public void onReject() {
+                        dialog.dismiss();
+                    }
 
-                @Override
-                public void onSuccess(int type) {
-                    if(type==1){
-                        // delete
-                        /* if(item.getState()!=1) {*/
-                        DatabaseManager.cancelUsage(getContext(), item);
-                        updateList();
-                        Utility.reCalculateManager(getContext());
-                        /*}*/
+                    @Override
+                    public void onSuccess(int type) {
+                        if (type == 1) {
+                            // delete
+                            /* if(item.getState()!=1) {*/
+                            DatabaseManager.cancelUsage(getContext(), item);
+                            updateList();
+                            Utility.reCalculateManager(getContext());
+                            /*}*/
 
-                    }else if(type==2){
-                        /*if(item.getState()!=2 || item.getState()!=1) {*/
-                        DatabaseManager.cancelUsage(getContext(), item);
-                        DatabaseManager.addToEnd(getContext(), item);
-                        updateList();
-                        Utility.reCalculateManager(getContext());
-                        /* }*/
+                        } else if (type == 2) {
+                            /*if(item.getState()!=2 || item.getState()!=1) {*/
+                            DatabaseManager.cancelUsage(getContext(), item);
+                            DatabaseManager.addToEnd(getContext(), item);
+                            updateList();
+                            Utility.reCalculateManager(getContext());
+                            /* }*/
 
-                    }else if (type==3){
-                        // used
-                        /* if(item.getState()!=1) {*/
-                        final DialogUsagePicker dialog = new DialogUsagePicker(getContext(),getActivity(),getFragmentManager(),item.getUsageTime(),item);
-                        dialog.setListener(new TimeUsageInterface() {
-                            @Override
-                            public void onSuccess(long timeUsage) {
-                                AppDatabase database = AppDatabase.getInMemoryDatabase(getContext());
-                                item.setUsedTime(timeUsage);
-                                item.setState(1);
-                                database.pillUsageDao().update(item);
-                                dialog.dismiss();
-                                Utility.reCalculateManager(getContext());
-                                updateList();
+                        } else if (type == 3) {
+                            // used
+                            /* if(item.getState()!=1) {*/
+                            final DialogUsagePicker dialog = new DialogUsagePicker(getContext(), getActivity(), getFragmentManager(), item.getUsageTime(), item);
+                            dialog.setListener(new TimeUsageInterface() {
+                                @Override
+                                public void onSuccess(long timeUsage) {
+                                    AppDatabase database = AppDatabase.getInMemoryDatabase(getContext());
+                                    item.setUsedTime(timeUsage);
+                                    item.setState(1);
+                                    item.setIsSync(0);
+                                    database.pillUsageDao().update(item);
+                                    dialog.dismiss();
+                                    Utility.reCalculateManager(getContext());
+                                    updateList();
 
-                            }
+                                }
 
-                            @Override
-                            public void onRejected() {
-                                dialog.dismiss();
-                            }
-                        });
-                        dialog.show();
+                                @Override
+                                public void onRejected() {
+                                    dialog.dismiss();
+                                }
+                            });
+                            dialog.show();
                             /*AppDatabase database = AppDatabase.getInMemoryDatabase(getContext());
                             item.setState(1);
                             item.setUsedTime(item.getUsageTime());
                             database.pillUsageDao().update(item);
                             updateList();*/
-                        /*  }*/
+                            /*  }*/
+                        }
+                        dialog.dismiss();
                     }
-                    dialog.dismiss();
-                }
-            });
-            dialog.show();
+                });
+                dialog.show();
+            }
         }else {
             Toast.makeText(getContext(), "پیش از مصرف و یا لغو ویرایش امکانپذیر نیست.", Toast.LENGTH_LONG).show();
         }

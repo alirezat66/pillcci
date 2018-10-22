@@ -1,34 +1,16 @@
 package greencode.ir.pillcci.objects;
 
+import greencode.ir.pillcci.database.Profile;
+import greencode.ir.pillcci.retrofit.respObject.ErrorResp;
+
 /**
  * Created by alireza on 5/11/18.
  */
 
-public class LoginResponse {
-    boolean isSuccess;
-    int id;
-    String error;
+public class LoginResponse extends ErrorResp {
+   Profile profile;
 
-    public LoginResponse(boolean isSuccess, int id, String error) {
-        this.isSuccess = isSuccess;
-        this.id = id;
-        this.error = error;
-    }
-
-    public LoginResponse(boolean isSuccess, String error) {
-        this.isSuccess = isSuccess;
-        this.error = error;
-    }
-
-    public boolean isSuccess() {
-        return isSuccess;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public String getError() {
-        return error;
+    public Profile getProfile() {
+        return profile;
     }
 }

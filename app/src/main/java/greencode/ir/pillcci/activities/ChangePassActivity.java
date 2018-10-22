@@ -18,8 +18,8 @@ import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
 import greencode.ir.pillcci.R;
 import greencode.ir.pillcci.interfaces.ChangePassIterface;
-import greencode.ir.pillcci.objects.ChangePassReq;
-import greencode.ir.pillcci.objects.ChangePassRes;
+import greencode.ir.pillcci.retrofit.reqobject.ChangePassReq;
+import greencode.ir.pillcci.retrofit.respObject.ChangePassRes;
 import greencode.ir.pillcci.presenters.ChangePassPresenter;
 import greencode.ir.pillcci.utils.BaseActivity;
 import greencode.ir.pillcci.utils.Constants;
@@ -55,7 +55,7 @@ public class ChangePassActivity extends BaseActivity implements ChangePassIterfa
     @BindView(R.id.btnLogin)
     Button btnLogin;
 
-
+    String userId;
     KProgressHUD kProgressHUD;
     ChangePassPresenter presenter;
     @Override
@@ -66,6 +66,7 @@ public class ChangePassActivity extends BaseActivity implements ChangePassIterfa
         Bundle bundle = getIntent().getExtras();
         if(bundle!=null){
             edtUser.setText(bundle.getString(Constants.PREF_USER_NAME));
+            userId = bundle.getString(Constants.PREF_USER_ID);
         }
         presenter = new ChangePassPresenter(this);
     }
@@ -97,7 +98,7 @@ public class ChangePassActivity extends BaseActivity implements ChangePassIterfa
         switch (view.getId()) {
             case R.id.btnSetPass:
                 Utility.hideKeyboard();
-                presenter.checkValidation(new ChangePassReq(edtUser.getText().toString(),edtPass.getText().toString(),edtPassRetry.getText().toString(),1));
+                presenter.checkValidation(edtPass.getText().toString(),edtPassRetry.getText().toString(),userId);
                 break;
             case R.id.btnRegiser:
                 Intent registerIntent = new Intent(this, RegisterActivity.class);

@@ -15,6 +15,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.Toolbar;
 import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -23,6 +24,7 @@ import android.widget.Toast;
 
 import com.alirezaafkar.sundatepicker.DatePicker;
 import com.alirezaafkar.sundatepicker.interfaces.DateSetListener;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
@@ -35,7 +37,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
 import greencode.ir.pillcci.R;
-import greencode.ir.pillcci.controler.AppDatabase;
 import greencode.ir.pillcci.database.Profile;
 import greencode.ir.pillcci.dialog.BloodDialog;
 import greencode.ir.pillcci.dialog.BloodInterface;
@@ -43,7 +44,10 @@ import greencode.ir.pillcci.dialog.ChosePhotoTakerDialog;
 import greencode.ir.pillcci.dialog.PhotoChoserInterface;
 import greencode.ir.pillcci.dialog.SexDialog;
 import greencode.ir.pillcci.dialog.SexInterface;
+import greencode.ir.pillcci.interfaces.ProfileInterface;
+import greencode.ir.pillcci.presenters.ProfilePresenter;
 import greencode.ir.pillcci.utils.BaseActivity;
+import greencode.ir.pillcci.utils.NetworkStateReceiver;
 import greencode.ir.pillcci.utils.PersianCalculater;
 import greencode.ir.pillcci.utils.Utility;
 import pl.aprilapps.easyphotopicker.DefaultCallback;
@@ -54,7 +58,7 @@ import saman.zamani.persiandate.PersianDate;
  * Created by alireza on 6/1/18.
  */
 
-public class ActivityProfile extends BaseActivity implements DateSetListener {
+public class ActivityProfile extends BaseActivity implements DateSetListener,ProfileInterface, NetworkStateReceiver.NetworkStateReceiverListener {
     @BindView(R.id.img_back)
     AppCompatImageView imgBack;
     @BindView(R.id.txtTitle)
@@ -91,7 +95,9 @@ public class ActivityProfile extends BaseActivity implements DateSetListener {
     String b64Image = "";
     int ourSex =0;
     int ourBlood=0;
+    boolean hasNet = false;
 
+    ProfilePresenter presenter;
     ChosePhotoTakerDialog dialog;
     private static final int REQUEST_CODE_PERMISSION = 2;
     String[] mPermission = {
@@ -102,16 +108,131 @@ public class ActivityProfile extends BaseActivity implements DateSetListener {
     @BindView(R.id.edtBlood)
     TextInputEditText edtBlood;
 
+    FirebaseAnalytics firebaseAnalytics;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         ButterKnife.bind(this);
+        firebaseAnalytics = FirebaseAnalytics.getInstance(this);
+        Bundle params = new Bundle();
+        params.putString("phoneNumber", Utility.getPhoneNumber(this));
+        firebaseAnalytics.logEvent("profile_open", params);
         edtFName.requestFocus();
         txtTitle.setText("پروفایل کاربری");
-        AppDatabase database = AppDatabase.getInMemoryDatabase(this);
-        profile = database.profileDao().getMyProfile();
+        presenter = new ProfilePresenter(this,this);
+        presenter.getProfile();
 
+
+
+
+
+    }
+
+    private void checkBlood(int nowBlood) {
+        String bloodType="";
+        if (nowBlood == 1) {
+            bloodType="A+";
+        } else if (nowBlood == 2) {
+            bloodType="A-";
+        } else if (nowBlood == 3) {
+            bloodType="B+";
+        }else if (nowBlood == 4) {
+            bloodType="B-";
+        }else   if (nowBlood == 5) {
+            bloodType="AB+";
+        } else if (nowBlood == 6) {
+            bloodType="AB-";
+        } else if (nowBlood == 7) {
+            bloodType="O+";
+        }else if (nowBlood == 8) {
+            bloodType="O-";
+        }
+        edtBlood.setText(bloodType);
+    }
+
+    private void checkSex(int sexNow) {
+        if (sexNow == 1) {
+            edtsex.setText("مرد");
+        } else if (sexNow == 2) {
+            edtsex.setText("زن");
+        } else if (sexNow == 3) {
+            edtsex.setText("سایر موارد");
+        } else {
+            edtsex.setText("");
+        }
+    }
+
+    @OnClick({R.id.img_back, R.id.btnInsert, R.id.btnDelete})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.img_back:
+                Utility.hideKeyboard();
+                finish();
+                break;
+            case R.id.btnInsert:
+                profile.setAge(edtAge.getText().toString());
+                profile.setfName(edtFName.getText().toString());
+                profile.setlName(edtLName.getText().toString());
+                profile.setBirthDay(edtBirthYear.getText().toString());
+                profile.setHeight(edtHeight.getText().toString());
+                profile.setWeight(edtWeight.getText().toString());
+                profile.setSickness(edtSickness.getText().toString()+" ");
+                profile.setAlergy(edtAlergy.getText().toString()+" ");
+                profile.setImg(b64Image);
+                profile.setBlood(ourBlood);
+                profile.setSex(ourSex);
+
+
+                Log.d("request",profile.getImg());
+                presenter.saveProfile(profile);
+
+                presenter.syncProfile(profile);
+
+
+
+
+                break;
+            case R.id.btnDelete:
+                finish();
+                break;
+        }
+    }
+
+    @Override
+    public void onDateSet(int id, @Nullable Calendar calendar, int day, int month, int year) {
+        PersianDate date = new PersianDate(System.currentTimeMillis());
+        boolean isBeger = false;
+        if (year == date.getShYear()) {
+            if (month > date.getShMonth()) {
+                isBeger = true;
+            } else if (month == date.getShMonth()) {
+                if (day > date.getShDay()) {
+                    isBeger = true;
+                }
+            }
+        }
+        if (!isBeger) {
+            edtBirthYear.setText(PersianCalculater.getYearMonthAndDay(year, month, day));
+            PersianDate today = new PersianDate(System.currentTimeMillis());
+            int differYear = today.getShYear() - year - 1;
+            if (today.getShMonth() > month) {
+                differYear++;
+            } else if (today.getShMonth() == month) {
+                if (today.getShDay() >= day) {
+                    differYear++;
+                }
+            }
+            edtAge.setText(differYear + "");
+
+        } else {
+            Toast.makeText(this, "تاریخ تولد باید پیش از تاریخ امروز باشد.", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    public void onDataReady(Profile pr) {
+        profile = pr;
         if (profile != null) {
             ourBlood = profile.getBlood();
             ourSex = profile.getSex();
@@ -127,15 +248,20 @@ public class ActivityProfile extends BaseActivity implements DateSetListener {
             edtSickness.setText(profile.getSickness());
             edtAlergy.setText(profile.getAlergy());
             b64Image=profile.getImg();
-            if (!b64Image.equals("")) {
+            if(b64Image!=null) {
+                if (!b64Image.equals("")) {
 
-                byte[] decodedString = Base64.decode(profile.getImg(), Base64.DEFAULT);
-                Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-                imgPersonLog.setImageBitmap(decodedByte);
-                imgPersonLog.setVisibility(View.VISIBLE);
-                imgLogo.setVisibility(View.GONE);
+                    byte[] decodedString = Base64.decode(profile.getImg(), Base64.DEFAULT);
+                    Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                    imgPersonLog.setImageBitmap(decodedByte);
+                    imgPersonLog.setVisibility(View.VISIBLE);
+                    imgLogo.setVisibility(View.GONE);
 
-            } else {
+                } else {
+                    imgPersonLog.setVisibility(View.GONE);
+                    imgLogo.setVisibility(View.VISIBLE);
+                }
+            }else {
                 imgPersonLog.setVisibility(View.GONE);
                 imgLogo.setVisibility(View.VISIBLE);
             }
@@ -218,104 +344,22 @@ public class ActivityProfile extends BaseActivity implements DateSetListener {
                 }
             });
         }
-
-    }
-
-    private void checkBlood(int nowBlood) {
-        String bloodType="";
-        if (nowBlood == 1) {
-            bloodType="A+";
-        } else if (nowBlood == 2) {
-            bloodType="A-";
-        } else if (nowBlood == 3) {
-            bloodType="B+";
-        }else if (nowBlood == 4) {
-            bloodType="B-";
-        }else   if (nowBlood == 5) {
-            bloodType="AB+";
-        } else if (nowBlood == 6) {
-            bloodType="AB-";
-        } else if (nowBlood == 7) {
-            bloodType="O+";
-        }else if (nowBlood == 8) {
-            bloodType="O-";
-        }
-        edtBlood.setText(bloodType);
-    }
-
-    private void checkSex(int sexNow) {
-        if (sexNow == 1) {
-            edtsex.setText("مرد");
-        } else if (sexNow == 2) {
-            edtsex.setText("زن");
-        } else if (sexNow == 3) {
-            edtsex.setText("سایر موارد");
-        } else {
-            edtsex.setText("");
-        }
-    }
-
-    @OnClick({R.id.img_back, R.id.btnInsert, R.id.btnDelete})
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.img_back:
-                Utility.hideKeyboard();
-                finish();
-                break;
-            case R.id.btnInsert:
-                profile.setAge(edtAge.getText().toString());
-                profile.setfName(edtFName.getText().toString());
-                profile.setlName(edtLName.getText().toString());
-                profile.setBirthDay(edtBirthYear.getText().toString());
-                profile.setHeight(edtHeight.getText().toString());
-                profile.setWeight(edtWeight.getText().toString());
-                profile.setSickness(edtSickness.getText().toString());
-                profile.setAlergy(edtAlergy.getText().toString());
-                profile.setImg(b64Image);
-                profile.setBlood(ourBlood);
-                profile.setSex(ourSex);
-
-                AppDatabase database = AppDatabase.getInMemoryDatabase(this);
-                database.profileDao().update(profile);
-                Utility.hideKeyboard();
-                finish();
-
-                break;
-            case R.id.btnDelete:
-                finish();
-                break;
-        }
     }
 
     @Override
-    public void onDateSet(int id, @Nullable Calendar calendar, int day, int month, int year) {
-        PersianDate date = new PersianDate(System.currentTimeMillis());
-        boolean isBeger = false;
-        if (year == date.getShYear()) {
-            if (month > date.getShMonth()) {
-                isBeger = true;
-            } else if (month == date.getShMonth()) {
-                if (day > date.getShDay()) {
-                    isBeger = true;
-                }
-            }
-        }
-        if (!isBeger) {
-            edtBirthYear.setText(PersianCalculater.getYearMonthAndDay(year, month, day));
-            PersianDate today = new PersianDate(System.currentTimeMillis());
-            int differYear = today.getShYear() - year - 1;
-            if (today.getShMonth() > month) {
-                differYear++;
-            } else if (today.getShMonth() == month) {
-                if (today.getShDay() >= day) {
-                    differYear++;
-                }
-            }
-            edtAge.setText(differYear + "");
+    public void onSaveFinish() {
+        Utility.hideKeyboard();
+        finish();
+    }
 
-        } else {
-            Toast.makeText(this, "تاریخ تولد باید پیش از تاریخ امروز باشد.", Toast.LENGTH_LONG).show();
-        }
+    @Override
+    public void networkAvailable() {
+        hasNet = true;
+    }
+
+    @Override
+    public void networkUnavailable() {
+        hasNet = false;
     }
 
     class ConvertToB64 extends AsyncTask<File, String, String> {

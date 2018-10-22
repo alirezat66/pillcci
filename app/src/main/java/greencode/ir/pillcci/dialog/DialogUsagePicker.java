@@ -72,7 +72,7 @@ public class DialogUsagePicker extends Dialog implements OnDateSetListener {
         radioSetTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dialog = Utility.getTimeDialog(DialogUsagePicker.this,context.getResources().getColor(R.color.colorPrimary));
+                dialog = Utility.getTimeDialogUsage(DialogUsagePicker.this,context.getResources().getColor(R.color.colorPrimary));
                 dialog.show(supportedFragmentManager,"انتخاب زمان");
             }
         });
@@ -121,8 +121,12 @@ public class DialogUsagePicker extends Dialog implements OnDateSetListener {
     @Override
     public void onDateSet(TimePickerDialog timePickerView, long millseconds) {
         PersianDate persianCalendar = new PersianDate(millseconds);
-        selectedTime=millseconds;
-        radioSetTime.setText("تنظیم ساعت ("+ PersianCalculater.getHourseAndMin(millseconds)+")");
+        PersianDate persianDate = new PersianDate(setedTime);
+        persianDate.setHour(persianCalendar.getHour());
+        persianDate.setMinute(persianCalendar.getMinute());
+        persianDate.setSecond(0);
+        selectedTime=persianDate.getTime();
+        radioSetTime.setText("در ساعت ("+ PersianCalculater.getHourseAndMin(millseconds)+")");
     }
 
 

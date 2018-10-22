@@ -1,72 +1,67 @@
-<ScrollView android:layout_width="match_parent"
+<RelativeLayout android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:isScrollContainer="true"
     android:background="@color/backColor"
-    android:fillViewport="true"
     xmlns:android="http://schemas.android.com/apk/res/android">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:isScrollContainer="true"
+        >
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginRight="16dp"
         android:orientation="vertical"
-        android:layout_marginLeft="16dp">
+       >
         <include layout="@layout/image_base_add"></include>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#d3d3d3"></LinearLayout>
-        <include layout="@layout/general_layout_add"></include>
-
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:weightSum="6"
-            android:layout_marginTop="32dp"
-            android:orientation="horizontal">
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"></LinearLayout>
+            android:layout_marginRight="0dp"
+            android:layout_marginLeft="0dp">
+        <include layout="@layout/general_layout_add"
+            ></include>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="90dp"></LinearLayout>
+
+    </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="46dp"
+            android:background="@color/white"
+            android:weightSum="10"
+            android:layout_alignParentBottom="true">
             <Button
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="4"
-                android:text="ذخیره و ادامه"
-                android:background="@drawable/ripple_green_dark"
+                android:layout_weight="6"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:text="ادامه"
+                android:background="@color/teal"
                 android:textColor="@color/white"
                 android:id="@+id/btnInsert"
                 android:textSize="16.0sp"/>
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"></LinearLayout>
-        </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:weightSum="6"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="16dp"
-            android:orientation="horizontal">
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"></LinearLayout>
             <Button
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+
+                android:layout_height="match_parent"
                 android:layout_weight="4"
-                android:text="حذف و خروج"
+                android:text="خروج"
                 android:id="@+id/btnDelete"
-                android:background="@drawable/ripple_red"
-                android:textColor="@color/white"
+
+                android:background="@drawable/border_red"
+                android:textColor="@color/bright_pink"
+
                 android:textSize="16.0sp"/>
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"></LinearLayout>
+
         </LinearLayout>
-    </LinearLayout>
-</ScrollView>
+    </RelativeLayout>
+    </ScrollView>
+</RelativeLayout>

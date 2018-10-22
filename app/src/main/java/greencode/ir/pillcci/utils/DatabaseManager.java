@@ -9,6 +9,7 @@ import greencode.ir.pillcci.controler.AppDatabase;
 import greencode.ir.pillcci.database.PillObject;
 import greencode.ir.pillcci.database.PillUsage;
 import greencode.ir.pillcci.objects.PillShelf;
+import greencode.ir.pillcci.retrofit.SyncController;
 import saman.zamani.persiandate.PersianDate;
 
 /**
@@ -25,6 +26,7 @@ public class DatabaseManager {
         AppDatabase database = AppDatabase.getInMemoryDatabase(context);
         for(PillUsage pillUsage:pillUsages){
             pillUsage.setState(3);
+            pillUsage.setIsSync(0);
             database.pillUsageDao().update(pillUsage);
         }
 
@@ -33,6 +35,7 @@ public class DatabaseManager {
     public static void cancelUsage(Context context, PillUsage item) {
         AppDatabase database = AppDatabase.getInMemoryDatabase(context);
         item.setState(2);
+        item.setIsSync(0);
         database.pillUsageDao().update(item);
     }
 
@@ -64,9 +67,11 @@ public class DatabaseManager {
             // yani bayad fasele bedim
             String day = use+","+stop+","+0;
             object.setDays(day);
+            object.setSync(0);
             database.pillObjectDao().update(object);
 
             addToEndInFreeMode(stop,lastPill,object,database);
+
         }else {
             //yani nabayad fasele bedim;
             addToEndInFreeMode(0,lastPill,object,database);
@@ -87,9 +92,9 @@ public class DatabaseManager {
         }
         PersianDate lastUsageDate = new PersianDate(lastPill.getSetedTime());
         int lastUsePosition=0;
+        // می خوایم پوزیشن آخرین مصرف رو پیدا کنیم. ببینیم ساعت چنده
         for(int i = 0 ; i<allTimesLong.size();i++){
             PersianDate currentTimeDate =  new PersianDate(allTimesLong.get(i));
-
             if(currentTimeDate.getHour()==lastUsageDate.getHour()
                     && currentTimeDate.getMinute()==lastUsageDate.getMinute()){
                 lastUsePosition=i;
@@ -106,7 +111,8 @@ public class DatabaseManager {
             // inja yani dooreye 1 roozesh tamam shode bayad ba ezafe kardane date jadid roo hesab konim
             nextDate = new PersianDate(lastPill.getSetedTime());
 
-            if(object.isRegular()){
+            // saat ro roye avalin tanzim mikonim
+            if(object.isRegular()==1){
                 if(object.getTypeOfUsage()==1){
                     // har rooz
                     nextDate = addDays(1,nextDate);
@@ -173,10 +179,12 @@ public class DatabaseManager {
         nextDate.setMinute(nextHourAndMin.getMinute());
         nextDate.setSecond(0);
         String time=PersianCalculater.getHourseAndMin(nextDate.getTime());
+        long lastLocal = database.pillUsageDao().getLastId();
 
         if(object.getUseType()==1){
-            database.pillUsageDao().insertPill(new PillUsage(lastPill.getPillId(),lastPill.getPillName(),time,nextDate.getTime(),
-                    0,"",false,lastPill.getDescription(),lastPill.getCatNme(),lastPill.getCatColor(),
+
+            database.pillUsageDao().insertPill(new PillUsage(++lastLocal,lastPill.getPillId(),lastPill.getPillName(),time,nextDate.getTime(),
+                    0,"",0,lastPill.getDescription(),lastPill.getCatNme(),lastPill.getCatColor(),
                     lastPill.getCatRingtone(),lastPill.getDrName(),lastPill.getUnit(),amount,lastPill.getCountPerDay(),0,nextDate.getTime()));
 
             // modam
@@ -186,8 +194,8 @@ public class DatabaseManager {
             int countAllDaysUsage=object.getAllUseDays();
 
             if(countUsage/object.getCountOfUsagePerDay()<countAllDaysUsage){
-                database.pillUsageDao().insertPill(new PillUsage(lastPill.getPillId(),lastPill.getPillName(),time,nextDate.getTime(),
-                        0,"",false,lastPill.getDescription(),lastPill.getCatNme(),lastPill.getCatColor(),
+                database.pillUsageDao().insertPill(new PillUsage(++lastLocal,lastPill.getPillId(),lastPill.getPillName(),time,nextDate.getTime(),
+                        0,"",0,lastPill.getDescription(),lastPill.getCatNme(),lastPill.getCatColor(),
                         lastPill.getCatRingtone(),lastPill.getDrName(),lastPill.getUnit(),amount,lastPill.getCountPerDay(),0,nextDate.getTime()));
             }
 
@@ -203,9 +211,15 @@ public class DatabaseManager {
 
             if(allAmount<object.getTotalAmounts()){
 
-                database.pillUsageDao().insertPill(new PillUsage(lastPill.getPillId(),lastPill.getPillName(),time,nextDate.getTime(),
-                        0,"",false,lastPill.getDescription(),lastPill.getCatNme(),lastPill.getCatColor(),
+                database.pillUsageDao().insertPill(new PillUsage(++lastLocal,lastPill.getPillId(),lastPill.getPillName(),time,nextDate.getTime(),
+                        0,"",0,lastPill.getDescription(),lastPill.getCatNme(),lastPill.getCatColor(),
                         lastPill.getCatRingtone(),lastPill.getDrName(),lastPill.getUnit(),amount,lastPill.getCountPerDay(),0,nextDate.getTime()));
+                List<PillUsage> canceledUsages = database.pillUsageDao().getCanceledUsages(lastPill.getPillId());
+                for(PillUsage usage : canceledUsages){
+                    usage.setCancelable(false);
+                }
+                database.pillUsageDao().update(canceledUsages);
+
 
             }
         }
@@ -237,8 +251,10 @@ public class DatabaseManager {
 
     public static void deletePill(PillShelf item,Context context) {
         AppDatabase database = AppDatabase.getInMemoryDatabase(context);
-        database.pillUsageDao().deletePill(item.getName(),item.getCatName());
-        database.pillObjectDao().deletePill(item.getName(),item.getCatName());
+        database.pillUsageDao().deleteTempPill(item.getName(),item.getCatName());
+        database.pillObjectDao().deleteTempPill(item.getName(),item.getCatName());
+        SyncController syncController = new SyncController();
+        syncController.checkDataBaseForUpdate();
     }
 
     public static void resetFactoryUsage(PillUsage item, Context context) {
@@ -246,8 +262,11 @@ public class DatabaseManager {
         item.setUsageTime(item.getSetedTime());
         item.setState(0);
         item.setUsedTime(0);
-        item.setHasDelay(false);
+        item.setHasDelay(0);
+        item.setIsSync(0);
         database.pillUsageDao().update(item);
+        SyncController sync = new SyncController();
+        sync.checkDataBaseForUpdate();
     }
 
     public static ArrayList<String> getAllMidNames(Context context) {
@@ -260,17 +279,20 @@ public class DatabaseManager {
     public static ArrayList<String> getAllCatNames(Context context) {
         AppDatabase database = AppDatabase.getInMemoryDatabase(context);
         ArrayList<String> allDistinct = new ArrayList<>(database.pillObjectDao().getAllDistinctPillCatNames());
-        allDistinct.add(0,"همه دسته ها");
+        allDistinct.add(0,"همه مصرف کننده ها");
         return allDistinct;
     }
 
     public static void stopPill(PillShelf item, Context context) {
         AppDatabase database = AppDatabase.getInMemoryDatabase(context);
         PersianDate date = new PersianDate(System.currentTimeMillis());
-        database.pillUsageDao().deletePill(item.getName(),item.getCatName(),date.getTime());
+        database.pillUsageDao().deleteTempPill(item.getName(),item.getCatName(),date.getTime());
         PillObject pillObject = database.pillObjectDao().specialPil(item.getName(),item.getCatName());
         pillObject.setState(2);
+        pillObject.setSync(0);
         database.pillObjectDao().update(pillObject);
+        SyncController sync = new SyncController();
+        sync.checkDataBaseForUpdate();
         Utility.reCalculateManager(context);
     }
 

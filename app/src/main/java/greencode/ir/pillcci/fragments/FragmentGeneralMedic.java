@@ -208,7 +208,7 @@ public class FragmentGeneralMedic extends Fragment {
         View view = inflater.inflate(R.layout.fragment_add_medician_step_one, container, false);
         ButterKnife.bind(this, view);
         mSelectedColor = ContextCompat.getColor(getContext(), R.color.flamingo);
-        edtColor.setText("رنگ دسته");
+        edtColor.setText("رنگ یادآور");
         edtColor.setTextColor(mSelectedColor);
         edtMedName.requestFocus();
         setUpPillNameAutoCompelet();
@@ -301,15 +301,10 @@ public class FragmentGeneralMedic extends Fragment {
         AutocompleteCallback<String> callback = new AutocompleteCallback<String>() {
             @Override
             public boolean onPopupItemClicked(Editable editable, String item) {
-
                 editable.clear();
                 editable.append(item);
                 return true;
-
-
             }
-
-
             public void onPopupVisibilityChanged(boolean shown) {
             }
         };
@@ -327,7 +322,6 @@ public class FragmentGeneralMedic extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         onAction = (onActionStepOne) context;
-
     }
 
     @Override
@@ -348,14 +342,6 @@ public class FragmentGeneralMedic extends Fragment {
                 setColorDialog();
                 break;
             case R.id.btnInsert:
-                /*boolean isFirst = PreferencesData.getBoolean(Constants.PREF_FIRST_PILL, true);
-                if (isFirst) {
-                    PreferencesData.saveBool(Constants.PREF_FIRST_PILL, false);
-                    showDialogForLight();
-                } else {
-                    insertData();
-
-                }*/
                 insertData();
                 break;
             case R.id.btnDelete:
@@ -374,11 +360,9 @@ public class FragmentGeneralMedic extends Fragment {
                             permissionLight, REQUEST_CODE_PERMISSION_Light);
                     // If any permission aboe not allowed by user, this condition will execute every tim, else your else part will work
                 } else {
-
                    isLight=1;
                 }
             } catch (Exception e) {
-
                 e.printStackTrace();
             }
         } else {
@@ -421,8 +405,8 @@ public class FragmentGeneralMedic extends Fragment {
                         edtDrName.getText().toString(), edtCatName.getText().toString(), mSelectedColor, ringTone,isLight,isVibrate);
                 onAction.onSaveButton(generalFields);
             } else {
-                if (object.getCatName().equals(edtCatName.getText().toString()) || ((object.getCatName().equals("عمومی")) && edtCatName.getText().toString().trim().equals(""))) {
-                    edtMedName.setError("دارویی با این نام  و با این دسته ذخیره شده است.");
+                if (object.getCatName().equals(edtCatName.getText().toString()) || ((object.getCatName().equals("")) && edtCatName.getText().toString().trim().equals(""))) {
+                    edtMedName.setError("دارویی با این نام  و با این مصرف کننده ذخیره شده است.");
                     edtMedName.requestFocus();
                 } else {
                     GeneralFields generalFields = new GeneralFields(edtMedName.getText().toString(), b64Image, edtUseRes.getText().toString(),
@@ -451,10 +435,11 @@ public class FragmentGeneralMedic extends Fragment {
         ringtonePickerBuilder.setListener(new RingtonePickerListener() {
             @Override
             public void OnRingtoneSelected(String ringtoneName, Uri ringtoneUri) {
+                if(ringtoneUri!=null) {
+                    edtRing.setText(ringtoneName);
+                    ringTone = ringtoneUri.toString();
 
-                edtRing.setText(ringtoneName);
-                ringTone = ringtoneUri.toString();
-
+                }
                 //Do someting with Uri.
             }
         });
@@ -479,7 +464,7 @@ public class FragmentGeneralMedic extends Fragment {
             public void onColorSelected(int color) {
                 mSelectedColor = color;
                 edtColor.setTextColor(mSelectedColor);
-                edtColor.setText("رنگ دسته");
+                edtColor.setText("رنگ یادآور");
 
             }
 
@@ -521,8 +506,6 @@ public class FragmentGeneralMedic extends Fragment {
         EasyImage.handleActivityResult(requestCode, resultCode, data, getActivity(), new DefaultCallback() {
             @Override
             public void onImagePicked(final File imageFile, EasyImage.ImageSource source, int type) {
-
-
                 Picasso.with(getContext())
                         .load(imageFile)
                         .centerCrop()

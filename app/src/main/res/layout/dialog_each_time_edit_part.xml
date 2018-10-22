@@ -5,46 +5,69 @@
     android:layout_height="wrap_content"
     android:background="@color/white"
     >
-    <ScrollView
+    <android.support.v7.widget.Toolbar
         android:layout_width="match_parent"
-        android:layout_alignParentTop="true"
-        android:layout_height="wrap_content"
-        android:id="@+id/scroll"
-        android:fillViewport="true">
+        android:background="@color/colorPrimary"
+        android:id="@+id/toolbar"
+        android:layout_height="56dp">
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="56dp">
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="16dp"
+                android:id="@+id/img_back"
+                app:srcCompat="@drawable/ic_arrow_forward"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:layout_toLeftOf="@id/img_back"
+                android:text="تایید زمانهای مصرف در روز"
+                android:layout_marginRight="8dp"
+                android:layout_centerVertical="true"
+                android:textSize="16sp"/>
+        </RelativeLayout>
+    </android.support.v7.widget.Toolbar>
+
+    <ScrollView
+        android:id="@+id/scroll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="36dp"
+        android:fillViewport="true">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:orientation="vertical">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                >
+                android:layout_margin="16dp">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
                     android:layout_weight="5"
-                    android:layoutDirection="rtl">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="#d3d3d3"
-                        android:textSize="11sp"
-                        android:text="ساعت شروع"/>
-                    <android.support.design.widget.TextInputEditText
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:hint="18:00"
+                    android:layoutDirection="rtl"
+                    android:orientation="vertical">
 
-                        android:id="@+id/edtStartEvrayDay"
-                        android:focusable="false"
-                        android:enabled="false"
-                        />
+
+
+
+
                     <android.support.v7.widget.RecyclerView
-                        android:layout_width="match_parent"
-                        android:layout_height="250dp"
                         android:id="@+id/container"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+
                         android:orientation="vertical"></android.support.v7.widget.RecyclerView>
 
                 </LinearLayout>
@@ -55,40 +78,43 @@
 
         </RelativeLayout>
     </ScrollView>
+
     <RelativeLayout
+        android:id="@+id/bottom_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/scroll"
+        android:layout_height="46dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/transparent"
+        >
 
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp">
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="46dp"
+            android:layout_alignParentBottom="true"
             android:orientation="horizontal"
-            android:layout_centerHorizontal="true">
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:background="@drawable/ripple_red"
-                android:textSize="16sp"
-                android:layout_marginRight="8dp"
-                android:textColor="@color/white"
-                android:id="@+id/btnCancle"
+            android:weightSum="10">
 
-                android:text="لغو"
-                />
             <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:textColor="@color/white"
-                android:text="تایید"
                 android:id="@+id/btnOk"
-                android:layout_marginLeft="8dp"
-                android:background="@drawable/ripple_green_dark"
-                />
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="6"
+                android:background="@color/teal"
+                android:text="تایید و ادامه"
+                android:textColor="@color/white"
+                android:textSize="16.0sp" />
+
+            <Button
+                android:id="@+id/btnCancle"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="4"
+                android:text="عدم تایید"
+                android:background="@drawable/border_red"
+                android:textColor="@color/bright_pink"
+                android:textSize="16.0sp" />
+
         </LinearLayout>
+
     </RelativeLayout>
 </RelativeLayout>

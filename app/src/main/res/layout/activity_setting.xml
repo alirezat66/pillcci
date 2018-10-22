@@ -29,7 +29,7 @@
 
                 <TextView
                     style="@style/BigBlue"
-                    android:text="نوع هشدار"
+                    android:text="پیش فرض های هشدار"
                     android:layout_gravity="right"
                     android:layout_marginRight="16dp"
                     android:layout_marginTop="16dp"
@@ -110,7 +110,7 @@
                         <android.support.design.widget.TextInputEditText
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:hint="تعداد یادآوری"
+                            android:hint="دفعات اعلان یادآوری"
                             android:maxLines="1"
                             android:ems="10"
                             android:selectAllOnFocus="true"
@@ -131,7 +131,7 @@
                         <android.support.design.widget.TextInputEditText
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:hint="فاصله هر یادآوری(دقیقه)"
+                            android:hint="مکث بین اعلان ها(دقیقه)"
                             android:maxLines="1"
                             android:ems="10"
 
@@ -149,12 +149,13 @@
                 </LinearLayout>
                 <TextView
                     style="@style/BigBlue"
-                    android:text="حدف کلیه اطلاعات"
+                    android:text="حذف کلیه اطلاعات"
                     android:textSize="24sp"
                     android:id="@+id/btnDeleteAllInfo"
                     android:layout_marginBottom="20dp"
                     android:layout_gravity="right"
                     android:layout_marginRight="16dp"
+                    android:visibility="gone"
                     android:layout_marginTop="20dp"
                     android:layoutDirection="rtl"
                     />
@@ -166,6 +167,7 @@
                     android:layout_marginBottom="20dp"
                     android:layout_gravity="right"
                     android:layout_marginRight="16dp"
+                    android:visibility="gone"
                     android:layout_marginTop="20dp"
                     android:layoutDirection="rtl"
                     />
@@ -195,7 +197,7 @@
                     <Button
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="لغو"
+                        android:text="انصراف"
                         android:layout_marginBottom="16dp"
                         android:layout_marginRight="16dp"
                         android:layout_marginLeft="16dp"

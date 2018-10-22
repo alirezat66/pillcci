@@ -13,11 +13,17 @@ import static android.arch.persistence.room.OnConflictStrategy.REPLACE;
 @Dao
 public interface PhoneBookDao {
 
-    @Query("select * from  phoneBook")
+    @Query("select * from  phoneBook where state == 0 and not isInitial")
+    List<PhoneBook> allUnSyncPhone();
+
+    @Query("select * from  phoneBook where state<>2")
     List<PhoneBook> listOfPhone();
 
-    @Query("select * from phoneBook where phone= :phone limit 1")
+    @Query("select * from phoneBook where phone= :phone and state<>2 limit 1")
     PhoneBook specialPhone(String phone);
+
+    @Query("select * from phoneBook where id= :phone and state<>2 limit 1")
+    PhoneBook specialPhone(long phone);
 
     @Insert(onConflict = REPLACE)
     void insertPhone(PhoneBook phoneBook);
@@ -26,4 +32,6 @@ public interface PhoneBookDao {
     public void nukeTable();
     @Update
     void update(PhoneBook phoneBook);
+
+
 }

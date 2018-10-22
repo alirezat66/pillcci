@@ -16,7 +16,7 @@
         >
         <TextView
             style="@style/BigBlue"
-            android:text="زمان مصرف:"/>
+            android:text="در چه زمانی ؟"/>
        <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -50,6 +50,23 @@
                 android:textColor="@color/grayText"
                 />
             <me.omidh.liquidradiobutton.LiquidRadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:lrb_strokeWidth="1dp"
+                app:lrb_explodeCount="3"
+                app:lrb_outterPadding="8dp"
+                app:lrb_strokeRadius="10dp"
+                app:lrb_inAnimDuration="500"
+                android:id="@+id/radioTimeUsage"
+                app:lrb_outAnimDuration="500"
+                app:lrb_checkedColor="@color/colorPrimary"
+                app:lrb_unCheckedColor="@color/grayText"
+                android:text="سر وقت"
+
+                android:textSize="18sp"
+                android:textColor="@color/grayText"
+                />
+            <me.omidh.liquidradiobutton.LiquidRadioButton
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:lrb_strokeWidth="1dp"
@@ -63,24 +80,7 @@
 
                 app:lrb_checkedColor="@color/colorPrimary"
                 app:lrb_unCheckedColor="@color/grayText"
-                android:text="تنظیم ساعت "
-
-                android:textSize="18sp"
-                android:textColor="@color/grayText"
-                />
-            <me.omidh.liquidradiobutton.LiquidRadioButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:lrb_strokeWidth="1dp"
-                app:lrb_explodeCount="3"
-                app:lrb_outterPadding="8dp"
-                app:lrb_strokeRadius="10dp"
-                app:lrb_inAnimDuration="500"
-                android:id="@+id/radioTimeUsage"
-                app:lrb_outAnimDuration="500"
-                app:lrb_checkedColor="@color/colorPrimary"
-                app:lrb_unCheckedColor="@color/grayText"
-                android:text="در زمان مشخص شده"
+                android:text="در ساعت ..."
 
                 android:textSize="18sp"
                 android:textColor="@color/grayText"
