@@ -1,4 +1,4 @@
-<android.support.design.widget.CoordinatorLayout android:layout_width="match_parent"
+<androidx.coordinatorlayout.widget.CoordinatorLayout android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android" >
     <ScrollView
@@ -87,7 +87,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="4"
-                    android:text="لغو ویرایش"
+                    android:text="انصراف از ویرایش"
                     android:id="@+id/btnDelete"
                     android:background="@drawable/ripple_red"
                     android:textColor="@color/white"
@@ -101,4 +101,4 @@
 
     </LinearLayout>
     </ScrollView>
-</android.support.design.widget.CoordinatorLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -1,37 +1,35 @@
 package greencode.ir.pillcci.activities;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.ActivityOptionsCompat;
 
 import com.crashlytics.android.answers.Answers;
 import com.crashlytics.android.answers.LoginEvent;
+import com.daimajia.androidanimations.library.Techniques;
 import com.google.firebase.analytics.FirebaseAnalytics;
-
-import java.util.List;
+import com.viksaa.sssplash.lib.activity.AwesomeSplash;
+import com.viksaa.sssplash.lib.model.ConfigSplash;
 
 import greencode.ir.pillcci.R;
 import greencode.ir.pillcci.controler.AppDatabase;
-import greencode.ir.pillcci.database.PhoneBook;
-import greencode.ir.pillcci.database.PillUsage;
 import greencode.ir.pillcci.onboarding.OnboardingActivity;
-import greencode.ir.pillcci.utils.BaseActivity;
 import greencode.ir.pillcci.utils.Constants;
-import greencode.ir.pillcci.utils.DatabaseManager;
 import greencode.ir.pillcci.utils.PreferencesData;
 import greencode.ir.pillcci.utils.Utility;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 /**
  * Created by alireza on 5/13/18.
  */
 
-public class PreSplashActivity extends BaseActivity {
+public class PreSplashActivity extends AwesomeSplash {
 
     private FirebaseAnalytics mFirebaseAnalytics;
 
@@ -39,24 +37,72 @@ public class PreSplashActivity extends BaseActivity {
             Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.CAMERA
     };
     public int REQUEST_CODE_PERMISSION = 48;
-    @Override
+    /*@Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pre_splash);
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
-        new Handler().postDelayed(new Runnable(){
-            @Override
-            public void run() {
-                /* Create an Intent that will start the Menu-Activity. */
-                welcomeScreen();
-            }
-        }, 4000);
 
 
 
 
 
 
+
+    }
+*/
+    @Override
+    public void initSplash(ConfigSplash configSplash) {
+
+
+        configSplash.setBackgroundColor(R.color.lightPing);
+        configSplash.setAnimCircularRevealDuration(200);
+        //any color you want form colors.xml
+        //Choose LOGO OR PATH; if you don't provide String value for path it's logo by default
+        //Customize Logo
+        configSplash.setTitleSplash("");
+        configSplash.setTitleTextColor(R.color.white);
+     //   configSplash.setTitleTextSize(20f); //float value
+        configSplash.setAnimTitleDuration(200);
+        configSplash.setAnimTitleTechnique(Techniques.FadeIn);
+        configSplash.setTitleSplash("نسخه " + Utility.getVersionName());
+        configSplash.setTitleTextSize(20f);
+        configSplash.setTitleTextColor(R.color.white);
+        configSplash.setLogoSplash(R.drawable.ic_splash); //or any other drawable
+        configSplash.setAnimLogoSplashDuration(3000); //int ms
+        configSplash.setAnimLogoSplashTechnique(Techniques.FadeIn); //choose one form Techniques (ref: https://github.com/daimajia/AndroidViewAnimations)
+        configSplash.setAnimTitleDuration(0);
+        configSplash.setAnimTitleTechnique(Techniques.FlipInX);
+
+        /*//Customize Path
+        configSplash.setPathSplash(Constants.DROID_LOGO); //set path String
+        configSplash.setOriginalHeight(400); //in relation to your svg (path) resource
+        configSplash.setOriginalWidth(400); //in relation to your svg (path) resource
+        configSplash.setAnimPathStrokeDrawingDuration(3000);
+        configSplash.setPathSplashStrokeSize(3); //I advise value be <5
+        configSplash.setPathSplashStrokeColor(R.color.accent); //any color you want form colors.xml
+        configSplash.setAnimPathFillingDuration(3000);
+        configSplash.setPathSplashFillColor(R.color.Wheat); //path object filling color
+*/
+
+        //Customize Title
+
+
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+
+
+
+        //provide string to your font located in assets/fonts/
+
+    }
+
+    @Override
+    public void animationsFinished() {
+        welcomeScreen();
+    }
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
     @Override
@@ -82,32 +128,46 @@ public class PreSplashActivity extends BaseActivity {
             startAlarmPillReminder(pillUsage);
         }*/
         Utility.reCalculateManager(this);
-        if(appDatabase.phoneBookDao().listOfPhone().size()==0){
-            appDatabase.phoneBookDao().insertPhone(new PhoneBook("اورژانس","","","115","",true));
-            appDatabase.phoneBookDao().insertPhone(new PhoneBook("اطلاعات دارویی","","","1490","",true));
-        }
 
 
-        if(!PreferencesData.getBoolean(Constants.PREF_FIRST,this)){
+
+        if(!PreferencesData.getBoolean(Constants.PREF_FIRST,PreSplashActivity.this)){
 
 
             Intent intent = new Intent(this, OnboardingActivity.class);
             startActivity(intent);
             finish();
-        }else if(PreferencesData.getBoolean(Constants.PREF_LOGIN,this)){
-            List<PillUsage>expendedUsage = DatabaseManager.getAllExpendedPillUsage(this);
-            DatabaseManager.updateToExpendedMode(this,expendedUsage);
+        }else if(PreferencesData.getBoolean(Constants.PREF_LOGIN,PreSplashActivity.this)){
+            Utility.reCalculateManager(this);
             Answers.getInstance().logLogin(new LoginEvent());
             Bundle params = new Bundle();
-            params.putString("phoneNumber", AppDatabase.getInMemoryDatabase(this).profileDao().getMyProfile().getPhone());
+            params.putString("phoneNumber", AppDatabase.getInMemoryDatabase(this).profileDao().getMyProfile().getPhone()+"");
+            mFirebaseAnalytics.logEvent("back_to_app", params);
+            Bundle bundle = ActivityOptionsCompat.makeCustomAnimation(PreSplashActivity.this, android.R.anim.fade_in, android.R.anim.fade_out).toBundle();
+
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent,bundle);
+            finish();
+        }else if(PreferencesData.getBoolean(Constants.PREF_Guess,PreSplashActivity.this)){
+            Utility.reCalculateManager(this);
+            Answers.getInstance().logLogin(new LoginEvent());
+            Bundle params = new Bundle();
+            params.putString("phoneNumber", "geuest");
             mFirebaseAnalytics.logEvent("back_to_app", params);
 
             Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent);
+            Bundle bundle = ActivityOptionsCompat.makeCustomAnimation(PreSplashActivity.this, android.R.anim.fade_in, android.R.anim.fade_out).toBundle();
+
+            startActivity(intent,bundle);
+         //   overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+
             finish();
-        }else {
+        }
+        else {
             Intent intent = new Intent(this, LoginActivity.class);
-            startActivity(intent);
+         //   overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+            Bundle bundle = ActivityOptionsCompat.makeCustomAnimation(PreSplashActivity.this, android.R.anim.fade_in, android.R.anim.fade_out).toBundle();
+            startActivity(intent,bundle);
             finish();
         }
 

@@ -1,6 +1,8 @@
 package greencode.ir.pillcci.retrofit.reqobject;
 
-public class SignUpRequest {
+import greencode.ir.pillcci.utils.ToJsonClass;
+
+public class SignUpRequest extends ToJsonClass {
     String username;
     String referrer;
 

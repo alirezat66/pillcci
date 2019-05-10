@@ -1,5 +1,6 @@
 package greencode.ir.pillcci.interfaces;
 
+import greencode.ir.pillcci.objects.LoginResponse;
 import greencode.ir.pillcci.objects.RegisterResponse;
 import greencode.ir.pillcci.retrofit.reqobject.SignUpRequest;
 
@@ -15,4 +16,10 @@ public interface RegisterStepOneInterface {
     void onEmptyUser();
 
     void onSuccessPhone(RegisterResponse resp);
+
+    void onLoginValid(LoginResponse data);
+
+    void onUpdateInvalidToken();
+
+    void onUpdateToken();
 }

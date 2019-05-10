@@ -1,116 +1,160 @@
 
-    <RelativeLayout
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools">
-        <ScrollView
+        android:isScrollContainer="true"
+        android:fillViewport="true">
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:isScrollContainer="true"
-            android:fillViewport="true">
+            android:orientation="vertical">
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
-                <include layout="@layout/header_login"
-                    android:layout_alignParentTop="true"
-                    android:layout_height="wrap_content"
-                    android:layout_width="match_parent"
-                    android:id="@+id/header"/>
-
+                android:layout_height="250dp"
+                >
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_below="@id/header">
-                    <LinearLayout
+                    android:layout_height="215dp"
+                    android:background="#DBCEF2"
+                    android:id="@+id/ly_one"
+                    android:visibility="gone"
+                    ></RelativeLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:layout_below="@id/ly_one"
+                    android:background="@color/white"
+                    android:visibility="gone"
+                    ></LinearLayout>
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/pill_fifth"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"/>
+
+
+
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/header">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:id="@+id/lyOne"
+                    >
+
+                    <EditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:id="@+id/lyOne"
-                        >
-
-                        <EditText
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/VioletBlue"
-                            android:layout_marginLeft="24dp"
-                            android:layout_marginRight="24dp"
-                            android:gravity="center_horizontal"
-                            android:maxLength="11"
-                            android:layout_marginTop="24dp"
-                            android:hint="نام کاربری"
-                            android:selectAllOnFocus="true"
-
-                            android:enabled="false"
-                            android:textColorHint="@color/hintColor"
-                            android:textColorLink="@color/VioletBlue"
-                            android:inputType="phone"
-                            android:id="@+id/edtUser"
-                            />
-                        <EditText
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/VioletBlue"
-                            android:layout_marginLeft="24dp"
-                            android:id="@+id/edtPass"
-                            android:gravity="center_horizontal"
-                            android:textColorHint="@color/hintColor"
-                            android:hint="کلمه عبور"
-                            android:selectAllOnFocus="true"
-
-                            android:maxLength="10"
-                            android:layout_marginRight="24dp"
-                            android:textColorLink="@color/VioletBlue"
-                            android:inputType="textPassword"
-
-                            />
-
-                        <EditText
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/VioletBlue"
-                            android:layout_marginLeft="24dp"
-                            android:id="@+id/edtPassRetry"
-                            android:gravity="center_horizontal"
-                            android:textColorHint="@color/hintColor"
-                            android:hint="تکرار کلمه عبور"
-                            android:selectAllOnFocus="true"
-
-                            android:maxLength="10"
-                            android:layout_marginRight="24dp"
-                            android:textColorLink="@color/VioletBlue"
-                            android:inputType="textPassword"
-
-                            />
-                        <Button
-                            android:layout_width="140dp"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/ripple_blue"
-                            android:text="ایجاد حساب کاربری"
-                            android:id="@+id/btnRegiser"
-
-                            android:layout_marginTop="8dp"
-                            android:layout_gravity="center_horizontal"
-                            android:textColor="@color/white"
-                            />
-                    </LinearLayout>
-                    <Button
-                        android:layout_below="@id/lyOne"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="تغییر شماره تلفن همراه"
                         android:textColor="@color/VioletBlue"
-                        android:layout_centerHorizontal="true"
-                        android:layout_alignParentBottom="true"
-                        android:layout_marginBottom="16dp"
-                        android:id="@+id/btnChangePhone"
-                        android:textSize="16.0sp"
-                        android:gravity="bottom"
-                        android:background="@color/transparent"/>
-                </RelativeLayout>
+                        android:layout_marginLeft="24dp"
+                        android:layout_marginRight="24dp"
+                        android:gravity="center_horizontal"
+                        android:maxLength="15"
+                        android:layout_marginTop="24dp"
+                        android:hint="نام کاربری"
+                        android:selectAllOnFocus="true"
+
+                        android:enabled="false"
+                        android:textColorHint="@color/hintColor"
+                        android:textColorLink="@color/VioletBlue"
+                        android:inputType="phone"
+                        android:id="@+id/edtUser"
+                        />
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/layoutTextInput"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="24dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginRight="24dp"
+                        app:passwordToggleEnabled="true"
+                        app:passwordToggleDrawable="@drawable/show_password_selector"
+                        android:textColorHint="@color/gray">
+                        <androidx.appcompat.widget.AppCompatEditText
+                            android:imeOptions="actionNext"
+                            android:layout_marginBottom="8dp"
+                            android:id="@+id/edtPass"
+                            android:textSize="12sp"
+                            android:gravity="center_horizontal"
+                            android:layout_width="match_parent"
+                            android:hint="کلمه عبور خود را وارد کنید"
+                            android:inputType="textPassword"
+                            android:selectAllOnFocus="true"
+                            android:textColorHint="@color/hintColor"
+                            android:textColorLink="@color/VioletBlue"
+                            android:layout_height="wrap_content" />
+                    </com.google.android.material.textfield.TextInputLayout>
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/layoutTextInput2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="24dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginRight="24dp"
+                        app:passwordToggleEnabled="true"
+                        app:passwordToggleDrawable="@drawable/show_password_selector"
+                        android:textColorHint="@color/gray">
+                        <androidx.appcompat.widget.AppCompatEditText
+                            android:imeOptions="actionNext"
+                            android:layout_marginBottom="8dp"
+                            android:id="@+id/edtPassRetry"
+                            android:textSize="12sp"
+                            android:gravity="center_horizontal"
+                            android:layout_width="match_parent"
+                            android:hint="تکرار کلمه عبور خود را وارد کنید"
+                            android:inputType="textPassword"
+                            android:selectAllOnFocus="true"
+                            android:textColorHint="@color/hintColor"
+                            android:textColorLink="@color/VioletBlue"
+                            android:layout_height="wrap_content" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+
+                    <Button
+                        android:layout_width="match_parent"
+                        android:layout_marginRight="24dp"
+                        android:layout_marginLeft="24dp"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/ripple_pink_round"
+                        android:text="ایجاد حساب"
+                        android:id="@+id/btnRegiser"
+
+                        android:layout_marginTop="8dp"
+                        android:layout_gravity="center_horizontal"
+                        android:textColor="@color/white"
+                        />
+                </LinearLayout>
+                <Button
+                    android:layout_below="@id/lyOne"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="تغییر شماره تلفن همراه"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="24dp"
+                    android:id="@+id/btnChangePhone"
+                    android:textSize="16.0sp"
+
+                    android:layout_marginLeft="24dp"
+                    android:layout_marginRight="24dp"
+
+                    android:background="@drawable/out_line_pink_round"/>
             </RelativeLayout>
-        </ScrollView>
+        </LinearLayout>
+    </ScrollView>
 
 
 </RelativeLayout>

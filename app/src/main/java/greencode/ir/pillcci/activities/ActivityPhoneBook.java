@@ -2,12 +2,17 @@ package greencode.ir.pillcci.activities;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.AppCompatImageView;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.widget.AppCompatImageView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import android.transition.Slide;
+import android.transition.Transition;
+import android.transition.Visibility;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
 
@@ -32,15 +37,13 @@ import greencode.ir.pillcci.utils.Utility;
 public class ActivityPhoneBook extends BaseActivity implements PhoneAdapter.onPhoneClick {
     @BindView(R.id.img_back)
     AppCompatImageView imgBack;
-    @BindView(R.id.txtTitle)
+    @BindView(R.id.title)
     TextView txtTitle;
-    @BindView(R.id.toolBar)
-    Toolbar toolBar;
     @BindView(R.id.list)
     RecyclerView list;
     @BindView(R.id.imgAdd)
     AppCompatImageView imgAdd;
-
+    PhoneAdapter adapter;
 
     FirebaseAnalytics firebaseAnalytics;
 
@@ -49,10 +52,17 @@ public class ActivityPhoneBook extends BaseActivity implements PhoneAdapter.onPh
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_phone_boox);
         ButterKnife.bind(this);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            setupWindowAnimations();
+        }
         imgBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    finishAfterTransition();
+                } else {
+                    finish();
+                }
             }
         });
         firebaseAnalytics = FirebaseAnalytics.getInstance(this);
@@ -67,10 +77,11 @@ public class ActivityPhoneBook extends BaseActivity implements PhoneAdapter.onPh
         super.onStart();
         AppDatabase database = AppDatabase.getInMemoryDatabase(this);
         ArrayList<PhoneBook> phoneBooks = new ArrayList<>(database.phoneBookDao().listOfPhone());
-        LinearLayoutManager staggeredGridLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL,false);
+        LinearLayoutManager staggeredGridLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
 
         list.setLayoutManager(staggeredGridLayoutManager);
-        list.setAdapter(new PhoneAdapter(this, phoneBooks, this));
+        adapter = new PhoneAdapter(this, phoneBooks, this);
+        list.setAdapter(adapter);
     }
 
     @OnClick(R.id.imgAdd)
@@ -84,13 +95,13 @@ public class ActivityPhoneBook extends BaseActivity implements PhoneAdapter.onPh
 
     @Override
     public void onItemClick(PhoneBook phoneBook) {
-        if(phoneBook.isInitial()){
+        if (phoneBook.isInitial()) {
             Bundle params = new Bundle();
             params.putString("phoneNumber", Utility.getPhoneNumber(this));
             firebaseAnalytics.logEvent("phonebook_call", params);
             Intent intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phoneBook.getPhone(), null));
             startActivity(intent);
-        }else {
+        } else {
             Bundle params = new Bundle();
             params.putString("phoneNumber", Utility.getPhoneNumber(this));
             firebaseAnalytics.logEvent("editphone_open", params);
@@ -109,5 +120,44 @@ public class ActivityPhoneBook extends BaseActivity implements PhoneAdapter.onPh
         Intent intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phoneBook.getPhone(), null));
         startActivity(intent);
 
+    }
+
+    @Override
+    public void onItemDelete(PhoneBook phoneBook) {
+        AppDatabase database = AppDatabase.getInMemoryDatabase(this);
+        database.phoneBookDao().deletePhone(phoneBook.getid());
+        adapter.remove(phoneBook);
+        adapter.notifyDataSetChanged();
+
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    private void setupWindowAnimations() {
+        Transition transition;
+        transition = buildEnterTransition();
+
+        getWindow().setEnterTransition(transition);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    private Visibility buildEnterTransition() {
+        Slide enterTransition = new Slide();
+        enterTransition.setDuration(getResources().getInteger(R.integer.anim_duration_long));
+        enterTransition.setSlideEdge(Gravity.RIGHT);
+        return enterTransition;
+    }
+
+    @OnClick({R.id.lyInfo, R.id.lyOrgance})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.lyInfo:
+                Intent intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", "1490", null));
+                startActivity(intent);
+                break;
+            case R.id.lyOrgance:
+                 intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", "115", null));
+                startActivity(intent);
+                break;
+        }
     }
 }

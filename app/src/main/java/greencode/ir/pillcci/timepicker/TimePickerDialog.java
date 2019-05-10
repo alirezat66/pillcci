@@ -3,9 +3,9 @@ package greencode.ir.pillcci.timepicker;
 import android.app.Activity;
 import android.app.Dialog;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.DialogFragment;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -131,11 +131,17 @@ public class TimePickerDialog extends DialogFragment implements View.OnClickList
         calendar.set(Calendar.HOUR_OF_DAY, mTimeWheel.getCurrentHour());
         calendar.set(Calendar.MINUTE, mTimeWheel.getCurrentMinute());
 
-        mCurrentMillSeconds = calendar.getTimeInMillis();
+
+            mCurrentMillSeconds = calendar.getTimeInMillis();
+
+
         if (mPickerConfig.mCallBack != null) {
             mPickerConfig.mCallBack.onDateSet(this, mCurrentMillSeconds);
         }
         dismiss();
+    }
+    public void setmCurrentMillSeconds(long mCurrentMillSeconds){
+        this.mCurrentMillSeconds = mCurrentMillSeconds;
     }
 
     public static class Builder {
@@ -206,7 +212,8 @@ public class TimePickerDialog extends DialogFragment implements View.OnClickList
         }
 
         public Builder setCurrentMillseconds(long millseconds) {
-            mPickerConfig.mCurrentCalendar = new WheelCalendar(millseconds);
+                mPickerConfig.mCurrentCalendar = new WheelCalendar(millseconds);
+
             return this;
         }
 

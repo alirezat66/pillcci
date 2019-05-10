@@ -8,7 +8,7 @@
     android:orientation="vertical"
     android:background="@color/backColor"
     >
-    <android.support.v7.widget.CardView
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:cardBackgroundColor="@color/white"
@@ -39,8 +39,8 @@
                     android:padding="8dp"
                     android:gravity="center_vertical|right"
                     android:layout_marginRight="16dp"
-                    android:text="نام دارو (اجباری)"/>
-                <android.support.v7.widget.AppCompatImageView
+                    android:text="نام دارو"/>
+                <androidx.appcompat.widget.AppCompatImageView
                     android:adjustViewBounds="true"
                     android:id="@+id/headerIndicator_one"
                     android:layout_alignParentLeft="true"
@@ -66,14 +66,12 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-        <android.support.design.widget.TextInputEditText
+        <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginRight="8dp"
             android:layout_marginLeft="8dp"
-
             android:maxLines="1"
-
             android:inputType="text"
             android:layoutDirection="rtl"
             android:id="@+id/edtMedName"
@@ -84,8 +82,8 @@
 
         </com.github.florent37.expansionpanel.ExpansionLayout>
         </LinearLayout>
-    </android.support.v7.widget.CardView>
-    <android.support.v7.widget.CardView
+    </androidx.cardview.widget.CardView>
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:cardCornerRadius="0dp"
@@ -102,31 +100,33 @@
         android:layout_width="match_parent"
         app:expansion_headerIndicator="@id/headerIndicator"
         app:expansion_layout="@id/expansionLayout"
+
         android:layoutDirection="rtl"
+
         app:expansion_toggleOnClick="true">
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="56dp"
-            android:gravity="center_vertical|right"
-            android:layout_marginRight="16dp"
-            android:text="اطلاعات تکمیلی"/>
-        <android.support.v7.widget.AppCompatImageView
-            android:adjustViewBounds="true"
-            android:id="@+id/headerIndicator"
-            android:layout_alignParentLeft="true"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_centerVertical="true"
-            android:layout_width="wrap_content"
-            app:srcCompat="@drawable/ic_right" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="56dp"
+                android:gravity="center_vertical|right"
+                android:layout_marginRight="16dp"
+                android:text="اطلاعات تکمیلی (اختیاری)"/>
+            <androidx.appcompat.widget.AppCompatImageView
+                android:adjustViewBounds="true"
+                android:id="@+id/headerIndicator"
+                android:layout_alignParentLeft="true"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_centerVertical="true"
+                android:layout_width="wrap_content"
+                app:srcCompat="@drawable/ic_right" />
         </RelativeLayout>
 
 
     </com.github.florent37.expansionpanel.ExpansionHeader>
-    <com.github.florent37.expansionpanel.ExpansionLayout
+        <com.github.florent37.expansionpanel.ExpansionLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -137,11 +137,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-    <android.support.design.widget.TextInputLayout
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:theme="@style/MyEditText"
         android:layout_height="wrap_content">
-        <android.support.design.widget.TextInputEditText
+        <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="علت مصرف"
@@ -151,12 +151,12 @@
             android:inputType="text"
             android:textColor="@color/grayText"
             />
-    </android.support.design.widget.TextInputLayout>
-    <android.support.design.widget.TextInputLayout
+    </com.google.android.material.textfield.TextInputLayout>
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/MyEditText">
-        <android.support.design.widget.TextInputEditText
+        <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="پزشک معالج"
@@ -166,13 +166,13 @@
             android:id="@+id/edtDrName"
             android:textColor="@color/grayText"
             />
-    </android.support.design.widget.TextInputLayout>
-    <android.support.design.widget.TextInputLayout
+    </com.google.android.material.textfield.TextInputLayout>
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
 
         android:theme="@style/MyEditText">
-        g<android.support.design.widget.TextInputEditText
+        g<com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="مصرف کننده"
@@ -184,12 +184,20 @@
             android:id="@+id/edtcatName"
             android:textColor="@color/grayText"
             />
-    </android.support.design.widget.TextInputLayout>
-    <android.support.design.widget.TextInputLayout
+    </com.google.android.material.textfield.TextInputLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:orientation="horizontal"
+                android:layoutDirection="rtl">
+
+    <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:theme="@style/MyEditText"
+        android:layout_toRightOf="@id/colorLy"
                 android:layout_height="wrap_content">
-                <android.support.design.widget.TextInputEditText
+                <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint=""
@@ -200,13 +208,22 @@
 
                     android:textColor="@color/grayText"
                     />
-            </android.support.design.widget.TextInputLayout>
+
+            </com.google.android.material.textfield.TextInputLayout>
+                <LinearLayout
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_margin="8dp"
+                    android:layout_alignParentLeft="true"
+                    android:orientation="horizontal"
+                    android:id="@+id/colorLy"></LinearLayout>
+            </RelativeLayout>
         </LinearLayout>
     </com.github.florent37.expansionpanel.ExpansionLayout>
     </LinearLayout>
-    </android.support.v7.widget.CardView>
+    </androidx.cardview.widget.CardView>
 
-    <android.support.v7.widget.CardView
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:cardCornerRadius="0dp"
@@ -235,8 +252,8 @@
                         android:layout_height="56dp"
                         android:gravity="center_vertical|right"
                         android:layout_marginRight="16dp"
-                        android:text="تنظیمات هشدار"/>
-                    <android.support.v7.widget.AppCompatImageView
+                        android:text="تنظیمات هشدار (اختیاری)"/>
+                    <androidx.appcompat.widget.AppCompatImageView
                         android:adjustViewBounds="true"
                         android:id="@+id/headerIndicator_three"
                         android:layout_alignParentLeft="true"
@@ -265,14 +282,14 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:weightSum="10">
-                        <android.support.design.widget.TextInputLayout
+                        <com.google.android.material.textfield.TextInputLayout
                             android:layout_width="0dp"
                             android:layout_weight="10"
                             android:paddingRight="16dp"
                             android:paddingLeft="16dp"
                             android:theme="@style/MyEditText"
                             android:layout_height="wrap_content">
-                            <android.support.design.widget.TextInputEditText
+                            <com.google.android.material.textfield.TextInputEditText
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:hint="صدای هشدار"
@@ -284,7 +301,7 @@
                                 android:focusable="false"
                                 android:textColor="@color/grayText"
                                 />
-                        </android.support.design.widget.TextInputLayout>
+                        </com.google.android.material.textfield.TextInputLayout>
 
                         <LinearLayout
                             android:layout_width="0dp"
@@ -343,7 +360,7 @@
                 </LinearLayout>
             </com.github.florent37.expansionpanel.ExpansionLayout>
         </LinearLayout>
-    </android.support.v7.widget.CardView>
+    </androidx.cardview.widget.CardView>
 
 
 

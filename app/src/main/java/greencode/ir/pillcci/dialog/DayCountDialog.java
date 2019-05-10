@@ -5,9 +5,15 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.isapanah.awesomespinner.AwesomeSpinner;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -34,7 +40,10 @@ public class DayCountDialog extends Dialog {
     Button btnOk;
     @BindView(R.id.btnCancel)
     Button btnCancel;
-
+    @BindView(R.id.dayspinner)
+    AwesomeSpinner dayspinner;
+    List<String> lsDays ;
+    List<Integer>lsIntDays;
     public DayCountDialog(Context context, int days, int lastType) {
         super(context);
         this.context = context;
@@ -56,12 +65,26 @@ public class DayCountDialog extends Dialog {
         WindowManager.LayoutParams params = getWindow().getAttributes();
         params.width = -1;
         getWindow().setAttributes(params);
-        txtDays.setText(days+"");
+        txtDays.setText(days + "");
+        lsDays = new ArrayList<>();
+        lsIntDays = new ArrayList<>();
+        for(int i = 1 ; i<366;i++){
+            lsIntDays.add(i);
+            lsDays.add(i+"");
+        }
 
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, lsDays);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        dayspinner.setAdapter(adapter);
+        dayspinner.setOnSpinnerItemClickListener(new AwesomeSpinner.onSpinnerItemClickListener<String>() {
+            @Override
+            public void onItemSelected(int position, String s) {
+                days = lsIntDays.get(position);
 
+            }
+        });
 
-
-
+        dayspinner.setSelection(0);
     }
 
 
@@ -76,16 +99,16 @@ public class DayCountDialog extends Dialog {
         switch (view.getId()) {
             case R.id.addBtn:
                 days++;
-                txtDays.setText(days+"");
+                txtDays.setText(days + "");
                 break;
             case R.id.minusBtn:
-                if(days>1){
+                if (days > 1) {
                     days--;
-                    txtDays.setText(days+"");
+                    txtDays.setText(days + "");
                 }
                 break;
             case R.id.btnOk:
-                 myInterface.onSuccess(days);
+                myInterface.onSuccess(days);
                 break;
             case R.id.btnCancel:
                 myInterface.onCancel(lastType);

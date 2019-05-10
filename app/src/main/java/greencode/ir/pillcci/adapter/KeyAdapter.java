@@ -1,19 +1,16 @@
 package greencode.ir.pillcci.adapter;
 
 import android.content.Context;
-import android.support.v7.widget.AppCompatTextView;
-import android.support.v7.widget.RecyclerView;
+import androidx.appcompat.widget.AppCompatTextView;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TextView;
 
 import com.nirigo.mobile.view.passcode.adapters.PasscodeBaseAdapter;
 import com.nirigo.mobile.view.passcode.models.PasscodeItem;
 import com.nirigo.mobile.view.passcode.models.PasscodeItemEmpty;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 
 import greencode.ir.pillcci.R;

@@ -1,17 +1,38 @@
 package greencode.ir.pillcci.objects;
 
+import greencode.ir.pillcci.utils.ToJsonClass;
+
 /**
  * Created by alireza on 5/11/18.
  */
 
-public class RegisterRequest {
+public class RegisterRequest extends ToJsonClass {
     String userName;
     String pass;
     String retryPass;
     String moarefCode;
     String code;
+    int codePhone;
+    String phone;
+
+    public void setCodePhone(int codePhone) {
+        this.codePhone = codePhone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public int getCodePhone() {
+        return codePhone;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
     public RegisterRequest(String userName, String pass, String retryPass, String moarefCode) {
-        this.userName = userName;
+         this.userName = userName;
         this.pass = pass;
         this.retryPass = retryPass;
         this.moarefCode = moarefCode;

@@ -9,6 +9,8 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.Toast;
 
+import androidx.fragment.app.FragmentManager;
+
 import greencode.ir.pillcci.R;
 import greencode.ir.pillcci.database.PillUsage;
 import greencode.ir.pillcci.timepicker.TimePickerDialog;
@@ -37,10 +39,10 @@ public class DialogUsagePicker extends Dialog implements OnDateSetListener {
     long setedTime;
     TimePickerDialog dialog;
     PillUsage usage;
-    android.support.v4.app.FragmentManager supportedFragmentManager;
+    FragmentManager supportedFragmentManager;
 
     long selectedTime=0;
-    public DialogUsagePicker(Context context, Activity activity, android.support.v4.app.FragmentManager manager, long setedTime, PillUsage usage) {
+    public DialogUsagePicker(Context context, Activity activity, FragmentManager manager, long setedTime, PillUsage usage) {
         super(context);
         this.context = context;
         this.activity = activity;
@@ -102,7 +104,9 @@ public class DialogUsagePicker extends Dialog implements OnDateSetListener {
                 }else if(radioSetTime.isChecked()){
                         myInterface.onSuccess(selectedTime);
                 }else {
-                    Toast.makeText(context, "لطفا یکی از گزینه ها را انتخاب کنید.", Toast.LENGTH_LONG).show();
+                    Toast toast = Toast.makeText(context, "لطفا یکی از گزینه ها را انتخاب کنید.", Toast.LENGTH_LONG);
+                    Utility.centrizeAndShow(toast);
+
                 }
             }
         });

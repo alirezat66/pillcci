@@ -1,5 +1,6 @@
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:visibility="invisible"
     android:layout_height="wrap_content"
@@ -43,7 +44,7 @@
                                 android:background="@color/white"
                                 android:layout_height="wrap_content">
 
-                                <android.support.v7.widget.AppCompatImageView
+                                <androidx.appcompat.widget.AppCompatImageView
                                     android:adjustViewBounds="true"
                                     android:id="@+id/headerIndicator"
                                     android:layout_alignParentLeft="true"
@@ -87,7 +88,7 @@
                                 </LinearLayout>
 
                             </RelativeLayout>
-                            <android.support.v7.widget.CardView
+                            <androidx.cardview.widget.CardView
                                 android:layout_width="12dp"
 
                                 android:layout_gravity="right"
@@ -98,7 +99,7 @@
                                 app:cardBackgroundColor="@color/red"
                                 app:cardCornerRadius="3dp"
                                 android:orientation="vertical"
-                                android:layout_height="match_parent"></android.support.v7.widget.CardView>
+                                android:layout_height="match_parent"></androidx.cardview.widget.CardView>
 
                         </com.github.florent37.expansionpanel.ExpansionHeader>
 
@@ -139,7 +140,7 @@
                                         android:orientation="vertical"
                                         android:gravity="center_horizontal"
                                         android:layout_weight="3">
-                                        <android.support.v7.widget.AppCompatImageView
+                                        <androidx.appcompat.widget.AppCompatImageView
                                             android:layout_width="24dp"
                                             android:layout_height="24dp"
 
@@ -156,7 +157,7 @@
                                         android:orientation="vertical"
                                         android:gravity="center_horizontal"
                                         android:layout_weight="3">
-                                        <android.support.v7.widget.AppCompatImageView
+                                        <androidx.appcompat.widget.AppCompatImageView
                                             android:layout_width="24dp"
                                             android:layout_height="24dp"
                                             app:srcCompat="@drawable/doctor"/>
@@ -172,7 +173,7 @@
                                         android:orientation="vertical"
                                         android:gravity="center_horizontal"
                                         android:layout_weight="3">
-                                        <android.support.v7.widget.AppCompatImageView
+                                        <androidx.appcompat.widget.AppCompatImageView
                                             android:layout_width="24dp"
                                             android:layout_height="24dp"
                                             app:srcCompat="@drawable/drug"/>
@@ -198,7 +199,7 @@
                                         android:orientation="vertical"
                                         android:gravity="center_horizontal"
                                         android:layout_weight="3">
-                                        <android.support.v7.widget.AppCompatImageView
+                                        <androidx.appcompat.widget.AppCompatImageView
                                             android:layout_width="24dp"
                                             android:layout_height="24dp"
                                             app:srcCompat="@drawable/time_for"
@@ -216,7 +217,7 @@
                                         android:gravity="center_horizontal"
                                         android:id="@+id/lyEdit"
                                         android:layout_weight="3">
-                                        <android.support.v7.widget.AppCompatImageView
+                                        <androidx.appcompat.widget.AppCompatImageView
                                             android:layout_width="24dp"
                                             android:layout_height="24dp"
                                             app:srcCompat="@drawable/edit"/>
@@ -233,14 +234,14 @@
                                         android:id="@+id/lyCancel"
                                         android:visibility="gone"
                                         android:layout_weight="3">
-                                        <android.support.v7.widget.AppCompatImageView
+                                        <androidx.appcompat.widget.AppCompatImageView
                                             android:layout_width="24dp"
                                             android:layout_height="24dp"
                                             android:visibility="visible"
                                             app:srcCompat="@drawable/undo"/>
                                         <TextView
                                             style="@style/SmallTextGray"
-                                            android:text="لغو تغییرات"
+                                            android:text="انصراف از تغییرات"
                                             />
                                     </LinearLayout>
                                 </LinearLayout>
@@ -258,7 +259,8 @@
                         app:clamp="self"
                         app:gravity="right"
                         android:layoutDirection="rtl"
-                        app:sticky="100dp">
+                        app:sticky="100dp"
+                        tools:ignore="MissingPrefix">
 
 
                         <RelativeLayout
@@ -320,7 +322,8 @@
                         app:bring_to_clamp="100dp"
                         app:clamp="self"
                         app:gravity="left"
-                        app:sticky="none">
+                        app:sticky="none"
+                        tools:ignore="MissingPrefix">
 
                         <LinearLayout
                             android:layout_width="0dp"
@@ -454,7 +457,7 @@
                     android:textSize="16sp"
                     android:layout_height="wrap_content"
                     android:padding="8dp"
-                    android:text="لغو مصرف"/>
+                    android:text="انصراف از مصرف"/>
                 <LinearLayout
                     android:layout_width="2dp"
                     android:layout_height="match_parent"
@@ -473,4 +476,4 @@
         </LinearLayout>
 
     </LinearLayout>
-</android.support.v7.widget.CardView>
+</androidx.cardview.widget.CardView>

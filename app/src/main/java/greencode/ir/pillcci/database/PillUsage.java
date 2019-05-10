@@ -1,11 +1,13 @@
 package greencode.ir.pillcci.database;
 
-import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.PrimaryKey;
 import android.content.Context;
+
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
 import greencode.ir.pillcci.R;
 import greencode.ir.pillcci.utils.PersianCalculater;
+import greencode.ir.pillcci.utils.Utility;
 import saman.zamani.persiandate.PersianDate;
 
 /**
@@ -13,15 +15,12 @@ import saman.zamani.persiandate.PersianDate;
  */
 @Entity(tableName = "pilusage")
 public class PillUsage {
-
     @PrimaryKey(autoGenerate = false)
     long id;
     public boolean isCancelable = true;
-
     public void setCancelable(boolean cancelable) {
         isCancelable = cancelable;
     }
-
     public boolean isCancelable() {
         return isCancelable;
     }
@@ -170,6 +169,7 @@ public class PillUsage {
     }
 
     public void setUsageTime(long usageTime) {
+        Utility.appendLog("we are in set new usage time and this time is " + PersianCalculater.getHourseAndMin(usageTime));
         this.usageTime = usageTime;
     }
 

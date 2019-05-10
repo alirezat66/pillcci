@@ -1,4 +1,4 @@
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
@@ -16,7 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-    <android.support.v7.widget.CardView
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_marginTop="-8dp"
         android:layout_gravity="right"
@@ -26,7 +26,7 @@
         app:cardElevation="0dp"
         app:cardBackgroundColor="@color/red"
         android:orientation="vertical"
-        android:layout_height="12dp"></android.support.v7.widget.CardView>
+        android:layout_height="12dp"></androidx.cardview.widget.CardView>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -57,20 +57,37 @@
                          android:layout_marginLeft="8dp"
                          android:layoutDirection="rtl"
                          >
-                         <TextView
-                             style="@style/BigGray"
-                             android:text=""
-                             android:maxLines="2"
-                             android:transitionName="simple_activity_transition"
-                             android:id="@+id/txtMedName"
+                         <LinearLayout
+                             android:layout_width="match_parent"
+                             android:layout_height="wrap_content"
+                             android:orientation="horizontal"
+                             android:layoutDirection="rtl">
+                             <TextView
+                                 style="@style/BigGray"
+                                 android:text=""
+                                 android:maxLines="2"
+                                 android:transitionName="simple_activity_transition"
+                                 android:id="@+id/txtMedName"
+                                 android:gravity="right"
+                                 android:layout_marginRight="8dp"
+                                 android:layout_marginTop="8dp"/>
+                             <TextView
+                                 android:layout_width="wrap_content"
+                                 android:layout_height="wrap_content"
+                                 style="@style/BigGray"
+                                 android:id="@+id/unitCount"
+                                 android:layout_marginRight="8dp"
+                                 android:layout_marginTop="8dp"
+                                 />
+                         </LinearLayout>
 
-                             android:layout_marginRight="8dp"
-                             android:layout_marginTop="8dp"/>
                          <TextView
                              style="@style/BigGray"
                              android:text=""
                              android:textSize="12sp"
                              android:maxLines="1"
+                             android:gravity="right"
+                             android:layoutDirection="rtl"
                              android:layout_width="match_parent"
                              android:layout_height="wrap_content"
                              android:id="@+id/txtUseTime"
@@ -146,4 +163,4 @@
 
     </LinearLayout>
     </LinearLayout>
-</android.support.v7.widget.CardView>
+</androidx.cardview.widget.CardView>

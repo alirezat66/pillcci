@@ -6,6 +6,11 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.FLASHLIGHT" />
 
+
+
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.flash" />
 
@@ -35,6 +40,7 @@
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
+        android:windowSoftInputMode="stateAlwaysHidden"
         tools:replace="android:allowBackup">
         <activity android:name=".activities.PreSplashActivity">
             <intent-filter>
@@ -43,6 +49,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".activities.ActivityShowTerms"></activity>
         <activity
             android:name=".activities.LoginActivity"
             android:screenOrientation="portrait"
@@ -65,7 +72,7 @@
             android:windowSoftInputMode="adjustResize|stateHidden" />
 
         <activity
-            android:name=".activities.AddBotActivity"
+            android:name=".activities.ActivityAddBot"
             android:configChanges="orientation|keyboardHidden|screenSize|locale"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateHidden" />
@@ -74,6 +81,13 @@
             android:configChanges="orientation|keyboardHidden|screenSize|locale"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateHidden" />
+
+        <service android:name=".service.MyFirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
         <!--
             <activity android:name=".activities.ActivityValidateCode"
             android:configChanges="orientation|keyboardHidden|screenSize|locale"
@@ -111,6 +125,7 @@
             android:name=".activities.MainActivity"
             android:configChanges="orientation|keyboardHidden|screenSize|locale"
             android:screenOrientation="portrait"
+            android:autoRemoveFromRecents="true"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".activities.ActivityAddPhone"
@@ -147,7 +162,8 @@
         <activity
             android:name=".activities.ActivityAlarmManager"
             android:keepScreenOn="true"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:autoRemoveFromRecents="true"/>
         <activity
             android:name=".activities.FilterActivity"
             android:keepScreenOn="true"
@@ -155,14 +171,30 @@
         <activity
             android:name=".activities.ActivityEditPill"
             android:keepScreenOn="true"
+            android:windowSoftInputMode="adjustResize|stateHidden"
             android:screenOrientation="portrait" />
+        <activity android:name=".activities.RecalculateActivity"
 
+        ></activity>
         <receiver
             android:name=".service.EventReciver"
-            android:process=":remote" />
+            android:process=":remote"
+            android:exported="true"
+            android:enabled="true"
+            >
+        </receiver>
+
         <receiver
             android:name=".service.StartMyActivityAtBootReceiver"
             android:label="StartMyServiceAtBootReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+        <receiver
+            android:name=".service.BroadCastRestart"
+            android:label="BroadCastReset">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
@@ -192,9 +224,23 @@
         <service
             android:name=".service.SyncService"
             android:exported="true"
+            android:permission="android.permission.BIND_JOB_SERVICE"
+            android:stopWithTask="false"
+            />
+        <service
+            android:name=".service.DelayService"
+            android:exported="true"
             android:stopWithTask="false"
             />
 
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/pill" />
+        <!-- Set color used with incoming notification messages. This is used when no color is set for the incoming
+             notification message. See README(https://goo.gl/6BKBk7) for more. -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/colorAccent" />
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="568362c655e87474e6fc33806ea747b8bf6c6542" />

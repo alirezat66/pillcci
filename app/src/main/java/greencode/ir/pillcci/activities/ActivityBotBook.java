@@ -1,13 +1,19 @@
 package greencode.ir.pillcci.activities;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.AppCompatImageView;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.widget.AppCompatImageView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import android.transition.Slide;
+import android.transition.Transition;
+import android.transition.Visibility;
+import android.view.Gravity;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,13 +40,12 @@ import greencode.ir.pillcci.utils.Utility;
  * Created by alireza on 5/30/18.
  */
 
-public class ActivityBotBook extends BaseActivity implements BotAdapter.onPhoneClick,BotListInterface {
+public class ActivityBotBook extends BaseActivity implements BotAdapter.onPhoneClick, BotListInterface {
     @BindView(R.id.img_back)
     AppCompatImageView imgBack;
-    @BindView(R.id.txtTitle)
+    @BindView(R.id.title)
     TextView txtTitle;
-    @BindView(R.id.toolBar)
-    Toolbar toolBar;
+
     @BindView(R.id.list)
     RecyclerView list;
     @BindView(R.id.imgAdd)
@@ -51,19 +56,33 @@ public class ActivityBotBook extends BaseActivity implements BotAdapter.onPhoneC
     KProgressHUD progressHUD;
     BotListPresenter presenter;
     FirebaseAnalytics firebaseAnalytics;
+    @BindView(R.id.mainphone)
+    LinearLayout mainphone;
+    @BindView(R.id.txt_hamyar)
+    TextView txtHamyar;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_phone_boox);
         ButterKnife.bind(this);
+        txtHamyar.setVisibility(View.VISIBLE);
+        mainphone.setVisibility(View.GONE);
         imgBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    finishAfterTransition();
+                } else {
+                    finish();
+                }
             }
         });
         firebaseAnalytics = FirebaseAnalytics.getInstance(this);
-        txtTitle.setText("بات تلگرام");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            setupWindowAnimations();
+        }
+        txtTitle.setText("ربات تلگرام");
         Bundle params = new Bundle();
         params.putString("phoneNumber", Utility.getPhoneNumber(this));
         firebaseAnalytics.logEvent("botbook_open", params);
@@ -76,7 +95,7 @@ public class ActivityBotBook extends BaseActivity implements BotAdapter.onPhoneC
         AppDatabase database = AppDatabase.getInMemoryDatabase(this);
         String userId = database.profileDao().getMyProfile().getMyId();
         presenter.getBotList(userId);
-        progressHUD = Utility.makeWaiting("لطفا منتطر بمانید","در حال دریافت اطلاعات",this);
+        progressHUD = Utility.makeWaiting("لطفا منتطر بمانید", "در حال دریافت اطلاعات", this);
         progressHUD.show();
     }
 
@@ -85,7 +104,7 @@ public class ActivityBotBook extends BaseActivity implements BotAdapter.onPhoneC
         Bundle params = new Bundle();
         params.putString("phoneNumber", Utility.getPhoneNumber(this));
         firebaseAnalytics.logEvent("addbot_open", params);
-        Intent intent = new Intent(this, AddBotActivity.class);
+        Intent intent = new Intent(this, ActivityAddBot.class);
         startActivity(intent);
     }
 
@@ -96,7 +115,7 @@ public class ActivityBotBook extends BaseActivity implements BotAdapter.onPhoneC
 
     @Override
     public void onItemDelete(final BotObject phoneBook) {
-        final FinishDialog dialog =new FinishDialog(this,"مطمئن هستید؟","آیا از حذف کاربر اطمینان دارید");
+        final FinishDialog dialog = new FinishDialog(this, "از حذف این همیار سلامتی مطمئنی؟", "گزارش\u200Cهای مصرف بعد از این برای این همیار فرستاده نمی‌شود.");
         dialog.setListener(new FinishListener() {
             @Override
             public void onReject() {
@@ -106,9 +125,9 @@ public class ActivityBotBook extends BaseActivity implements BotAdapter.onPhoneC
             @Override
             public void onSuccess() {
                 dialog.dismiss();
-                progressHUD = Utility.makeWaiting("لطفا منتظر بمانید...","در حال پاک کردن شماره",ActivityBotBook.this);
+                progressHUD = Utility.makeWaiting("لطفا منتظر بمانید...", "در حال پاک کردن شماره", ActivityBotBook.this);
                 progressHUD.show();
-                presenter.deleteBotObject(AppDatabase.getInMemoryDatabase(ActivityBotBook.this).profileDao().getMyProfile().getMyId(),phoneBook);
+                presenter.deleteBotObject(AppDatabase.getInMemoryDatabase(ActivityBotBook.this).profileDao().getMyProfile().getMyId(), phoneBook);
             }
         });
         dialog.show();
@@ -118,15 +137,16 @@ public class ActivityBotBook extends BaseActivity implements BotAdapter.onPhoneC
     @Override
     public void onError(String message) {
         progressHUD.dismiss();
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+        Toast toast = Toast.makeText(this, message, Toast.LENGTH_SHORT);
+        Utility.centrizeAndShow(toast);
     }
 
     @Override
     public void onListReady(ArrayList<BotObject> bots) {
         progressHUD.dismiss();
         botList = bots;
-        adapter = new BotAdapter(this,botList,this);
-        list.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false));
+        adapter = new BotAdapter(this, botList, this);
+        list.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         list.setAdapter(adapter);
     }
 
@@ -135,6 +155,21 @@ public class ActivityBotBook extends BaseActivity implements BotAdapter.onPhoneC
         presenter.getBotList(AppDatabase.getInMemoryDatabase(this).profileDao().getMyProfile().getMyId());
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    private void setupWindowAnimations() {
+        Transition transition;
+        transition = buildEnterTransition();
+
+        getWindow().setEnterTransition(transition);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    private Visibility buildEnterTransition() {
+        Slide enterTransition = new Slide();
+        enterTransition.setDuration(getResources().getInteger(R.integer.anim_duration_long));
+        enterTransition.setSlideEdge(Gravity.RIGHT);
+        return enterTransition;
+    }
    /* @Override
     public void onItemClick(PhoneBook phoneBook) {
         if(phoneBook.isInitial()){

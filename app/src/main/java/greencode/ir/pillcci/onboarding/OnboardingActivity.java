@@ -5,8 +5,10 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.graphics.drawable.VectorDrawableCompat;
+import androidx.annotation.Nullable;
+import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
+
+import androidx.fragment.app.Fragment;
 
 import com.github.paolorotolo.appintro.AppIntro;
 
@@ -29,17 +31,24 @@ public class OnboardingActivity extends AppIntro {
         addSlide(new OnboardingFragmentThree());
         addSlide(new OnboardingFragmentFour());
 
-        setSeparatorColor(getResources().getColor(R.color.colorPrimaryDark));
-        setSkipText("ورود");
-        setColorSkipButton(getResources().getColor(R.color.white));
+
+        setColorDoneText(getResources().getColor(R.color.nextBlue));
+        setIndicatorColor(getResources().getColor(R.color.nextBlue),getResources().getColor(R.color.beforBlue));
+    //    setSkipText("ورود");
         Drawable drawable;
         if (android.os.Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
             drawable = getResources().getDrawable(R.drawable.ic_next, getTheme());
         } else {
             drawable = VectorDrawableCompat.create(getResources(), R.drawable.ic_next, getTheme());
         }
+      //  setSkipText("بلدم");
+        setColorSkipButton(getResources().getColor(R.color.nextBlue));
         setImageNextButton(drawable);
-        setDoneText("پایان");
+    //    skipButton.setVisibility(View.GONE);
+        showSkipButton(false);
+
+        setDoneText("شرایط و مقررات را " +
+                "می\u200Cپذیرم");
 
     }
 
@@ -49,13 +58,13 @@ public class OnboardingActivity extends AppIntro {
     }
 
     @Override
-    public void onSkipPressed(android.support.v4.app.Fragment currentFragment) {
+    public void onSkipPressed(Fragment currentFragment) {
         super.onSkipPressed(currentFragment);
         goToLoginPage();
     }
 
     @Override
-    public void onDonePressed(android.support.v4.app.Fragment currentFragment) {
+    public void onDonePressed(Fragment currentFragment) {
         super.onDonePressed(currentFragment);
         goToLoginPage();
     }

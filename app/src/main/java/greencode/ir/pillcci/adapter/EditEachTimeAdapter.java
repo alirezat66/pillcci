@@ -1,7 +1,7 @@
 package greencode.ir.pillcci.adapter;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -29,7 +29,9 @@ public class EditEachTimeAdapter extends RecyclerView.Adapter<EditEachTimeAdapte
     SelectListener myListener;
 
 
-
+    public EachUsage getSelectedUsage(int position){
+        return list.get(position);
+    }
     public EditEachTimeAdapter(Context context1, ArrayList<EachUsage> list,SelectListener myListener) {
         this.list = list;
         context = context1;
@@ -38,9 +40,8 @@ public class EditEachTimeAdapter extends RecyclerView.Adapter<EditEachTimeAdapte
 
     public void updatePilTime(EachUsage data, PersianDate selectedDate) {
        int index= list.indexOf(data);
-        String hours  = (selectedDate.getHour()>=10?selectedDate.getHour()+"":"0"+selectedDate.getHour());
-        String min  = (selectedDate.getMinute()>=10?selectedDate.getMinute()+"":"0"+selectedDate.getMinute());
-        list.get(index).setTimeStr(hours+":"+min);
+
+        list.get(index).setTimeStr(PersianCalculater.getHourseAndMin(selectedDate.getTime()));
         list.get(index).setStartDay(selectedDate.getTime());
         list.get(index).setEachUse(data.getEachUse());
         boolean isChange=false;
@@ -56,16 +57,14 @@ public class EditEachTimeAdapter extends RecyclerView.Adapter<EditEachTimeAdapte
                 }
             }
         }
-        if(!isChange){
-            notifyItemChanged(index);
-        }
+        notifyDataSetChanged();
 
 
     }
 
 
     public interface SelectListener{
-        public void selectTime(EachUsage eachUsage);
+        public void selectTime(EachUsage eachUsage,int position);
     }
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -132,6 +131,7 @@ public class EditEachTimeAdapter extends RecyclerView.Adapter<EditEachTimeAdapte
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 data.setEachUse(s.toString());
                 list.set(position,data);
+              //  notifyDataSetChanged();
             }
 
             @Override
@@ -142,7 +142,7 @@ public class EditEachTimeAdapter extends RecyclerView.Adapter<EditEachTimeAdapte
         holder.txtTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                myListener.selectTime(data);
+                myListener.selectTime(data,position);
             }
         });
 
@@ -150,6 +150,16 @@ public class EditEachTimeAdapter extends RecyclerView.Adapter<EditEachTimeAdapte
     }
 
     public ArrayList<EachUsage> getList(){
+
+        for (int i = 1; i < list.size(); i++) {
+            for (int j = i + 1; j < list.size(); j++) {
+                if (list.get(i).getStartDay() > list.get(j).getStartDay()) {
+                    EachUsage temp = list.get(i);
+                    list.set(i,list.get(j));
+                    list.set(j,temp);
+                }
+            }
+        }
         return list;
     }
     @Override

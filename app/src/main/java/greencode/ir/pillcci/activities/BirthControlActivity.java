@@ -2,8 +2,8 @@ package greencode.ir.pillcci.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.design.widget.TextInputEditText;
+import androidx.annotation.Nullable;
+import com.google.android.material.textfield.TextInputEditText;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -15,6 +15,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import greencode.ir.pillcci.R;
 import greencode.ir.pillcci.utils.BaseActivity;
+import greencode.ir.pillcci.utils.Utility;
 
 public class BirthControlActivity extends BaseActivity  {
 
@@ -77,15 +78,19 @@ public class BirthControlActivity extends BaseActivity  {
             case R.id.btnOk:
                 Intent intent = getIntent();
                 if(edtBirthlUse.getText().toString().length()==0){
-                    Toast.makeText(this, "تعداد روزهای مصرف مشخص نشده است.", Toast.LENGTH_LONG).show();
+                    Toast toast = Toast.makeText(this, "تعداد روزهای مصرف مشخص نشده است.", Toast.LENGTH_LONG);
+                    Utility.centrizeAndShow(toast);
                 }else if(edtBirthStop.getText().length()==0){
-                    Toast.makeText(this, "تعداد روزهای توقف مصرف مشخص نشده است.", Toast.LENGTH_LONG).show();
+                    Toast toast = Toast.makeText(this, "تعداد روزهای توقف مصرف مشخص نشده است.", Toast.LENGTH_LONG);
+                    Utility.centrizeAndShow(toast);
+
                 }else {
                     String passtDays = edtPastDay.getText().toString().equals("") ? "0" : edtPastDay.getText().toString();
                     int past = Integer.parseInt(passtDays);
                     int use = Integer.parseInt(edtBirthlUse.getText().toString());
                     if (past >= use) {
-                        Toast.makeText(this, "تعداد روزهای سپری شده نباید از روزهای مصرف بیشتر باشد.", Toast.LENGTH_SHORT).show();
+                        Toast toast = Toast.makeText(this, "تعداد روزهای سپری شده نباید از روزهای مصرف بیشتر باشد.", Toast.LENGTH_LONG);
+                        Utility.centrizeAndShow(toast);
                         return;
                     } else {
 
@@ -118,5 +123,11 @@ public class BirthControlActivity extends BaseActivity  {
                 finish();
                 break;
         }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Utility.hideKeyboard();
     }
 }

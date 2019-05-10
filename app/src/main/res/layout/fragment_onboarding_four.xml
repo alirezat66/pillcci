@@ -1,28 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary"
+    android:orientation="vertical"
+    android:background="@color/white"
   >
 
     <ImageView
-        android:layout_width="210dp"
-        android:layout_height="210dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="16dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="18dp"
         android:id="@+id/img"
-        android:background="@drawable/oval_white"/>
+        android:background="@drawable/group_9"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:layout_gravity="center_horizontal"
         android:layout_below="@id/img"
         android:text="@string/onboarding_page_title_four"
         android:id="@+id/title"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"
-        android:textSize="28sp"
-        android:textColor="@color/white" />
+        android:layout_marginTop="16dp"
+        android:textSize="24sp"
+        android:textColor="#656565"  />
+
     <TextView
         android:layout_width="match_parent"
         android:layout_marginRight="16dp"
@@ -30,12 +35,14 @@
         android:gravity="center"
         android:layout_height="wrap_content"
         android:layout_below="@id/title"
-        android:text="@string/onboarding_page_four"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="18dp"
-
+        android:linksClickable="true"
+        android:layout_marginTop="8dp"
+        android:layout_gravity="center_horizontal"
         android:textSize="18sp"
-        android:textColor="@color/white" />
+        android:id="@+id/txt_link"
+        android:textColor="#656565"  />
 
 
-</RelativeLayout>
+
+</LinearLayout>

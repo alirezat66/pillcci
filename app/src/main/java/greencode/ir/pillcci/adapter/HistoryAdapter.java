@@ -1,8 +1,8 @@
 package greencode.ir.pillcci.adapter;
 
 import android.content.Context;
-import android.support.v7.widget.CardView;
-import android.support.v7.widget.RecyclerView;
+import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,7 +59,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView txtMedName, txtTime,txtCatName,txtdrName,txtunit,txtrepeatUsage,txtState,txtUse,txtCancel,txtJump;
+        public TextView txtMedName, txtUnitCount,txtTime,txtCatName,txtdrName,txtunit,txtrepeatUsage,txtState,txtUse,txtCancel,txtJump;
         public CardView catColor;
         LinearLayout lyEdit;
         public ExpansionLayout expansionLayout;
@@ -69,6 +69,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
             expansionLayout = v.findViewById(R.id.expansionLayout);
 
             txtMedName =  v.findViewById(R.id.txtMedName);
+            txtUnitCount =  v.findViewById(R.id.unitCount);
             txtTime =  v.findViewById(R.id.txtUseTime);
             txtunit =v.findViewById(R.id.txtUnitUsage);
             txtrepeatUsage = v.findViewById(R.id.txtRepeatCount);
@@ -94,8 +95,6 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
 
         return viewHolder1;
     }
-
-
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {

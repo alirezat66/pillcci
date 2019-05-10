@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -11,122 +11,197 @@
         android:layout_height="match_parent"
         android:isScrollContainer="true"
         android:fillViewport="true">
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <include layout="@layout/header_login"
-                android:layout_alignParentTop="true"
-                android:layout_height="wrap_content"
-                android:layout_width="match_parent"
-                android:id="@+id/header"/>
+            android:layout_height="match_parent"
+            android:orientation="vertical">
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_below="@id/header">
+                android:layout_height="250dp"
+                >
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/pill_one"/>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="215dp"
+                    android:background="#DBCEF2"
+                    android:visibility="gone"
+                    android:id="@+id/ly_one"
+                    ></RelativeLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:visibility="gone"
+                    android:layout_below="@id/ly_one"
+                    android:background="@color/white"
+                    ></LinearLayout>
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/login_image"
+                    android:visibility="gone"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"/>
+
+
+
+
+            </RelativeLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="8dp"
+                android:id="@+id/lyOne"
+                >
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="16sp"
+
+                    android:id="@+id/error"
+                    android:textColor="@color/hintColor"
+                    android:gravity="center_horizontal"
+                    android:visibility="gone"
+                    android:layout_marginTop="12dp"/>
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:id="@+id/lyOne"
+                    android:gravity="center_vertical"
+                    android:layout_marginLeft="24dp"
+                    android:layout_marginRight="24dp"
                     >
-                    <TextView
-                        android:layout_width="match_parent"
+                    <com.hbb20.CountryCodePicker
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="16sp"
-                        android:id="@+id/error"
-                        android:textColor="@color/hintColor"
-                        android:gravity="center_horizontal"
-                        android:visibility="invisible"
-                        android:layout_marginTop="12dp"/>
+                        app:ccp_contentColor="@color/black"
+                        app:ccp_textSize="12sp"
+                        android:layoutDirection="rtl"
+                        app:ccp_defaultLanguage="FARSI"
+                        android:id="@+id/cpCodePicker"
+                        app:ccp_showNameCode="true"
+                        app:ccp_countryAutoDetectionPref="SIM_NETWORK"
+                        app:ccp_autoFormatNumber="true"
+                        app:ccp_autoDetectCountry="true"
+                        app:ccp_hintExampleNumberType="MOBILE"
+                        app:ccp_defaultNameCode="ir"/>
                     <EditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/VioletBlue"
-                        android:layout_marginLeft="24dp"
-                        android:layout_marginRight="24dp"
-                        android:gravity="center_horizontal"
-
+                        android:backgroundTint="@color/gray"
+                        android:freezesText="true"
+                        android:hint="phone"
+                        android:id="@+id/edtPhone"
+                        android:textSize="14sp"
+                        android:singleLine="true"
                         android:textColorHint="@color/hintColor"
                         android:textColorLink="@color/VioletBlue"
-                        android:inputType="phone"
-                        android:selectAllOnFocus="true"
-
-                        android:maxLength="11"
-                        android:hint="شماره تلفن همراه"
-                        android:id="@+id/edtUser"
+                        android:inputType="numberPassword"
+                        android:textColor="@color/black"
                         />
-                    <EditText
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/VioletBlue"
-                        android:layout_marginLeft="24dp"
-                        android:layout_marginTop="16dp"
+                </LinearLayout>
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/layoutTextInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="24dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginRight="24dp"
+                    app:passwordToggleEnabled="true"
+                    app:passwordToggleDrawable="@drawable/show_password_selector"
+                    android:textColorHint="@color/gray">
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:imeOptions="actionNext"
+                        android:layout_marginBottom="8dp"
                         android:id="@+id/edtPass"
+                        android:textSize="12sp"
                         android:gravity="center_horizontal"
-                        android:textColorHint="@color/hintColor"
+                        android:layout_width="match_parent"
                         android:hint="کلمه عبور خود را وارد کنید"
-                        android:layout_marginRight="24dp"
-                        android:textColorLink="@color/VioletBlue"
                         android:inputType="textPassword"
                         android:selectAllOnFocus="true"
+                        android:textColorHint="@color/hintColor"
+                        android:textColorLink="@color/VioletBlue"
+                        android:layout_height="wrap_content" />
+                </com.google.android.material.textfield.TextInputLayout>
 
-                        />
-                    <LinearLayout
-                        android:layout_width="match_parent"
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="24dp"
+                    android:layout_marginLeft="24dp"
+                    android:layout_marginTop="8dp"
+                    android:visibility="gone"
+                    android:orientation="horizontal"
+                    android:layoutDirection="rtl">
+                    <CheckBox
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="24dp"
-                        android:layout_marginLeft="24dp"
-                        android:layout_marginTop="16dp"
-                        android:orientation="horizontal"
-                        android:layoutDirection="rtl">
-                        <CheckBox
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="نمایش رمز عبور"
-                            android:textSize="16sp"
-                            android:id="@+id/checkboxShowPass"
-                            android:textColor="@color/grayText"/>
-                    </LinearLayout>
-                    <Button
-                        android:layout_width="140dp"
-                        android:layout_height="wrap_content"
-                        android:paddingRight="24dp"
-                        android:paddingLeft="24dp"
-                        android:background="@drawable/ripple_blue"
-                        android:text="ورود"
-                        android:id="@+id/btnLogin"
-                        android:layout_marginTop="16dp"
-                        android:layout_gravity="center_horizontal"
-                        android:textColor="@color/white"
-                        />
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:layout_marginLeft="24dp"
-                        android:id="@+id/forgetPass"
+                        android:text="نمایش رمز عبور"
                         android:textSize="16sp"
-                        android:textColor="@color/grayText"
-                        android:layout_marginRight="24dp"
-                        android:gravity="center_horizontal"
-                        android:text="کلمه عبور خود را فراموش کرده ام"
-                        />
-
-
+                        android:id="@+id/checkboxShowPass"
+                        android:textColor="@color/grayText"/>
                 </LinearLayout>
                 <Button
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="ایجاد حساب کاربری"
-                    android:textColor="@color/VioletBlue"
-                    android:layout_centerHorizontal="true"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginBottom="16dp"
-                    android:id="@+id/btnRegiser"
-                    android:textSize="16.0sp"
-                    android:layout_below="@id/lyOne"
-                    android:background="@color/transparent"/>
-            </RelativeLayout>
-        </RelativeLayout>
+                    android:layout_marginRight="24dp"
+                    android:layout_marginLeft="24dp"
+                    android:background="@drawable/ripple_pink_round"
+                    android:text="ورود"
+                    android:textSize="18sp"
+                    android:id="@+id/btnLogin"
+                    android:layout_marginTop="8dp"
+                    android:layout_gravity="center_horizontal"
+                    android:textColor="@color/white"
+                    />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="24dp"
+                    android:layout_marginLeft="24dp"
+                    android:orientation="horizontal"
+                    android:weightSum="2"
+                    android:layout_marginTop="16dp">
+                    <Button
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="ایجاد حساب"
+                        android:textColor="#B4ADC0"
+                        android:id="@+id/btnRegiser"
+                        android:layout_marginRight="4dp"
+                        android:background="@drawable/ripple_out_line_pink_round"/>
+                    <Button
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="مهمان"
+                        android:id="@+id/btnLoginAsGuess"
+
+                        android:layout_marginLeft="4dp"
+                        android:textColor="#B4ADC0"
+                        android:background="@drawable/ripple_out_line_pink_round"/>
+                </LinearLayout>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginLeft="24dp"
+                    android:id="@+id/forgetPass"
+                    android:textSize="16sp"
+                    android:textColor="@color/grayText"
+                    android:layout_marginRight="24dp"
+                    android:gravity="center_horizontal"
+                    android:text="کلمه عبور را فراموش کرده‌ام"
+                    />
+
+
+            </LinearLayout>
+
+        </LinearLayout>
     </ScrollView>
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,6 +1,6 @@
 package greencode.ir.pillcci.retrofit;
 
-        import android.support.v7.widget.helper.ItemTouchHelper;
+        import androidx.recyclerview.widget.ItemTouchHelper;
 import android.util.Log;
 
 import com.google.gson.JsonObject;
@@ -39,47 +39,9 @@ public class ServerResponse {
                     }
                 }
                 if(response.code()==401) {
-
                     serverListener.onFailure(method.getMethodValue(), serverErrors.Authorized.getErrorName());
-
-
-                  /*  try {
-                        String data=response.errorBody().string();
-                        JSONObject jObjError = null;
-                        try {
-                            jObjError = new JSONObject(data);
-
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-
-                    if (response.body() != null) {
-                        try {
-
-
-                            JsonObject data = (JsonObject) response.body();
-                            if (data != null) {
-                                serverListener.onSuccess(method.getMethodValue(), data);
-                                return;
-                            } else {
-                                serverListener.onFailure(method.getMethodValue(), serverErrors.NullError.getErrorName());
-                                return;
-                            }
-                        } catch (Exception e) {
-                            serverListener.onFailure(method.getMethodValue(), serverErrors.NotJsaonResponse.getErrorName());
-                            return;
-                        }*/
-
-
                     } else
                         serverListener.onFailure(method.getMethodValue(), serverErrors.ServerError.getErrorName());
-
-
             }
 
             public void onFailure(Call<JsonObject> call, Throwable t) {

@@ -1,8 +1,8 @@
 package greencode.ir.pillcci.database;
 
-import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.PrimaryKey;
-import android.support.annotation.NonNull;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+import androidx.annotation.NonNull;
 
 /**
  * Created by alireza on 5/19/18.

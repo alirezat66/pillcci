@@ -8,8 +8,10 @@
     <string name="onboarding_page_one">و مصرف به‌موقع داروهای خودت و عزیزانت رو یادآوری می‌کنه.</string>
     <string name="onboarding_page_two">پیلچی مصرف کردن یا نکردن داروها رو از طریق تلگرام به اونهایی که بخوای خبر میده.</string>
     <string name="onboarding_page_three">پیچلی سابقه کاملی از مصرف داروها رو برات نگه می‌داره.</string>
-    <string name="onboarding_page_four">و مصرف به‌موقع داروهای خودت و عزیزانت رو یادآوری می‌کنه.</string>
-    <string name="color_picker">طلاعات شخصیت همیشه محفوظ میمونه! مقررات و شرایط ما رو بخون و ببین چطور مراقب حریم خصوصیت هستیم.</string>
+    <string name="onboarding_page_four">اطلاعات شخصیت همیشه محفوظ می‌مونه! </string>
+    <string name="onboarding_page_four_tow"> ما رو بخون و ببین چطور مراقب حریم خصوصیت هستیم.</string>
+
+    <string name="color_picker">رنگ یادآورِ این دارو رو انتخاب کن!</string>
     <string name="menu_delete_task">حذف</string>
     <string name="menu_cancel">کنسل</string>
     <string name="use">مصرف شد</string>
@@ -31,7 +33,7 @@
 
 
     <string name="picker_sure">تایید</string>
-    <string name="picker_cancel">لغو</string>
+    <string name="picker_cancel">انصراف</string>
     <string name="picker_title">انتخاب ساعت</string>
 
     <string name="picker_year">سال</string>
@@ -98,6 +100,7 @@
     <string name="mdtp_radial_numbers_typeface" translatable="false">sans-serif</string>
     <!-- DO NOT TRANSLATE -->
     <string name="mdtp_sans_serif" translatable="false">sans-serif</string>
+    <string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>
 
     <!-- DO NOT TRANSLATE -->
     <string name="mdtp_day_of_week_label_typeface" translatable="false">sans-serif</string>
@@ -106,4 +109,30 @@
     <string name="editInfo"></string>
     <string name="masraf">مصرف می‌کنم</string>
     <string name="adammasraf">مصرف نمی‌کنم</string>
+    <string name="msg_token_fmt" translatable="false">InstanceID Token: %s</string>
+
+    <string name="string_with_links"><![CDATA[<p style="text-align:justify">اطلاعات شخصیت همیشه محفوظ می‌مونه! <a href="http://www.google.com">مقررات و شرایط </a>  ما رو بخون و ببین چطور مراقب حریم خصوصیت هستیم.
+     </p>]]></string>
+
+
+
+
+    <string name="color_picker_default_title">Select a Color</string>
+    <!-- Content description for a color square. -->
+    <string name="color_swatch_description">Color <xliff:g example="14" id="color_index">%1$d</xliff:g></string>
+    <!-- Content description for a selected color square. -->
+    <string name="color_swatch_description_selected">Color <xliff:g example="14" id="color_index">%1$d</xliff:g> selected</string>
+
+    <string name="tomato">Tomato</string>
+    <string name="tangerine">Tangerine</string>
+    <string name="banana">Banana</string>
+    <string name="basil">Basil</string>
+    <string name="sage">Sage</string>
+    <string name="peacock">Peacock</string>
+    <string name="blueberry">Blueberry</string>
+    <string name="lavender">Lavender</string>
+    <string name="grape">Grape</string>
+    <string name="flamingo">Flamingo</string>
+    <string name="graphite">Graphite</string>
+    <string name="default_color">Default color</string>
 </resources>

@@ -1,4 +1,4 @@
-<RelativeLayout
+<LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -11,53 +11,101 @@
         android:layout_height="match_parent"
         android:isScrollContainer="true"
         android:fillViewport="true">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        >
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <include layout="@layout/header_login"
-                android:layout_alignParentTop="true"
-                android:layout_height="wrap_content"
-                android:layout_width="match_parent"
-                android:id="@+id/header"/>
+            android:layout_height="215dp"
+            android:background="#DBCEF2"
+            android:id="@+id/ly_one"
+            android:visibility="gone"
+            ></RelativeLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_below="@id/ly_one"
+            android:background="@color/white"
+            ></LinearLayout>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/pill_two"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"/>
+
+
+
+
+    </RelativeLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@id/header">
+                >
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:id="@+id/lyOne"
+
                     >
 
-                    <EditText
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/VioletBlue"
+                        android:gravity="center_vertical"
                         android:layout_marginLeft="24dp"
                         android:layout_marginTop="24dp"
-                        android:selectAllOnFocus="true"
-
                         android:layout_marginRight="24dp"
-                        android:gravity="center_horizontal"
-                        android:maxLength="11"
-                        android:textColorHint="@color/hintColor"
-                        android:textColorLink="@color/VioletBlue"
-                        android:inputType="phone"
-                        android:hint="شماره تلفن همراه"
-                        android:id="@+id/edtUser"
-                        />
+                        >
+                        <com.hbb20.CountryCodePicker
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:ccp_contentColor="@color/black"
+                            app:ccp_textSize="12sp"
+                            android:layoutDirection="rtl"
+                            app:ccp_defaultLanguage="FARSI"
+                            android:id="@+id/cpCodePicker"
+                            app:ccp_showNameCode="true"
+
+                            android:textDirection="rtl"
+
+                            app:ccp_autoFormatNumber="true"
+                            app:ccp_autoDetectCountry="true"
+                            app:ccp_hintExampleNumberType="MOBILE"
+
+                            app:ccp_defaultNameCode="ir"/>
+                        <EditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:backgroundTint="@color/gray"
+                            android:freezesText="true"
+                            android:hint="phone"
+                            android:id="@+id/edtPhone"
+                            android:textSize="14sp"
+                            android:singleLine="true"
+                            android:textColorHint="@color/hintColor"
+                            android:textColorLink="@color/VioletBlue"
+                            android:inputType="numberPassword"
+                            android:textColor="@color/black"
+                            />
+                    </LinearLayout>
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
                         android:layout_marginLeft="24dp"
-                        android:textSize="16sp"
+                        android:textSize="12sp"
                         android:textColor="@color/grayText"
                         android:layout_marginRight="24dp"
                         android:gravity="center_horizontal"
-                        android:text="کد فعالسازی به شماره تلفن همراه شماارسال خواهد شد"
+                        android:text="کد فعال‌سازی به شماره تلفن همراه شما ارسال خواهد شد."
                         />
                     <EditText
                         android:layout_width="match_parent"
@@ -67,9 +115,9 @@
                         android:layout_marginTop="16dp"
                         android:id="@+id/edtCode"
                         android:selectAllOnFocus="true"
-
+                        android:drawableLeft="@drawable/ic_ekhtiari"
                         android:gravity="center_horizontal"
-                        android:textColorHint="@color/hintColor"
+                        android:textColorHint="@color/gray"
                         android:hint="کد معرف"
                         android:maxLength="20"
                         android:layout_marginRight="24dp"
@@ -83,6 +131,7 @@
                         android:layout_marginTop="16dp"
                         android:layout_marginLeft="24dp"
                         android:textSize="16sp"
+                        android:visibility="gone"
                         android:textColor="@color/grayText"
                         android:layout_marginRight="24dp"
                         android:gravity="center_horizontal"
@@ -93,19 +142,32 @@
 
                 </LinearLayout>
                 <Button
-                    android:layout_below="@id/lyOne"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="ایجاد حساب کاربری"
-                    android:textColor="@color/VioletBlue"
+                    android:layout_marginRight="24dp"
+                    android:layout_marginLeft="24dp"
+                    android:text="ایجاد حساب"
+                    android:textColor="@color/white"
                     android:layout_centerHorizontal="true"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginBottom="16dp"
                     android:id="@+id/btnRegiser"
                     android:textSize="16.0sp"
-                    android:gravity="bottom"
-                    android:background="@color/transparent"/>
+                    android:layout_marginTop="16dp"
+                    android:layout_below="@id/lyOne"
+                    android:background="@drawable/ripple_pink_round"/>
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/ripple_out_line_pink_round"
+                    android:layout_below="@id/btnRegiser"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginRight="24dp"
+                    android:layout_marginLeft="24dp"
+                    android:layout_marginBottom="24dp"
+                    android:textSize="16sp"
+
+                    android:id="@+id/btn_back"
+                    android:text="تغییر شماره تلفن همراه"/>
             </RelativeLayout>
-        </RelativeLayout>
+        </LinearLayout>
     </ScrollView>
-</RelativeLayout>
+</LinearLayout>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -11,14 +11,39 @@
         android:layout_height="match_parent"
         android:isScrollContainer="true"
         android:fillViewport="true">
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <include layout="@layout/header_login"
-                android:layout_alignParentTop="true"
-                android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
-                android:id="@+id/header"/>
+                android:layout_height="250dp"
+                >
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="215dp"
+                    android:background="#DBCEF2"
+                    android:id="@+id/ly_one"
+                    android:visibility="gone"
+                    ></RelativeLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:visibility="gone"
+                    android:layout_below="@id/ly_one"
+                    android:background="@color/white"
+                    ></LinearLayout>
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/pill_fifth"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"/>
+
+
+
+
+            </RelativeLayout>
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -51,13 +76,21 @@
 
                         android:inputType="phone"
                         android:enabled="false"
-                        android:maxLength="11"
+                        android:maxLength="20"
                         android:hint="شماره تلفن همراه"
                         android:id="@+id/edtUser"
                         />
 
 
-                    <EditText
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/layoutTextInput"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        app:passwordToggleEnabled="true"
+                        app:passwordToggleDrawable="@drawable/show_password_selector"
+                        android:textColorHint="@color/gray">
+                    <androidx.appcompat.widget.AppCompatEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textColor="@color/VioletBlue"
@@ -73,7 +106,16 @@
                         android:inputType="textPassword"
 
                         />
-                    <EditText
+                    </com.google.android.material.textfield.TextInputLayout>
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/layoutTextInputTwo"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        app:passwordToggleEnabled="true"
+                        app:passwordToggleDrawable="@drawable/show_password_selector"
+                        android:textColorHint="@color/gray">
+                    <androidx.appcompat.widget.AppCompatEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textColor="@color/VioletBlue"
@@ -89,12 +131,15 @@
                         android:inputType="textPassword"
 
                         />
+                    </com.google.android.material.textfield.TextInputLayout>
                     <Button
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingRight="24dp"
+                        android:layout_marginRight="24dp"
+                        android:layout_marginLeft="24dp"
                         android:paddingLeft="24dp"
-                            android:background="@drawable/ripple_blue"
+                            android:background="@drawable/ripple_pink_round"
                         android:text="ثبت کلمه عبور"
                         android:id="@+id/btnSetPass"
                         android:textSize="18.0sp"
@@ -106,40 +151,45 @@
 
 
                 </LinearLayout>
-                <RelativeLayout
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:layout_below="@id/lyOne"
-                    android:layout_alignParentBottom="true">
+                    android:weightSum="10"
+                    android:layout_marginLeft="24dp"
+                    android:layout_marginRight="24dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="16dp"
+                    >
                     <Button
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:text="ایجاد حساب کاربری"
-                        android:layout_alignParentBottom="true"
-                        android:textColor="@color/VioletBlue"
-                        android:layout_marginLeft="16dp"
+                        android:text="ایجاد حساب"
+                        android:layout_weight="5"
+                        android:textColor="@color/gray"
                         android:id="@+id/btnRegiser"
                         android:textSize="16.0sp"
-                        android:layout_marginRight="16dp"
-                        android:layout_alignParentRight="true"
-                        android:background="@color/transparent"/>
+                        android:layout_marginRight="4dp"
+                        android:background="@drawable/ripple_out_line_pink_round"/>
 
                     <Button
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
+                        android:layout_weight="5"
                         android:layout_alignParentBottom="true"
                         android:layout_height="wrap_content"
-                        android:text="ورود به حساب کاربری"
-                        android:textColor="@color/VioletBlue"
+                        android:text="ورود به حساب"
+                        android:textColor="@color/gray"
                         android:layout_centerHorizontal="true"
                         android:layout_alignParentLeft="true"
-                        android:layout_marginLeft="16dp"
+                        android:layout_marginLeft="4dp"
                         android:id="@+id/btnLogin"
                         android:textSize="16.0sp"
-                        android:background="@color/transparent"/>
-                </RelativeLayout>
+                        android:background="@drawable/ripple_out_line_pink_round"
+                        />
+                </LinearLayout>
 
             </RelativeLayout>
-        </RelativeLayout>
+        </LinearLayout>
     </ScrollView>
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -2,8 +2,8 @@ package greencode.ir.pillcci.retrofit;
 
 public class Constants {
     public static String Key = "_bl4ck0ut_2F4162786374546C5677454F4A4E415359";
-    public static String Base_Url = "http://app.pillcci.ir/";
-    public static String URL_API = "http://app.pillcci.ir/";
+    public static String Base_Url = "https://app.pillcci.ir/";
+    public static String URL_API = "https://app.pillcci.ir/";
     //  public static String URL_API = "http://dev.coloan.ir/coloanServerSide/index.php/";
     public static String token = "";
 

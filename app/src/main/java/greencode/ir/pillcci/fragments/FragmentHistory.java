@@ -2,18 +2,20 @@ package greencode.ir.pillcci.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.AppCompatImageView;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.appcompat.widget.AppCompatImageView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.text.Editable;
+import android.text.Html;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -60,13 +62,22 @@ public class FragmentHistory extends Fragment implements HistoryAdapter.UsageInt
     ImageView imgSearch;
     HistoryAdapter adapter;
     FirebaseAnalytics firebaseAnalytics;
+    @BindView(R.id.txt_empty_title)
+    TextView txtEmptyTitle;
+    @BindView(R.id.img)
+    ImageView img;
+    @BindView(R.id.txt_empty_desc)
+    TextView txtEmptyDesc;
+    @BindView(R.id.root_empty)
+    RelativeLayout rootEmpty;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
-    public void filter(String s){
-        if(adapter!=null) {
+    public void filter(String s) {
+        if (adapter != null) {
             List<PillUsage> usages = adapter.getFullPill();
             List<PillUsage> filteredList = new ArrayList<>();
             if (usages != null) {
@@ -81,18 +92,19 @@ public class FragmentHistory extends Fragment implements HistoryAdapter.UsageInt
             }
         }
     }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         try {
             super.onActivityResult(requestCode, resultCode, data);
 
-            if (requestCode == 5817  && resultCode  == RESULT_OK) {
-                int sDay = data.getIntExtra("sDay",0);
-                int sMonth = data.getIntExtra("sMonth",0);
-                int sYear = data.getIntExtra("sYear",0);
-                int fDay = data.getIntExtra("fDay",0);
-                int fMonth = data.getIntExtra("fMonth",0);
-                int fYear = data.getIntExtra("fYear",0);
+            if (requestCode == 5817 && resultCode == RESULT_OK) {
+                int sDay = data.getIntExtra("sDay", 0);
+                int sMonth = data.getIntExtra("sMonth", 0);
+                int sYear = data.getIntExtra("sYear", 0);
+                int fDay = data.getIntExtra("fDay", 0);
+                int fMonth = data.getIntExtra("fMonth", 0);
+                int fYear = data.getIntExtra("fYear", 0);
                 String pillName = data.getStringExtra("pilName");
                 String catName = data.getStringExtra("catName");
 
@@ -102,57 +114,56 @@ public class FragmentHistory extends Fragment implements HistoryAdapter.UsageInt
 
                 PersianDate endDate = new PersianDate();
 
-                boolean hasStart=false;
+                boolean hasStart = false;
                 boolean hasEnd = false;
-                boolean hasName=false;
-                boolean hasCat=false;
-                if(sYear!=0){
+                boolean hasName = false;
+                boolean hasCat = false;
+                if (sYear != 0) {
                     startDate.setShYear(sYear);
                     startDate.setShMonth(sMonth);
                     startDate.setShDay(sDay);
-                    hasStart=true;
+                    hasStart = true;
                 }
-                if(fYear!=0){
+                if (fYear != 0) {
                     endDate.setShYear(fYear);
                     endDate.setShMonth(fMonth);
                     endDate.setShDay(fDay);
-                    hasEnd=true;
+                    hasEnd = true;
                 }
-                if(!pillName.equals("")){
-                    hasName=true;
+                if (!pillName.equals("")) {
+                    hasName = true;
                 }
-                if(!catName.equals(""))
-                {
-                    hasCat=true;
+                if (!catName.equals("")) {
+                    hasCat = true;
                 }
-                if(catName.equals("خودم")){
+                if (catName.equals("خودم")) {
                     catName = "";
                 }
                 ArrayList<PillUsage> temp = new ArrayList<>();
 
-                for(PillUsage usage :adapter.getFullPill()){
+                for (PillUsage usage : adapter.getFullPill()) {
                     boolean isIn = true;
-                    if(hasName){
-                        if(!usage.getPillName().equals(pillName)){
-                            isIn=false;
+                    if (hasName) {
+                        if (!usage.getPillName().equals(pillName)) {
+                            isIn = false;
                         }
                     }
-                    if(hasCat){
-                        if(!usage.getCatNme().equals(catName)){
-                            isIn=false;
+                    if (hasCat) {
+                        if (!usage.getCatNme().equals(catName)) {
+                            isIn = false;
                         }
                     }
-                    if(hasStart){
-                        if(usage.getSetedTime()<startDate.getTime()){
-                            isIn=false;
+                    if (hasStart) {
+                        if (usage.getSetedTime() < startDate.getTime()) {
+                            isIn = false;
                         }
                     }
-                    if(hasEnd){
-                        if(usage.getSetedTime()>endDate.getTime()){
-                            isIn=false;
+                    if (hasEnd) {
+                        if (usage.getSetedTime() > endDate.getTime()) {
+                            isIn = false;
                         }
                     }
-                    if(isIn){
+                    if (isIn) {
                         temp.add(usage);
                     }
                 }
@@ -164,11 +175,13 @@ public class FragmentHistory extends Fragment implements HistoryAdapter.UsageInt
 
             }
         } catch (Exception ex) {
-            Toast.makeText(getContext(), ex.toString(),
-                    Toast.LENGTH_SHORT).show();
+           Toast toast = Toast.makeText(getContext(), ex.toString(),
+                    Toast.LENGTH_SHORT);
+           Utility.centrizeAndShow(toast);
         }
 
     }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -178,9 +191,9 @@ public class FragmentHistory extends Fragment implements HistoryAdapter.UsageInt
         imgSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                isFilter=true;
-               Intent intent = new Intent(getContext(), FilterActivity.class);
-               startActivityForResult(intent,5817);
+                isFilter = true;
+                Intent intent = new Intent(getContext(), FilterActivity.class);
+                startActivityForResult(intent, 5817);
 
             }
         });
@@ -207,11 +220,16 @@ public class FragmentHistory extends Fragment implements HistoryAdapter.UsageInt
     @Override
     public void onResume() {
         super.onResume();
-        if(!isFilter){
+        if (!isFilter) {
             makeList();
-
         }
-        isFilter=false;
+        isFilter = false;
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        edtSearch.setText("");
     }
 
     @Override
@@ -231,13 +249,23 @@ public class FragmentHistory extends Fragment implements HistoryAdapter.UsageInt
         PersianDate persianDate = new PersianDate(System.currentTimeMillis());
         pillUsages = database.pillUsageDao().getHistory(nowDate.getTime());
         list.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-        adapter = new HistoryAdapter(getContext(), pillUsages,this);
+        adapter = new HistoryAdapter(getContext(), pillUsages, this);
         list.setAdapter(adapter);
 
         int position = calculateFirstPosition();
         if (pillUsages.size() > 0) {
             list.scrollToPosition(position);
+            rootEmpty.setVisibility(View.GONE);
+        }else {
+            empty();
         }
+    }
+    public void empty() {
+        rootEmpty.setVisibility(View.VISIBLE);
+        txtEmptyTitle.setText("گزارشی وجود نداره!");
+        String htmlStringWithMathSymbols = "گزارش مصرف داروها اینجا ذخیره میشه!";
+
+        txtEmptyDesc.setText(Html.fromHtml(htmlStringWithMathSymbols));
     }
 
     private int calculateFirstPosition() {
@@ -265,12 +293,13 @@ public class FragmentHistory extends Fragment implements HistoryAdapter.UsageInt
     public void onDestroyView() {
         super.onDestroyView();
     }
+
     @Override
     public void EditAct(final PillUsage item) {
-        if (item.getState() !=0 ) {
+        if (item.getState() != 0) {
             AppDatabase database = AppDatabase.getInMemoryDatabase(getContext());
-            PillObject pillObject = database.pillObjectDao().specialPil(item.getPillName(),item.getCatNme());
-            if(pillObject!=null) {
+            PillObject pillObject = database.pillObjectDao().specialPil(item.getPillName(), item.getCatNme());
+            if (pillObject != null) {
                 Bundle params = new Bundle();
                 params.putString("phoneNumber", Utility.getPhoneNumber(getContext()));
                 firebaseAnalytics.logEvent("history_edit_with_button", params);
@@ -335,8 +364,9 @@ public class FragmentHistory extends Fragment implements HistoryAdapter.UsageInt
                 });
                 dialog.show();
             }
-        }else {
-            Toast.makeText(getContext(), "پیش از مصرف و یا لغو ویرایش امکانپذیر نیست.", Toast.LENGTH_LONG).show();
+        } else {
+            Toast toast = Toast.makeText(getContext(), "پیش از مصرف یا انصراف مصرف دارو، ویرایش وضعیت مصرف ممکن نیست.", Toast.LENGTH_LONG);
+            Utility.centrizeAndShow(toast);
         }
     }
 
@@ -345,7 +375,7 @@ public class FragmentHistory extends Fragment implements HistoryAdapter.UsageInt
         PersianDate persianDate = new PersianDate(System.currentTimeMillis());
         pillUsages = database.pillUsageDao().getHistory(persianDate.getTime());
         list.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-        adapter = new HistoryAdapter(getContext(), pillUsages,this);
+        adapter = new HistoryAdapter(getContext(), pillUsages, this);
         list.setAdapter(adapter);
     }
 }

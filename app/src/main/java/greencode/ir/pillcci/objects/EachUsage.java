@@ -1,6 +1,6 @@
 package greencode.ir.pillcci.objects;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import java.io.Serializable;
 
@@ -31,7 +31,7 @@ public class EachUsage implements Comparable<EachUsage>, Serializable {
         String finalTime="";
         for(String ti:times){
             int tiInt =Integer.parseInt(ti);
-            if(tiInt>10){
+            if(tiInt>=10){
                 finalTime= finalTime+tiInt+"";
             }else {
                 finalTime=finalTime+"0"+tiInt;
@@ -67,7 +67,7 @@ public class EachUsage implements Comparable<EachUsage>, Serializable {
         String[]hoursAndMin = timeStr.split(":");
         int hours = Integer.parseInt( hoursAndMin[0]);
         int min = Integer.parseInt( hoursAndMin[1]);
-         if((hours>=22 && hours<24 )|| (hours>=0 && hours<=5)){
+         if((hours>=20 && hours<24 )|| (hours>=0 && hours<=5)){
              return true;
          }else {
              return false;

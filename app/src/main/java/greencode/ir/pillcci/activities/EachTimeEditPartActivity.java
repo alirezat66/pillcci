@@ -1,10 +1,14 @@
 package greencode.ir.pillcci.activities;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import android.transition.Explode;
+import android.transition.Transition;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -57,13 +61,16 @@ public class EachTimeEditPartActivity extends BaseActivity implements EditEachTi
     String unitUse;
     @BindView(R.id.img_back)
     ImageView imgBack;
-
+    int selectedPosition;
     FirebaseAnalytics firebaseAnalytics;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dialog_each_time_edit_part);
         ButterKnife.bind(this);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            setupWindowAnimations();
+        }
         firebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
         Bundle bundle = getIntent().getExtras();
@@ -75,7 +82,9 @@ public class EachTimeEditPartActivity extends BaseActivity implements EditEachTi
             unitUse = bundle.getString("unitUse");
             eachTimeUsage = bundle.getDouble("eachTimeUsage");
             startTimeDate = bundle.getLong("startTimeDate");
-
+            if(startTimeHour==24){
+                startTimeHour=0;
+            }
             if (startTimeHour < 10) {
                 startStr = "0" + startTimeHour;
             } else {
@@ -99,7 +108,11 @@ public class EachTimeEditPartActivity extends BaseActivity implements EditEachTi
             public void onClick(View v) {
                 Intent intent = getIntent();
                 setResult(RESULT_CANCELED, intent);
-                finish();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    finishAfterTransition();
+                }else {
+                    finish();
+                }
             }
         });
         list = makeAllTimes(count, startTime, startTimeDate, diffrenceOfUsage);
@@ -123,7 +136,8 @@ public class EachTimeEditPartActivity extends BaseActivity implements EditEachTi
                     setResult(RESULT_OK, intent);
                     finish();
                 } else {
-                    Toast.makeText(EachTimeEditPartActivity.this, "میزان مصرف نمی تواند مقدار خالی داشته باشد.", Toast.LENGTH_LONG).show();
+                    Toast toast = Toast.makeText(EachTimeEditPartActivity.this, "میزان مصرف نمی‌تواند مقدار خالی داشته باشد.", Toast.LENGTH_LONG);
+                    Utility.centrizeAndShow(toast);
                 }
             }
         });
@@ -194,23 +208,23 @@ public class EachTimeEditPartActivity extends BaseActivity implements EditEachTi
 
 
     @Override
-    public void selectTime(EachUsage eachUsage) {
+    public void selectTime(EachUsage eachUsage,int position) {
         data = eachUsage;
+        selectedPosition = position;
+        nowPersianDate = new PersianDate(data.getStartDay());
 
-        nowPersianDate = new PersianDate(System.currentTimeMillis());
-
-        String[] times = eachUsage.getTimeStr().split(":");
+        /*String[] times = eachUsage.getTimeStr().split(":");
         int hour = Integer.parseInt(times[0]);
         int min = Integer.parseInt(times[1]);
         nowPersianDate.setHour(hour);
-        nowPersianDate.setMinute(min);
+        nowPersianDate.setMinute(min);*/
 
 
         TimePickerDialog dialog = new TimePickerDialog.Builder()
                 .setHourText("")
                 .setMinuteText("")
                 .setWheelItemTextSize(16)
-                .setCancelStringId("لغو")
+                .setCancelStringId("انصراف")
                 .setThemeColor(R.color.colorPrimary)
                 .setTitleStringId("انتخاب زمان")
                 .setSureStringId("انتخاب")
@@ -224,6 +238,38 @@ public class EachTimeEditPartActivity extends BaseActivity implements EditEachTi
     @Override
     public void onDateSet(TimePickerDialog timePickerView, long millseconds) {
 
+        // agar position bozorgtar 1 bood nabayad az 0 kochiktar bashe va nabayad az 2 bozorgtar bashe
+        // agar position akharin position bood nabayad az ghablish koochiktar bashe
+
+        PersianDate pSelected  = new PersianDate(data.getStartDay());
+        PersianDate pickedTime = new PersianDate(millseconds);
+        pSelected.setHour(pickedTime.getHour());
+        pSelected.setMinute(pickedTime.getMinute());
+        if(adapter.getItemCount()-1 >= selectedPosition+1 ){
+            // badi darim
+
+
+            PersianDate pPrevious = new PersianDate(adapter.getSelectedUsage(selectedPosition+1).getStartDay());
+
+            if(pSelected.getTime()>= adapter.getSelectedUsage(selectedPosition+1).getStartDay()){
+                Toast toast = Toast.makeText(this, "زمان انتخابی باید بین نوبت‌های قبلی و بعدی مصرف باشد.", Toast.LENGTH_LONG);
+                Utility.centrizeAndShow(toast);
+                return;
+            }
+
+        }
+        if(selectedPosition-1>-1){
+            // ghabli darim
+
+            PersianDate pPrevious = new PersianDate(adapter.getSelectedUsage(selectedPosition-1).getStartDay());
+
+            if(pSelected.getTime()<= adapter.getSelectedUsage(selectedPosition-1).getStartDay()){
+                Toast toast =Toast.makeText(this, "زمان انتخابی باید بین نوبت‌های قبلی و بعدی مصرف باشد.", Toast.LENGTH_LONG);
+                Utility.centrizeAndShow(toast);
+                return;
+            }
+        }
+
         Bundle params = new Bundle();
         params.putString("phoneNumber", Utility.getPhoneNumber(this));
         firebaseAnalytics.logEvent("change_time", params);
@@ -232,11 +278,28 @@ public class EachTimeEditPartActivity extends BaseActivity implements EditEachTi
         selectedDate.setHour(selectedHMDate.getHour());
         selectedDate.setMinute(selectedHMDate.getMinute());
         if (selectedDate.getTime() < startTimeDate) {
-            Toast.makeText(this, "زمان انتخاب شده نباید قبل از زمان شروع باشد.", Toast.LENGTH_SHORT).show();
+            Toast toast = Toast.makeText(this, "زمان انتخابی باید بین نوبت‌های قبلی و بعدی مصرف باشد.", Toast.LENGTH_SHORT);
+            Utility.centrizeAndShow(toast);
         } else {
             adapter.updatePilTime(data, selectedDate);
         }
 
+    }
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    private void setupWindowAnimations() {
+        Transition transition;
+
+
+        transition = buildEnterTransition();
+
+        getWindow().setEnterTransition(transition);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    private Transition buildEnterTransition() {
+        Explode enterTransition = new Explode();
+        enterTransition.setDuration(getResources().getInteger(R.integer.anim_duration_long));
+        return enterTransition;
     }
 
 }

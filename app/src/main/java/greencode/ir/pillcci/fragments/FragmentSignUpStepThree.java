@@ -3,8 +3,6 @@ package greencode.ir.pillcci.fragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +11,9 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 import com.nirigo.mobile.view.passcode.PasscodeIndicator;
 import com.nirigo.mobile.view.passcode.PasscodeView;
@@ -26,6 +27,7 @@ import greencode.ir.pillcci.adapter.KeyAdapter;
 import greencode.ir.pillcci.interfaces.ValidationInterface;
 import greencode.ir.pillcci.objects.RegisterRequest;
 import greencode.ir.pillcci.presenters.ValidationPresenter;
+import greencode.ir.pillcci.utils.Utility;
 
 /**
  * Created by alireza on 5/15/18.
@@ -68,6 +70,11 @@ public class FragmentSignUpStepThree extends Fragment implements ValidationInter
         presenter = new ValidationPresenter(this);
 
         request = RegisterActivity.getRequest();
+        String phone = request.getUserName();
+        if(phone.startsWith("00")){
+          phone =  phone.replaceFirst("00","+");
+        }
+        txtUser.setText(phone);
         iosPasscodeAdapter = new KeyAdapter(getContext());
         passcodeView.setAdapter(iosPasscodeAdapter);
         startCountDown();
@@ -174,7 +181,8 @@ public class FragmentSignUpStepThree extends Fragment implements ValidationInter
 
     @Override
     public void onError(String message) {
-        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+        Toast toast = Toast.makeText(getContext(), message, Toast.LENGTH_SHORT);
+        Utility.centrizeAndShow(toast);
     }
 
     public interface onActionStepThree {

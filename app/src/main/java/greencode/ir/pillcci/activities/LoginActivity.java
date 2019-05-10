@@ -3,8 +3,10 @@ package greencode.ir.pillcci.activities;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import android.text.InputType;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -12,7 +14,13 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
+import com.hbb20.CountryCodePicker;
 import com.kaopiz.kprogresshud.KProgressHUD;
 
 import java.util.ArrayList;
@@ -20,7 +28,6 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import de.hdodenhof.circleimageview.CircleImageView;
 import greencode.ir.pillcci.R;
 import greencode.ir.pillcci.controler.AppDatabase;
 import greencode.ir.pillcci.database.PhoneBook;
@@ -33,6 +40,7 @@ import greencode.ir.pillcci.presenters.LoginPresenter;
 import greencode.ir.pillcci.retrofit.reqobject.LoginRequest;
 import greencode.ir.pillcci.utils.BaseActivity;
 import greencode.ir.pillcci.utils.Constants;
+import greencode.ir.pillcci.utils.NumericKeyBoardTransformationMethod;
 import greencode.ir.pillcci.utils.PreferencesData;
 import greencode.ir.pillcci.utils.Utility;
 
@@ -40,19 +48,12 @@ import greencode.ir.pillcci.utils.Utility;
  * Created by alireza on 5/11/18.
  */
 
-public class LoginActivity extends BaseActivity implements LoginInterface{
-    @BindView(R.id.imgLogi)
-    CircleImageView imgLogi;
-    @BindView(R.id.txtPilchi)
-    TextView txtPilchi;
-    @BindView(R.id.txtTitle)
-    TextView txtTitle;
-    @BindView(R.id.txtSubTitle)
-    TextView txtSubTitle;
+public class LoginActivity extends BaseActivity implements LoginInterface {
+
+
     @BindView(R.id.error)
     TextView error;
-    @BindView(R.id.edtUser)
-    EditText edtUser;
+
     @BindView(R.id.edtPass)
     EditText edtPass;
     @BindView(R.id.btnLogin)
@@ -67,6 +68,11 @@ public class LoginActivity extends BaseActivity implements LoginInterface{
     CheckBox showPass;
     KProgressHUD kProgressHUD;
     LoginPresenter presenter;
+    @BindView(R.id.cpCodePicker)
+    CountryCodePicker cpCodePicker;
+    @BindView(R.id.edtPhone)
+    EditText edtPhone;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,19 +81,38 @@ public class LoginActivity extends BaseActivity implements LoginInterface{
         Bundle bundle = getIntent().getExtras();
 
         ButterKnife.bind(this);
-        PreferencesData.saveBool(Constants.PREF_FIRST,true);
+        PreferencesData.saveBool(Constants.PREF_FIRST, true);
+        edtPass.setTypeface(Utility.getRegularTypeFaceWithOutNumber(this));
+        if (bundle != null) {
 
-        if(bundle!=null){
-            edtUser.setText(bundle.getString(Constants.PREF_USER_NAME));
+            cpCodePicker.setCountryForPhoneCode(bundle.getInt(Constants.PREF_USER_CODE));
+            edtPhone.setText(bundle.getString(Constants.PREF_USER_Phone));
         }
+        edtPhone.setTransformationMethod(new NumericKeyBoardTransformationMethod());
+
+        cpCodePicker.registerCarrierNumberEditText(edtPhone);
+        cpCodePicker.setPhoneNumberValidityChangeListener(new CountryCodePicker.PhoneNumberValidityChangeListener() {
+            @Override
+            public void onValidityChanged(boolean isValidNumber) {
+                if(isValidNumber){
+                    edtPhone.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_check_green, 0);
+
+                }else {
+                    edtPhone.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+
+                }
+                // your code
+            }
+        });
+
         forgetPass.setPaintFlags(forgetPass.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-        presenter  = new LoginPresenter(this);
+        presenter = new LoginPresenter(this);
         showPass.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked){
+                if (isChecked) {
                     edtPass.setInputType(InputType.TYPE_CLASS_TEXT);
-                }else {
+                } else {
                     edtPass.setInputType(InputType.TYPE_CLASS_TEXT |
                             InputType.TYPE_TEXT_VARIATION_PASSWORD);
 
@@ -95,41 +120,67 @@ public class LoginActivity extends BaseActivity implements LoginInterface{
             }
         });
 
+
     }
 
-    @OnClick({R.id.btnLogin, R.id.forgetPass, R.id.btnRegiser})
+    @OnClick({R.id.btnLogin, R.id.forgetPass, R.id.btnRegiser, R.id.btnLoginAsGuess})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btnLogin:
                 Utility.hideKeyboard();
-                  LoginRequest req = new LoginRequest(edtUser.getText().toString(),edtPass.getText().toString());
-                presenter.checkValidation(req);
+                if(cpCodePicker.isValidFullNumber()){//){
+                    String phone = cpCodePicker.getFullNumberWithPlus();
+                    phone = phone.replace("+","00");
+                    LoginRequest req = new LoginRequest(phone, edtPass.getText().toString());
+                    presenter.checkValidation(req);
+                }else {
+                    Toast toast = Toast.makeText(this, "شماره تلفن صحیح نیست!", Toast.LENGTH_SHORT);
+                    Utility.centrizeAndShow(toast);
+                }
                 break;
+
             case R.id.forgetPass:
-                Intent forgetIntent = new Intent(this,ForgetPassOneActivity.class);
-                forgetIntent.putExtra(Constants.PREF_USER_NAME,edtUser.getText().toString());
+                Intent forgetIntent = new Intent(this, ForgetPassOneActivity.class);
+                forgetIntent.putExtra(Constants.PREF_CODE, cpCodePicker.getSelectedCountryCodeAsInt());
+                forgetIntent.putExtra(Constants.PREF_USER_Phone, edtPhone.getText().toString());
                 startActivity(forgetIntent);
                 finish();
                 break;
             case R.id.btnRegiser:
-                Intent intent = new Intent(this,RegisterActivity.class);
-                intent.putExtra(Constants.PREF_USER_NAME,edtUser.getText().toString());
+                Intent intent = new Intent(this, RegisterActivity.class);
+                intent.putExtra(Constants.PREF_CODE, cpCodePicker.getSelectedCountryCodeAsInt());
+                intent.putExtra(Constants.PREF_USER_Phone, edtPhone.getText().toString());
                 startActivity(intent);
                 finish();
                 break;
+            case R.id.btnLoginAsGuess:
+                PreferencesData.saveBool(Constants.PREF_Guess, true);
+                Intent mainIntent = new Intent(this, MainActivity.class);
+                startActivity(mainIntent);
+                finish();
         }
     }
-    public void showError(String str){
-        error.setVisibility(View.VISIBLE);
-        error.setText(str);
+
+    public void showError(String str) {
+        if(kProgressHUD!=null) {
+            if (kProgressHUD.isShowing()) {
+                kProgressHUD.dismiss();
+            }
+        }
+        Toast toast = Toast.makeText(this, str, Toast.LENGTH_LONG);
+        Utility.centrizeAndShow(toast);
+        /*error.setVisibility(View.VISIBLE);
+        error.setText(str);*/
     }
-    public void hiddenError(){
+
+    public void hiddenError() {
         error.setVisibility(View.INVISIBLE);
     }
+
     @Override
     public void onErrorLogin(String error) {
         disMissWaiting();
-        showError("نام کاربری یا کلمه عبور وارد شده صحیح نیست");
+        showError(error);
 
     }
 
@@ -139,12 +190,44 @@ public class LoginActivity extends BaseActivity implements LoginInterface{
 
         disMissWaiting();
         hiddenError();
-        PreferencesData.saveBool(Constants.PREF_LOGIN,true);
-        Profile profile = resp.getProfile(); //new Profile(edtUser.getText().toString(),"","",0,0,"","","","","","");
+        PreferencesData.saveBool(Constants.PREF_LOGIN, true);
+        final Profile profile = resp.getProfile(); //new Profile(edtUser.getText().toString(),"","",0,0,"","","","","","");
         AppDatabase database = AppDatabase.getInMemoryDatabase(this);
         database.profileDao().insertProfile(profile);
         showWaitingLoad();
-        presenter.getDrugs(profile.getMyId());
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                        if (!task.isSuccessful()) {
+                            Log.w("hilevel", "getInstanceId failed", task.getException());
+
+                            if(kProgressHUD.isShowing()) {
+                                kProgressHUD.dismiss();
+                                showError("اشکال در دسترسی به شبکه. لطفا دوباره تلاش کن!");
+                            }
+
+                            return;
+                        }
+                        // Get new Instance ID token
+                        String token = task.getResult().getToken();
+                        PreferencesData.saveString(Constants.Pref_Token,token);
+                        // Log and toast
+                        String msg = getString(R.string.msg_token_fmt, token);
+                        PreferencesData.saveBool(Constants.PREF_Guess, false);
+                        AppDatabase database = AppDatabase.getInMemoryDatabase(LoginActivity.this);
+                        String userId = database.profileDao().getMyProfile().getMyId();
+                        presenter.updateToken(userId,token);
+
+                        Log.d("hilevel", msg);
+                    }
+                });
+
+
+
+
+
+
 
 
 
@@ -175,43 +258,62 @@ public class LoginActivity extends BaseActivity implements LoginInterface{
 
     @Override
     public void onNumberWrong() {
-        showError("نام کاربری ۱۱ کارکتر می باشد.");
+        showError("نام کاربری ۱۱ کارکتر است.");
     }
 
     @Override
-    public void onDrugReady(ArrayList<PillObject> posts, ArrayList<PillUsage>usages, ArrayList<PhoneBook>books) {
+    public void onDrugReady(ArrayList<PillObject> posts, ArrayList<PillUsage> usages, ArrayList<PhoneBook> books) {
         AppDatabase database = AppDatabase.getInMemoryDatabase(this);
-        for(PillObject object : posts){
+        for (PillObject object : posts) {
             object.setSync(1);
             database.pillObjectDao().insertPill(object);
 
         }
 
-        for(PillUsage usage : usages){
+        for (PillUsage usage : usages) {
             usage.setIsSync(1);
             database.pillUsageDao().insertPill(usage);
         }
-        for(PhoneBook book :books){
+        for (PhoneBook book : books) {
             book.setState(1);
             database.phoneBookDao().insertPhone(book);
         }
         disMissWaiting();
 
         Utility.reCalculateManager(this);
-        Intent intent = new Intent(this,MainActivity.class);
+        PreferencesData.saveLong(Constants.Pref_Last_Update,System.currentTimeMillis());
+        Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
         finish();
     }
 
     @Override
     public void onEmptyDrug() {
-        Intent intent = new Intent(this,MainActivity.class);
+        PreferencesData.saveLong(Constants.Pref_Last_Update,System.currentTimeMillis());
+        Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
+
         finish();
     }
 
-    public void showWaiting(){
-        kProgressHUD=  KProgressHUD.create(this)
+    @Override
+    public void onUpdateToken() {
+        PreferencesData.saveBool("tokenSeted",true);
+        AppDatabase database = AppDatabase.getInMemoryDatabase(LoginActivity.this);
+        String userId = database.profileDao().getMyProfile().getMyId();
+        presenter.getDrugs(userId);
+    }
+
+    @Override
+    public void onUpdateInvalidToken() {
+        PreferencesData.saveBool("tokenSeted",false);
+        AppDatabase database = AppDatabase.getInMemoryDatabase(LoginActivity.this);
+        String userId = database.profileDao().getMyProfile().getMyId();
+        presenter.getDrugs(userId);
+    }
+
+    public void showWaiting() {
+        kProgressHUD = KProgressHUD.create(this)
                 .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
                 .setLabel("لطفا منتظر بمانید")
                 .setDetailsLabel("در حال بررسی صلاحیت ورود")
@@ -221,8 +323,9 @@ public class LoginActivity extends BaseActivity implements LoginInterface{
                 .setBackgroundColor(getResources().getColor(R.color.colorPrimary))
                 .show();
     }
-    public void showWaitingLoad(){
-        kProgressHUD=  KProgressHUD.create(this)
+
+    public void showWaitingLoad() {
+        kProgressHUD = KProgressHUD.create(this)
                 .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
                 .setLabel("لطفا منتظر بمانید")
                 .setDetailsLabel("درحال همگام سازی سوابق ...")
@@ -232,8 +335,9 @@ public class LoginActivity extends BaseActivity implements LoginInterface{
                 .setBackgroundColor(getResources().getColor(R.color.colorPrimary))
                 .show();
     }
-    public void disMissWaiting(){
-        if(kProgressHUD!=null){
+
+    public void disMissWaiting() {
+        if (kProgressHUD != null) {
             kProgressHUD.dismiss();
         }
     }

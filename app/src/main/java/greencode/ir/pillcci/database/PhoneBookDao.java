@@ -1,14 +1,14 @@
 package greencode.ir.pillcci.database;
 
 
-import android.arch.persistence.room.Dao;
-import android.arch.persistence.room.Insert;
-import android.arch.persistence.room.Query;
-import android.arch.persistence.room.Update;
+import androidx.room.Dao;
+import androidx.room.Insert;
+import androidx.room.Query;
+import androidx.room.Update;
 
 import java.util.List;
 
-import static android.arch.persistence.room.OnConflictStrategy.REPLACE;
+import static androidx.room.OnConflictStrategy.REPLACE;
 
 @Dao
 public interface PhoneBookDao {
@@ -30,6 +30,9 @@ public interface PhoneBookDao {
 
     @Query("DELETE FROM phoneBook")
     public void nukeTable();
+
+    @Query("DELETE FROM phoneBook WHERE  id = :id")
+    void deletePhone(long id);
     @Update
     void update(PhoneBook phoneBook);
 

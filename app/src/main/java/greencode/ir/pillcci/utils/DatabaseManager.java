@@ -18,13 +18,26 @@ import saman.zamani.persiandate.PersianDate;
 
 public class DatabaseManager {
     public static List<PillUsage> getAllExpendedPillUsage(Context context){
+
         AppDatabase database = AppDatabase.getInMemoryDatabase(context);
-        List<PillUsage>pillUsages = database.pillUsageDao().getAllExpendedPillUsage(System.currentTimeMillis());
+        int snoozCount = Utility.getRemindCount();
+        int snoozDistance = Utility.getDistance();
+        long exteraTime = (snoozCount) * snoozDistance * 60 * 1000   ;
+        exteraTime += 60000;// yek daghighe ham behesh ezafe mikonim chizi la dasto pa leh nashe
+        /// timi ke kolan  baraye snooz tool mikeshe + 1 daghighe baraye khataye ehtemali
+        PersianDate date = new PersianDate(System.currentTimeMillis());
+        date.setSecond(0);
+        List<PillUsage>pillUsages = database.pillUsageDao().getAllExpendedPillUsage(date.getTime(),exteraTime);
         return pillUsages;
     }
     public static void updateToExpendedMode(Context context,List<PillUsage>pillUsages){
         AppDatabase database = AppDatabase.getInMemoryDatabase(context);
         for(PillUsage pillUsage:pillUsages){
+            Utility.appendLog("داروی مربوط به  " + pillUsage.getPillName()+" برای تاریخ " +
+                    PersianCalculater.getYearMonthAndDay(pillUsage.getSetedTime()) +" ساعت "
+                    + PersianCalculater.getHourseAndMin(pillUsage.getSetedTime())+" که قرار بود در ساعت "
+                    + PersianCalculater.getHourseAndMin(pillUsage.getUsageTime()) +" زنگ بخورد"
+                    + " در روز و ساعت " +PersianCalculater.getYearMonthAndDay(new PersianDate(System.currentTimeMillis()).getTime())+ PersianCalculater.getHourseAndMin(new PersianDate(System.currentTimeMillis()).getTime())+" به دلیل تاخیر باطل شد.") ;
             pillUsage.setState(3);
             pillUsage.setIsSync(0);
             database.pillUsageDao().update(pillUsage);

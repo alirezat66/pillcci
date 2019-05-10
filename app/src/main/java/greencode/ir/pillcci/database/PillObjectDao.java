@@ -1,21 +1,23 @@
 package greencode.ir.pillcci.database;
 
 
-import android.arch.persistence.room.Dao;
-import android.arch.persistence.room.Insert;
-import android.arch.persistence.room.Query;
-import android.arch.persistence.room.Update;
+import androidx.room.Dao;
+import androidx.room.Insert;
+import androidx.room.Query;
+import androidx.room.Update;
 
 import java.util.List;
 
-import static android.arch.persistence.room.OnConflictStrategy.REPLACE;
+import static androidx.room.OnConflictStrategy.REPLACE;
 
 @Dao
 public interface PillObjectDao {
 
-    @Query("select * from  pil where state<>3")
+    @Query("select * from  pil where state<>3 order by midname ")
     List<PillObject> getAllPill();
-    @Query("select * from  pil where isSync = 0 and state<> 3")
+    @Query("select * from  pil where state<>3 order by midname ")
+    List<PillObject> getAllPillBySort();
+    @Query("select * from  pil where isSync = 0 and state<> 3 order by midname desc")
     List<PillObject> getAllUnSyncPill();
 
 
@@ -24,9 +26,9 @@ public interface PillObjectDao {
 
     @Query("select midname from pil where state <>3")
     List<String> getAllPillNames();
-    @Query("select distinct midname from pil")
+    @Query("select distinct midname from pil where state<>3 order by midname")
     List<String> getAllDistinctPillNames();
-    @Query("select distinct catName from pil ")
+    @Query("select distinct catName from pil where state<>3 order by catName")
     List<String> getAllDistinctPillCatNames();
     @Query("select distinct drName from pil ")
     List<String> getAllDrNames();

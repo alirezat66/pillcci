@@ -1,24 +1,29 @@
 package greencode.ir.pillcci.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.TextView;
+
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
+import com.hbb20.CountryCodePicker;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import de.hdodenhof.circleimageview.CircleImageView;
 import greencode.ir.pillcci.R;
+import greencode.ir.pillcci.activities.LoginActivity;
 import greencode.ir.pillcci.activities.RegisterActivity;
 import greencode.ir.pillcci.objects.RegisterRequest;
+import greencode.ir.pillcci.utils.Constants;
+import greencode.ir.pillcci.utils.NumericKeyBoardTransformationMethod;
 import greencode.ir.pillcci.utils.Utility;
 
 /**
@@ -28,17 +33,7 @@ import greencode.ir.pillcci.utils.Utility;
 public class FragmentSignUpStepOne extends Fragment {
     onActionStepOne onAction;
 
-    @BindView(R.id.imgLogi)
-    CircleImageView imgLogi;
-    @BindView(R.id.txtPilchi)
-    TextView txtPilchi;
-    @BindView(R.id.txtTitle)
-    TextView txtTitle;
-    @BindView(R.id.txtSubTitle)
-    TextView txtSubTitle;
 
-    @BindView(R.id.edtUser)
-    EditText edtUser;
     @BindView(R.id.edtCode)
     EditText edtCode;
     @BindView(R.id.lyOne)
@@ -48,6 +43,12 @@ public class FragmentSignUpStepOne extends Fragment {
 
 
     RegisterRequest request;
+    @BindView(R.id.cpCodePicker)
+    CountryCodePicker cpCodePicker;
+    @BindView(R.id.edtPhone)
+    EditText edtPhone;
+    @BindView(R.id.btn_back)
+    Button btnBack;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -60,12 +61,39 @@ public class FragmentSignUpStepOne extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_sign_up_one, container, false);
         ButterKnife.bind(this, view);
-        txtTitle.setText("ایجاد حساب کاربری");
-        txtSubTitle.setText("ایحاد حساب کاربری رایگان است.");
+
         request = RegisterActivity.getRequest();
-        edtUser.requestFocus();
-        edtUser.setText(request.getUserName()==null?"":request.getUserName());
-        edtCode.setText(request.getMoarefCode()==null?"":request.getMoarefCode());
+        edtPhone.setTransformationMethod(new NumericKeyBoardTransformationMethod());
+
+        cpCodePicker.registerCarrierNumberEditText(edtPhone);
+        cpCodePicker.setPhoneNumberValidityChangeListener(new CountryCodePicker.PhoneNumberValidityChangeListener() {
+            @Override
+            public void onValidityChanged(boolean isValidNumber) {
+                if (isValidNumber) {
+                    edtPhone.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_check_green, 0);
+
+                } else {
+                    edtPhone.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+
+                }
+                // your code
+            }
+        });
+        // cpCodePicker.setcountry(request.getCodePhone());
+        cpCodePicker.setFullNumber(request.getCodePhone() + request.getPhone());
+        edtPhone.setText(request.getPhone());
+        edtCode.setText(request.getMoarefCode() == null ? "" : request.getMoarefCode());
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(),LoginActivity.class);
+
+                intent.putExtra(Constants.PREF_CODE, cpCodePicker.getSelectedCountryCodeAsInt());
+                intent.putExtra(Constants.PREF_USER_Phone, edtPhone.getText().toString());
+                startActivity(intent);
+                getActivity().finish();
+            }
+        });
         return view;
     }
 
@@ -73,7 +101,7 @@ public class FragmentSignUpStepOne extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        onAction = (FragmentSignUpStepOne.onActionStepOne) context;
+        onAction = (onActionStepOne) context;
 
     }
 
@@ -81,12 +109,27 @@ public class FragmentSignUpStepOne extends Fragment {
     @OnClick(R.id.btnRegiser)
     public void onClick() {
         Utility.hideKeyboard();
-        request.setUserName(edtUser.getText().toString());
+        String phone = cpCodePicker.getFullNumberWithPlus();
+        phone = phone.replace("+", "00");
+        request.setUserName(phone);
         request.setMoarefCode(edtCode.getText().toString());
-        onAction.onRegisterButton(request);
+        if (cpCodePicker.isValidFullNumber()) {
+            onAction.onRegisterButton(request);
+        } else {
+
+        }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
     }
 
     public interface onActionStepOne {
         public void onRegisterButton(RegisterRequest request);
+
+        public void onInvide();
+
+        public void onEmpty();
     }
 }

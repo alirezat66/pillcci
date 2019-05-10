@@ -3,8 +3,8 @@ package greencode.ir.pillcci.adapter;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.support.v7.widget.CardView;
-import android.support.v7.widget.RecyclerView;
+import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.RecyclerView;
 import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -108,7 +108,7 @@ public class PillAdapter extends RecyclerView.Adapter<PillAdapter.ViewHolder>  {
         if (data.getCatName().equals("")){
             holder.txtUseTime.setVisibility(View.GONE);
         }
-        holder.txtUseTime.setText("مصرف کننده : "+data.getCatName());
+        holder.txtUseTime.setText("مصرف کننده: "+data.getCatName());
         holder.txtUseTime.setTextColor(data.getCatColer());
         holder.catColor.setCardBackgroundColor(data.getCatColer());
         if (!data.getImg().equals("")) {

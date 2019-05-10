@@ -2,8 +2,8 @@ package greencode.ir.pillcci.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.constraint.ConstraintLayout;
+import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,7 +16,6 @@ import com.kaopiz.kprogresshud.KProgressHUD;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import de.hdodenhof.circleimageview.CircleImageView;
 import greencode.ir.pillcci.R;
 import greencode.ir.pillcci.objects.RegisterRequest;
 import greencode.ir.pillcci.presenters.SetPassPresenter;
@@ -34,11 +33,9 @@ public class SetPassActivity extends BaseActivity implements NetworkStateReceive
 
     @BindView(R.id.netError)
     TextView netError;
-    @BindView(R.id.imgLogi)
-    CircleImageView imgLogi;
-    @BindView(R.id.txtPilchi)
+
     TextView txtPilchi;
-    @BindView(R.id.txtTitle)
+    @BindView(R.id.title)
     TextView txtTitle;
     @BindView(R.id.txtSubTitle)
     TextView txtSubTitle;
@@ -97,7 +94,8 @@ public class SetPassActivity extends BaseActivity implements NetworkStateReceive
 
                     presenter.checkValidation(new RegisterRequest(edtUser.getText().toString(), edtPass.getText().toString(), edtPassRetry.getText().toString(), moarefCode));
                 } else {
-                    Toast.makeText(this, "لطفا دسترسی خود به اینترنت را چک کنید.", Toast.LENGTH_LONG).show();
+                    Toast toast = Toast.makeText(this, "لطفا دسترسی خود به اینترنت را چک کنید.", Toast.LENGTH_LONG);
+                    Utility.centrizeAndShow(toast);
                 }
                 break;
             case R.id.btnChangePhone:

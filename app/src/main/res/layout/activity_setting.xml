@@ -19,7 +19,7 @@
 
                 <TextView
                     style="@style/BigBlue"
-                    android:text="تنظیمات یادآوری"
+                    android:text="پیش فرض‌های هشدار"
                     android:textSize="24sp"
                     android:layout_gravity="right"
                     android:layout_marginRight="16dp"
@@ -27,22 +27,48 @@
                     android:layoutDirection="rtl"
                  />
 
-                <TextView
-                    style="@style/BigBlue"
-                    android:text="پیش فرض های هشدار"
-                    android:layout_gravity="right"
-                    android:layout_marginRight="16dp"
-                    android:layout_marginTop="16dp"
-                    android:textSize="20sp"
-                    android:layoutDirection="rtl"
-                    />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="16dp"
+                    android:weightSum="10">
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="0dp"
+                        android:layout_weight="10"
+                        android:paddingRight="16dp"
+                        android:paddingLeft="16dp"
+                        android:theme="@style/MyEditText"
+                        android:layout_height="wrap_content">
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="صدای هشدار"
+                            android:maxLines="1"
+
+                            android:id="@+id/edtRing"
+                            android:layoutDirection="rtl"
+                            android:inputType="text"
+                            android:focusable="false"
+                            android:textColor="@color/grayText"
+                            />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0"></LinearLayout>
+
+
+                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:weightSum="10"
-                    android:layout_margin="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginLeft="16dp"
                     android:layoutDirection="rtl">
                     <LinearLayout
                         android:layout_width="0dp"
@@ -85,6 +111,33 @@
                     </LinearLayout>
 
                 </LinearLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+
+                    >
+                    <ImageView
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="16dp"
+                        android:id="@+id/lamp"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/creative"/>
+                    <com.codesgood.views.JustifiedTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="12sp"
+                        android:layout_toLeftOf="@id/lamp"
+                        android:layout_marginRight="8dp"
+                        android:layout_marginLeft="16dp"
+                        android:textColor="@color/colorAccent"
+                        android:text="اگر بعد از ثبت داروها می‌خوای تنظیماتی مثل صدای زنگ رو به طور مجزا برای هر دارو تغییر بدی، به سبد دارو مراجعه کن و از اونجا دارو رو ویرایش کن!"
+
+                        />
+                </RelativeLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
@@ -102,15 +155,15 @@
                     android:weightSum="10"
                     android:layoutDirection="rtl"
                     android:layout_marginTop="20dp">
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:theme="@style/MyEditText"
                         android:layout_weight="5">
-                        <android.support.design.widget.TextInputEditText
+                        <com.google.android.material.textfield.TextInputEditText
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:hint="دفعات اعلان یادآوری"
+                            android:hint="دفعات یادآوری"
                             android:maxLines="1"
                             android:ems="10"
                             android:selectAllOnFocus="true"
@@ -122,16 +175,16 @@
                             android:maxLength="1"
                             android:textColor="@color/grayText"
                             />
-                    </android.support.design.widget.TextInputLayout>
-                    <android.support.design.widget.TextInputLayout
+                    </com.google.android.material.textfield.TextInputLayout>
+                    <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:theme="@style/MyEditText"
                         android:layout_weight="5">
-                        <android.support.design.widget.TextInputEditText
+                        <com.google.android.material.textfield.TextInputEditText
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:hint="مکث بین اعلان ها(دقیقه)"
+                            android:hint="مکث بین یادآوری‌ها (دقیقه)"
                             android:maxLines="1"
                             android:ems="10"
 
@@ -144,7 +197,7 @@
                             android:maxLength="2"
                             android:textColor="@color/grayText"
                             />
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
                 </LinearLayout>
                 <TextView

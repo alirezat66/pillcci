@@ -64,4 +64,16 @@ public class LoginPresenter {
     public void GetDrugsError() {
         myInterface.onEmptyDrug();
     }
+
+    public void onTokenInvalidUpdate() {
+        myInterface.onUpdateInvalidToken();
+    }
+
+    public void onTokenUpdated() {
+        myInterface.onUpdateToken();
+    }
+
+    public void updateToken(String userId, String token) {
+        model.updateToken(userId,token);
+    }
 }

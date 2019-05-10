@@ -3,14 +3,14 @@ package greencode.ir.pillcci.activities;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.AppCompatImageView;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatImageView;
 
 import com.alirezaafkar.sundatepicker.DatePicker;
 import com.alirezaafkar.sundatepicker.interfaces.DateSetListener;
@@ -37,10 +37,9 @@ import saman.zamani.persiandate.PersianDate;
 public class FilterActivity extends BaseActivity implements DateSetListener{
     @BindView(R.id.img_back)
     AppCompatImageView imgBack;
-    @BindView(R.id.txtTitle)
+    @BindView(R.id.title)
     TextView txtTitle;
-    @BindView(R.id.toolBar)
-    Toolbar toolBar;
+
     @BindView(R.id.pill_spinner)
     AwesomeSpinner pillSpinner;
     @BindView(R.id.cat_spinner)
@@ -81,12 +80,26 @@ public class FilterActivity extends BaseActivity implements DateSetListener{
         midName = DatabaseManager.getAllMidNames(this);
 
         catNames = DatabaseManager.getAllCatNames(this);
+
         for(int i = 0 ; i <catNames.size(); i++){
             if(catNames.get(i).equals("")){
                 catNames.set(i,"خودم");
                 break;
             }
         }
+
+        int countKhodam = 0;
+        int lastPosKhodam = -1;
+        for(int i = 0; i<catNames.size();i++){
+            if(catNames.get(i).equals("خودم")){
+                countKhodam++;
+                lastPosKhodam = i;
+            }
+        }
+        if(countKhodam==2){
+            catNames.remove(lastPosKhodam);
+        }
+
         pilAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, midName);
         catAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, catNames);
         txtTitle.setText("فیلتر کردن گزارش");
@@ -122,9 +135,8 @@ public class FilterActivity extends BaseActivity implements DateSetListener{
                 new DatePicker.Builder()
                         .id(1)
 
-                        .minYear(date.getShYear())
-                        .maxYear(date.getShYear())
-                        .maxMonth(date.getShMonth())
+                        .minDate(date.getShYear(),1,1)
+                        .maxDate(date.getShYear(),date.getShMonth(),30)
                         .showYearFirst(false)
                         .closeYearAutomatically(true)
                         .theme(R.style.DialogTheme)
@@ -140,10 +152,8 @@ public class FilterActivity extends BaseActivity implements DateSetListener{
                  date = new PersianDate(System.currentTimeMillis());
                 new DatePicker.Builder()
                         .id(2)
-
-                        .minYear(date.getShYear())
-                        .maxYear(date.getShYear())
-                        .maxMonth(date.getShMonth())
+                        .minDate(date.getShYear(),1,1)
+                        .maxDate(date.getShYear(),date.getShMonth(),30)
                         .showYearFirst(false)
                         .closeYearAutomatically(true)
                         .theme(R.style.DialogTheme)

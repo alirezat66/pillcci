@@ -18,13 +18,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:layout_marginRight="32dp"
-                android:layout_marginLeft="32dp"
                 android:id="@+id/root"
 
                 android:orientation="vertical">
 
-                <android.support.v7.widget.AppCompatCheckBox
+                <androidx.appcompat.widget.AppCompatCheckBox
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
@@ -32,7 +30,7 @@
                     android:layoutDirection="rtl"
                     android:textSize="18sp"
                     android:text="شنبه"/>
-                <android.support.v7.widget.AppCompatCheckBox
+                <androidx.appcompat.widget.AppCompatCheckBox
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
@@ -40,7 +38,7 @@
                     android:layoutDirection="rtl"
                     android:textSize="18sp"
                     android:text="یک‌شنبه"/>
-                <android.support.v7.widget.AppCompatCheckBox
+                <androidx.appcompat.widget.AppCompatCheckBox
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
@@ -48,7 +46,7 @@
                     android:layoutDirection="rtl"
                     android:textSize="18sp"
                     android:text="دوشنبه"/>
-                <android.support.v7.widget.AppCompatCheckBox
+                <androidx.appcompat.widget.AppCompatCheckBox
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
@@ -56,7 +54,7 @@
                     android:layoutDirection="rtl"
                     android:textSize="18sp"
                     android:text="سه‌شنبه"/>
-                <android.support.v7.widget.AppCompatCheckBox
+                <androidx.appcompat.widget.AppCompatCheckBox
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
@@ -64,7 +62,7 @@
                     android:layoutDirection="rtl"
                     android:textSize="18sp"
                     android:text="چهارشنبه"/>
-                <android.support.v7.widget.AppCompatCheckBox
+                <androidx.appcompat.widget.AppCompatCheckBox
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
@@ -72,7 +70,7 @@
                     android:layoutDirection="rtl"
                     android:textSize="18sp"
                     android:text="پنج‌شنبه"/>
-                <android.support.v7.widget.AppCompatCheckBox
+                <androidx.appcompat.widget.AppCompatCheckBox
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
@@ -99,7 +97,7 @@
                             android:layout_marginRight="8dp"
                             android:textColor="@color/white"
                             android:id="@+id/btnCancle"
-                            android:text="لغو"
+                            android:text="انصراف"
                             />
                         <Button
                             android:layout_width="wrap_content"

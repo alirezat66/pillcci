@@ -1,42 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary"
+    android:background="@color/white"
+    android:orientation="vertical"
   >
 
     <ImageView
-        android:layout_width="210dp"
-        android:layout_height="210dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="32dp"
         android:id="@+id/img"
-        android:background="@drawable/oval_white"/>
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/group_8"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/img"
         android:text="@string/onboarding_page_title_three"
         android:id="@+id/title"
+        android:layout_gravity="center_horizontal"
         android:gravity="center"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
-        android:textSize="28sp"
-        android:textColor="@color/white" />
+        android:textSize="22sp"
+        android:textColor="#656565" />
     <TextView
         android:layout_width="match_parent"
         android:layout_marginRight="16dp"
         android:layout_marginLeft="16dp"
+        android:layout_gravity="center_horizontal"
         android:gravity="center"
         android:layout_height="wrap_content"
         android:layout_below="@id/title"
+        android:id="@+id/txt_text"
         android:text="@string/onboarding_page_three"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="18dp"
-
+        android:layout_marginTop="8dp"
         android:textSize="18sp"
-        android:textColor="@color/white" />
+        android:textColor="#656565" />
 
 
-</RelativeLayout>
+</LinearLayout>

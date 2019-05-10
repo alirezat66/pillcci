@@ -19,48 +19,54 @@ public class CallerService {
     // 1- ok
     public static void signUp( ServerListener sl, SignUpRequest req) {
 
+        Log.d("request","signUp:"+req.toJson().toString());
         new ServerResponse().setCall(MyMethods.SignUp, ((reqInterface) ApiClient.getClient().create(reqInterface.class)).signUp(req.getUsername(), req.getReferrer()), sl);
     }
-
     public static void setPass(RegisterRequest req,ServerListener sl) {
+        Log.d("request","set pass:"+req.toJson().toString());
+
         new ServerResponse().setCall(MyMethods.SetPass,((reqInterface) ApiClient.getClient().create(reqInterface.class)).setPass(req.getUserName(), req.getPass()), sl);
     }
-
     public static void reSend(SignUpRequest req,ServerListener sl) {
         new ServerResponse().setCall(MyMethods.ResendSMS, ((reqInterface) ApiClient.getClient().create(reqInterface.class)).signUp(req.getUsername(), req.getReferrer()), sl);
-
     }
     public static void login(LoginRequest req, ServerListener sl) {
-        new ServerResponse().setCall(MyMethods.Login, ((reqInterface) ApiClient.getClient().create(reqInterface.class)).login(req.getUsername(), req.getPassword()), sl);
-
+        new ServerResponse().setCall(MyMethods.Login, ((reqInterface) ApiClient.getClient().create(reqInterface.class)).
+                login(req.getUsername(), req.getPassword()), sl);
     }
-
     public static void forgetPassStepOne(ChangePassStepOneReq req,ServerListener sl) {
-        new ServerResponse().setCall(MyMethods.ForgetPassStepOne, ((reqInterface) ApiClient.getClient().create(reqInterface.class)).forgetPassStepOne(req.getUserName()), sl);
 
+        String phone = req.getUserName();
+        if(phone.startsWith("+")){
+            phone = phone.replace("+","00");
+        }
+        new ServerResponse().setCall(MyMethods.ForgetPassStepOne,
+                ((reqInterface) ApiClient.getClient().create(reqInterface.class)).
+                        forgetPassStepOne(phone), sl);
     }
-
     public static void forgetPassStepTwo(ChangePassStepTwoReq req,ServerListener sl) {
-        new ServerResponse().setCall(MyMethods.ForgetPassStepTwo, ((reqInterface) ApiClient.getClient().create(reqInterface.class)).forgetPassStepTwo(req.getUserName(),req.getCode()), sl);
-
+        new ServerResponse().setCall(MyMethods.ForgetPassStepTwo,
+                ((reqInterface) ApiClient.getClient().create(reqInterface.class)).
+                        forgetPassStepTwo(req.getUserName(),req.getCode()), sl);
     }
-
     public static void forgetPassStepThree(ChangePassReq req, ServerListener sl) {
-        new ServerResponse().setCall(MyMethods.ForgetPassStepThree, ((reqInterface) ApiClient.getClient().create(reqInterface.class)).forgetPassStepThree(req.getPass(),req.getUser_id()), sl);
-
+        new ServerResponse().setCall(MyMethods.ForgetPassStepThree,
+                ((reqInterface) ApiClient.getClient().create(reqInterface.class)).
+                        forgetPassStepThree(req.getPass(),req.getUser_id()), sl);
     }
     public static void setProfile(Profile req , ServerListener sl){
-        new ServerResponse().setCall(MyMethods.SetProfile, ((reqInterface) ApiClient.getClient().create(reqInterface.class)).setProfile(req.getPhone(),req.getAge(),req.getWeight(),req.getHeight(),req.getSex()+"",req.getBlood()+"",req.getfName(),req.getlName(),req.getBirthDay(),req.getSickness(),req.getAlergy(),req.getImg()), sl);
-
+        new ServerResponse().setCall(MyMethods.SetProfile,
+                ((reqInterface) ApiClient.getClient().create(reqInterface.class)).
+                        setProfile(req.getPhone(),req.getAge(),req.getWeight(),req.getHeight(),
+                                req.getSex()+"",req.getBlood()+"",req.getfName(),req.getlName(),
+                                req.getBirthDay(),req.getSickness(),req.getAlergy(),req.getImg()), sl);
     }
     public static void addDrug(String req  , ServerListener sl){
         Log.d("request",req);
         new ServerResponse().setCall(MyMethods.AddDrug,
                 ((reqInterface) ApiClient.getClient().create(reqInterface.class)).addAllDrug(req), sl);
-
     }
     public static void addUsage(String req,ServerListener sl){
-
         Log.d("request",req);
         new ServerResponse().setCall(MyMethods.AddUsageAll,
                 ((reqInterface) ApiClient.getClient().create(reqInterface.class)).addDrugUsage(req),sl);
@@ -70,6 +76,7 @@ public class CallerService {
                 ((reqInterface) ApiClient.getClient().create(reqInterface.class)).deleteUsage(req),sl);
     }
     public static void deleteDrug(String req,ServerListener sl){
+        Log.d("request",req);
         new ServerResponse().setCall(MyMethods.DeletePillObject,
                 ((reqInterface) ApiClient.getClient().create(reqInterface.class)).deleteDrug(req),sl);
     }
@@ -92,12 +99,21 @@ public class CallerService {
     }
 
     public static void addToBot(ServerListener sl,String data,String userId) {
+        Log.d("request","addbpt : "+data);
         new ServerResponse().setCall(MyMethods.AddToBot, ((reqInterface) ApiClient.getClient().create(reqInterface.class)).addToBot(userId,data), sl);
 
     }
 
     public static void deleteBotObject(ServerListener sl, String myId, String data) {
         new ServerResponse().setCall(MyMethods.DeleteFromBot, ((reqInterface) ApiClient.getClient().create(reqInterface.class)).deleteBot(myId,data), sl);
+
+    }
+    public static void updateToken(ServerListener sl, String user_id, String token) {
+        new ServerResponse().setCall(MyMethods.UpdateToken, ((reqInterface) ApiClient.getClient().create(reqInterface.class)).updateToken(user_id,token), sl);
+
+    }
+    public static void removeToken(ServerListener sl, String user_id, String token) {
+        new ServerResponse().setCall(MyMethods.DeleteToken, ((reqInterface) ApiClient.getClient().create(reqInterface.class)).removeToken(user_id,token), sl);
 
     }
 

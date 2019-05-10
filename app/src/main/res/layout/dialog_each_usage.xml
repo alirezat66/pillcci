@@ -30,7 +30,7 @@
             android:orientation="horizontal"
             android:weightSum="10">
 
-        <android.support.design.widget.TextInputEditText
+        <com.google.android.material.textfield.TextInputEditText
             android:layout_width="0dp"
             android:layout_weight="5"
             android:selectAllOnFocus="true"
@@ -49,23 +49,16 @@
             android:maxLength="5"
             android:inputType="numberDecimal"
             />
-            <fr.ganfra.materialspinner.MaterialSpinner
+            <com.isapanah.awesomespinner.AwesomeSpinner
                 android:id="@+id/spinner"
                 android:layout_width="0dp"
                 android:layout_weight="5"
                 android:layout_height="wrap_content"
-                app:ms_hint="واحد"
+                app:spinnerHint="واحد"
+                app:spinnerDirection="ltr"
                 android:layout_marginBottom="5dp"
-                android:layoutDirection="rtl"
-                app:ms_enableFloatingLabel="false"
-                app:ms_enableErrorLabel="false"
-                app:ms_floatingLabelText="واحد"
-                app:ms_baseColor="@color/grayText"
-                app:ms_thickness="1dp"
-                app:ms_arrowColor="@color/colorPrimary"
-                app:ms_arrowSize="14dp"
-                app:ms_alignLabels="false"
-                app:ms_floatingLabelColor="@color/grayText"/>
+
+                />
         </LinearLayout>
         <TextView
             android:layout_width="match_parent"
@@ -210,7 +203,7 @@
             android:layout_marginRight="8dp"
             android:textColor="@color/white"
             android:id="@+id/btnCancle"
-            android:text="لغو"
+            android:text="انصراف"
             />
             <Button
                 android:layout_width="wrap_content"

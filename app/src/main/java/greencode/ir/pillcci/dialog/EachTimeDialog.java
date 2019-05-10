@@ -4,12 +4,12 @@ import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.BottomSheetDialog;
-import android.support.design.widget.BottomSheetDialogFragment;
-import android.support.design.widget.TextInputEditText;
-import android.support.v4.app.DialogFragment;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import com.google.android.material.textfield.TextInputEditText;
+import androidx.fragment.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,11 +17,13 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.isapanah.awesomespinner.AwesomeSpinner;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import fr.ganfra.materialspinner.MaterialSpinner;
 import greencode.ir.pillcci.R;
 import greencode.ir.pillcci.utils.KeyboardUtil;
+import greencode.ir.pillcci.utils.Utility;
 
 /**
  * Created by alireza on 5/18/18.
@@ -37,7 +39,7 @@ public class EachTimeDialog extends BottomSheetDialogFragment {
     @BindView(R.id.edtEachTime)
     TextInputEditText edtEachTime;
     @BindView(R.id.spinner)
-    MaterialSpinner spinner;
+    AwesomeSpinner spinner;
     @BindView(R.id.btnCancle)
     Button btnCancle;
     @BindView(R.id.btnOk)
@@ -88,10 +90,12 @@ public class EachTimeDialog extends BottomSheetDialogFragment {
                     if (spinner.getSelectedItemPosition() - 1 >= 0) {
                         myInterface.onSuccess(Double.parseDouble(edtEachTime.getText().toString()), ITEMS[spinner.getSelectedItemPosition() - 1]);
                     } else {
-                        Toast.makeText(context, "واحد انتخاب نشده است.", Toast.LENGTH_LONG).show();
+                        Toast toast = Toast.makeText(context, "واحد انتخاب نشده است.", Toast.LENGTH_LONG);
+                        Utility.centrizeAndShow(toast);
                     }
                 } else {
-                    Toast.makeText(context, "دوز مصرف را وارد کن.", Toast.LENGTH_LONG).show();
+                    Toast toast = Toast.makeText(context, "دوز مصرف را وارد کن.", Toast.LENGTH_LONG);
+                    Utility.centrizeAndShow(toast);
                 }
             }
         });

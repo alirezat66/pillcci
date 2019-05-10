@@ -1,15 +1,15 @@
 package greencode.ir.pillcci.database;
 
 
-import android.arch.persistence.room.Dao;
-import android.arch.persistence.room.Delete;
-import android.arch.persistence.room.Insert;
-import android.arch.persistence.room.Query;
-import android.arch.persistence.room.Update;
+import androidx.room.Dao;
+import androidx.room.Delete;
+import androidx.room.Insert;
+import androidx.room.Query;
+import androidx.room.Update;
 
 import java.util.List;
 
-import static android.arch.persistence.room.OnConflictStrategy.REPLACE;
+import static androidx.room.OnConflictStrategy.REPLACE;
 
 @Dao
 public interface PillUsageDao {
@@ -31,10 +31,8 @@ public interface PillUsageDao {
    List<PillUsage> listSpecialUsedPillUsage(String pillName,String catname);
     @Query("select * from pilusage where id= :id  limit 1 ")
     PillUsage specialPilUsage(long id);
-    @Query("select * from pilusage where usageTime>= :startTime and usageTime<= :endTime and state<> 4 order by setedTime")
+    @Query("select * from pilusage where usageTime>= :startTime and usageTime<= :endTime and state<> 4 and ((select  state from pil where pil.id = pillId limit 1 ) == 1) order by setedTime")
     List<PillUsage> listPillToday(long startTime, long endTime);
-
-
 
     @Insert(onConflict = REPLACE)
     void insertPillList(List<PillUsage>list);
@@ -55,10 +53,13 @@ public interface PillUsageDao {
     @Update
     void update(List<PillUsage>usages);
 
-    @Query("select * from pilusage where usageTime< :nowTime and state = 0  ")
-    List<PillUsage> getAllExpendedPillUsage(long nowTime);
+    @Query("select * from pilusage where setedTime  < (:nowTime - :exteraTime) and state = 0  ")
+    List<PillUsage> getAllExpendedPillUsage(long nowTime,long exteraTime);
 
-    @Query("select * from pilusage where usageTime > :thisTime and state=0  order by usageTime  limit 1")
+    @Query("select * from pilusage where setedTime<:nowTime and :nowTime< setedTime+:exteraTime and state=0 order by usageTime")
+    List<PillUsage> getAllNotAlarmNotexpirePillUsage(long nowTime,long exteraTime);
+
+    @Query("select * from pilusage where usageTime >= :thisTime and state=0  order by usageTime  limit 1")
     PillUsage getNearestUsage(long thisTime);
 
     @Query("select * from pilusage where usageTime > :thisTime and state=0 and pillName=:name and catName=:catname order by usageTime  limit 1")
@@ -67,8 +68,13 @@ public interface PillUsageDao {
     @Query("select * from pilusage where usageTime <= :thisTime and state=0 order by usageTime desc  limit 1")
     PillUsage getNearestUsed(long thisTime);
 
+    @Query("select * from pilusage where state=0 order by usageTime asc limit 10")
+    List<PillUsage> getTenNotUsed();
     @Query("select * from pilusage where usageTime <= :thisTime and state=0 order by usageTime desc")
     List<PillUsage> getNearestUsedList(long thisTime);
+
+    @Query("select * from pilusage where setedTime <= :thisTime + (:dist * snoozCount * 60 * 1000) and state=0 order by usageTime desc")
+    List<PillUsage> getNearestUsedList(long thisTime,int dist);
 
 
     @Query("select * from pilusage where usageTime < :thisTime and state=1 and pillName=:name and catName=:catname  order by usageTime desc  limit 1")
@@ -86,6 +92,14 @@ public interface PillUsageDao {
     void deletePill(String name, String catName, Long time);
     @Query("select * from pilusage where pillName = :pillName and catName=:catNme and state=0 order by usageTime desc")
     List<PillUsage> getAllNotUsed(String pillName, String catNme);
+
+
+    @Query("select * from pilusage WHERE state=0 order by usageTime")
+    List<PillUsage> getAllNotUsed();
+    @Query("select * from pilusage WHERE state=0 and usageTime>:currentTime order by usageTime")
+    List<PillUsage> getAllNotUsed(long currentTime);
+    @Query("select * from pilusage where state =0 limit 1")
+    PillUsage getLastPillUsage();
     @Query("select id from (select * from pilusage order by id desc limit 1)")
     long getLastId();
 

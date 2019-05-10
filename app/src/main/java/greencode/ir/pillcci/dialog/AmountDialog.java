@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -23,18 +24,21 @@ public class AmountDialog extends Dialog {
     Context context;
     double amount;
 
-
+    String unit;
     @BindView(R.id.btnOk)
     Button btnOk;
     @BindView(R.id.btnCancel)
     Button btnCancel;
     @BindView(R.id.edtAmount)
     EditText edtAmount;
+    @BindView(R.id.txt_unit)
+    TextView txtUnit;
 
-    public AmountDialog(Context context, double amount) {
+    public AmountDialog(Context context, double amount,String unit) {
         super(context);
         this.context = context;
         this.amount = amount;
+        this.unit = unit;
     }
 
     public void setListener(AmountInterface listener) {
@@ -52,6 +56,7 @@ public class AmountDialog extends Dialog {
         params.width = -1;
         getWindow().setAttributes(params);
         edtAmount.setText(amount + "");
+        txtUnit.setText(unit);
 
 
     }
@@ -63,7 +68,7 @@ public class AmountDialog extends Dialog {
         super.onBackPressed();
     }
 
-    @OnClick({ R.id.btnOk, R.id.btnCancel})
+    @OnClick({R.id.btnOk, R.id.btnCancel})
     public void onClick(View view) {
         switch (view.getId()) {
 
@@ -72,12 +77,15 @@ public class AmountDialog extends Dialog {
                     amount = Double.parseDouble(edtAmount.getText().toString());
                     myInterface.onSuccess(amount);
 
-                }catch (NumberFormatException ex){
+                } catch (NumberFormatException ex) {
                     myInterface.onCancel();
                 }
+                edtAmount.setVisibility(View.GONE);
                 break;
             case R.id.btnCancel:
                 myInterface.onCancel();
+                edtAmount.setVisibility(View.GONE);
+
                 break;
         }
     }

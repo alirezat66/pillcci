@@ -2,17 +2,20 @@ package greencode.ir.pillcci.fragments;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.design.widget.TextInputEditText;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.AppCompatImageView;
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import com.google.android.material.textfield.TextInputEditText;
+import androidx.core.app.ActivityOptionsCompat;
+import androidx.fragment.app.Fragment;
+import androidx.core.util.Pair;
+import androidx.appcompat.widget.AppCompatImageView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.RadioGroup;
@@ -23,14 +26,16 @@ import com.alirezaafkar.sundatepicker.DatePicker;
 import com.alirezaafkar.sundatepicker.interfaces.DateSetListener;
 import com.github.florent37.expansionpanel.ExpansionLayout;
 import com.github.florent37.expansionpanel.viewgroup.ExpansionLayoutCollection;
+import com.isapanah.awesomespinner.AwesomeSpinner;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import fr.ganfra.materialspinner.MaterialSpinner;
 import greencode.ir.pillcci.R;
 import greencode.ir.pillcci.activities.AddMedicianActivity;
 import greencode.ir.pillcci.activities.BirthControlActivity;
@@ -48,6 +53,7 @@ import greencode.ir.pillcci.objects.UsageFields;
 import greencode.ir.pillcci.timepicker.TimePickerDialog;
 import greencode.ir.pillcci.timepicker.listener.OnDateSetListener;
 import greencode.ir.pillcci.utils.PersianCalculater;
+import greencode.ir.pillcci.utils.TransitionHelper;
 import greencode.ir.pillcci.utils.Utility;
 import me.omidh.liquidradiobutton.LiquidRadioButton;
 import saman.zamani.persiandate.PersianDate;
@@ -105,7 +111,7 @@ public class FragmentUsageMedic extends Fragment implements OnDateSetListener, D
     @BindView(R.id.edtEachTime)
     TextInputEditText edtEachTime;
     @BindView(R.id.spinner)
-    MaterialSpinner spinner;
+    AwesomeSpinner spinner;
     @BindView(R.id.edtDescription)
     TextInputEditText edtDescription;
     @BindView(R.id.btnInsert)
@@ -235,16 +241,16 @@ public class FragmentUsageMedic extends Fragment implements OnDateSetListener, D
     private void setDefualts() {
         long timeStamp = System.currentTimeMillis();
         PersianDate persianDate = new PersianDate(timeStamp);
-        persianDate.setHour(8);
-        persianDate.setMinute(0);
-        persianDate.setSecond(0);
+
+        persianDate = Utility.makeNearestTime(persianDate);
+
         ourStartTimeStamp = persianDate.getTime();
-        startTimeHour = 8;
-        startTimeMin = 0;
+        startTimeHour = persianDate.getHour();
+        startTimeMin = persianDate.getMinute();
         txtStartUsageDate.setText(PersianCalculater.getYearMonthAndDay(persianDate.getTime()));
-        txtStartUsageTime.setText("8:00");
+        txtStartUsageTime.setText(PersianCalculater.getHourseAndMin(persianDate.getTime()));
         txtStartDate.setText(PersianCalculater.getYearMonthAndDay(persianDate.getTime()));
-        txtStartTime.setText("8:00" + " - ");
+        txtStartTime.setText(PersianCalculater.getHourseAndMin(persianDate.getTime()) );
 
         final String[] ITEMS = {"عدد", "قرص", "کپسول", "سی سی/میلی لیتر", "قاشق چای خوری", "بار", "قاشق غذا خوری",
                 "قطره", "پیمانه", "پاف/اسپری", "گرم", "میلی گرم", "قطعه/تکه", "برچسب"};
@@ -278,19 +284,16 @@ public class FragmentUsageMedic extends Fragment implements OnDateSetListener, D
             }
         });
         spinner.setAdapter(adapter);
-        spinner.setSelection(0);
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        spinner.setOnSpinnerItemClickListener(new AwesomeSpinner.onSpinnerItemClickListener<String>() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemSelected(int position, String s) {
                 unitUse = ITEMS[position];
                 txtUsage.setText(unitUse);
             }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
         });
+       spinner.setSelection(0);
+
+
 
         rgOne.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -367,13 +370,16 @@ public class FragmentUsageMedic extends Fragment implements OnDateSetListener, D
         txtStartUsageDate.setText(PersianCalculater.getYearMonthAndDay(persianDate.getTime()));
         txtStartUsageTime.setText(PersianCalculater.getHourseAndMin(ourStartTimeStamp));
         txtStartDate.setText(PersianCalculater.getYearMonthAndDay(ourStartTimeStamp));
-        txtStartTime.setText(PersianCalculater.getHourseAndMin(ourStartTimeStamp) + " - ");
+        txtStartTime.setText(PersianCalculater.getHourseAndMin(ourStartTimeStamp) );
 
         final String[] ITEMS = {"عدد", "قرص", "کپسول", "سی سی/میلی لیتر", "قاشق چای خوری", "بار", "قاشق غذا خوری",
                 "قطره", "پیمانه", "پاف/اسپری", "گرم", "میلی گرم", "قطعه/تکه", "برچسب"};
+        List<String> types = new ArrayList<String>();
+        types = Arrays.asList(ITEMS);
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, ITEMS);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        ArrayAdapter<String> tyepesAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, types);
+
         try {
             countEachUse = Double.parseDouble(usageFields.getUnitsCount().get(0));
             edtEachTime.setText(usageFields.getUnitsCount().get(0));
@@ -404,7 +410,7 @@ public class FragmentUsageMedic extends Fragment implements OnDateSetListener, D
 
             }
         });
-        spinner.setAdapter(adapter);
+        spinner.setAdapter(tyepesAdapter);
         int pos = 0;
         for (int i = 0; i < ITEMS.length; i++) {
             if (ITEMS[i].equals(usageFields.getUnitUsage())) {
@@ -414,20 +420,16 @@ public class FragmentUsageMedic extends Fragment implements OnDateSetListener, D
                 break;
             }
         }
-
-        spinner.setSelection(pos);
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        spinner.setOnSpinnerItemClickListener(new AwesomeSpinner.onSpinnerItemClickListener<String>() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemSelected(int position, String s) {
                 unitUse = ITEMS[position];
                 txtUsage.setText(unitUse);
             }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
         });
+        spinner.setSelection(pos);
+
+
 
         switch (usageFields.getCountOfUsagePerDay()) {
             case 1:
@@ -583,7 +585,8 @@ public class FragmentUsageMedic extends Fragment implements OnDateSetListener, D
 
 
                 if (countEachUse == 0) {
-                    Toast.makeText(getContext(), "تمامی موارد بجز توضیحات را وارد کن.", Toast.LENGTH_LONG).show();
+                    Toast toast = Toast.makeText(getContext(), "میزان مصرف در هر نوبت را وارد کن!", Toast.LENGTH_LONG);
+                    Utility.centrizeAndShow(toast);
                 } else {
 
 
@@ -626,7 +629,9 @@ public class FragmentUsageMedic extends Fragment implements OnDateSetListener, D
                         .show(getFragmentManager(), "انتخاب تاریخ شروع");
                 break;
             case R.id.txtStartUsageTime:
-                timePickerDialog = Utility.getTimeDialog(this, getResources().getColor(R.color.colorPrimary));
+                PersianDate date = Utility.makeNearestTime(new PersianDate(System.currentTimeMillis()));
+
+                timePickerDialog = Utility.getTimeDialog(this, getResources().getColor(R.color.colorPrimary),date.getTime());
 
                 timePickerDialog.show(getFragmentManager(), "انتخاب زمان");
                 break;
@@ -645,12 +650,21 @@ public class FragmentUsageMedic extends Fragment implements OnDateSetListener, D
         intent.putExtra("unitUse", unitUse);
         intent.putExtra("eachTimeUsage", countEachUse);
         intent.putExtra("startTimeDate", ourStartTimeStamp);
-
-        startActivityForResult(intent, 2910);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            transitionTo(intent);
+        }else {
+            startActivityForResult(intent, 2910);
+        }
+        //
 
 
     }
-
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    @SuppressWarnings("unchecked") void transitionTo(Intent i) {
+        final Pair<View, String>[] pairs = TransitionHelper.createSafeTransitionParticipants(getActivity(), true);
+        ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(), pairs);
+        startActivityForResult(i, 2910,transitionActivityOptions.toBundle());
+    }
     private void showDialogBirthControl() {
         Intent intent = new Intent(getContext(), BirthControlActivity.class);
         if (typeDayUsage == 4) {
@@ -685,7 +699,7 @@ public class FragmentUsageMedic extends Fragment implements OnDateSetListener, D
                     daysOfUsage = days;
                     String dayStr = makeDays(daysOfUsage);
                     dayRepeat = 0;
-                    txtTypeOfDays.setText("( روزهای : " + dayStr + " )");
+                    txtTypeOfDays.setText("(" + dayStr + ")");
                     typeDayUsage = 3;
                     isRegular = 0;
                 }
@@ -746,14 +760,14 @@ public class FragmentUsageMedic extends Fragment implements OnDateSetListener, D
     private void backToLastState(int lastType) {
         if (lastType == 1) {
             radioEvryDay.setChecked(true);
-            txtTypeOfDays.setText(")هر روز)");
+            txtTypeOfDays.setText("(هر روز)");
         } else if (lastType == 2) {
             radioDaysInterval.setChecked(true);
             txtTypeOfDays.setText("(هر " + dayRepeat + " روز)");
         } else if (lastType == 3) {
             radioSpecificDays.setChecked(true);
             String dayStr = makeDays(daysOfUsage);
-            txtTypeOfDays.setText("( روزهای : " + dayStr + " )");
+            txtTypeOfDays.setText("( " + dayStr + " )");
 
         } else {
             radiobirthControl.setChecked(true);
@@ -962,7 +976,7 @@ public class FragmentUsageMedic extends Fragment implements OnDateSetListener, D
         ourTime.setMinute(persianCalendar.getMinute());
         startTimeHour = persianCalendar.getHour();
         startTimeMin = persianCalendar.getMinute();
-        txtStartTime.setText(PersianCalculater.getHourseAndMin(millseconds) + " - ");
+        txtStartTime.setText(PersianCalculater.getHourseAndMin(millseconds) );
         txtStartUsageTime.setText(PersianCalculater.getHourseAndMin(millseconds));
 /*
         edtStartTime.setText(PersianCalculater.getHourseAndMin(millseconds));
@@ -991,7 +1005,8 @@ public class FragmentUsageMedic extends Fragment implements OnDateSetListener, D
             txtStartUsageDate.setText(PersianCalculater.getYearMonthAndDay(ourStartTimeStamp));
             txtStartDate.setText(PersianCalculater.getYearMonthAndDay(ourStartTimeStamp));
         } else {
-            Toast.makeText(getContext(), "روز انتخاب شده نباید قبل از امروز باشد.", Toast.LENGTH_LONG).show();
+            Toast toast  = Toast.makeText(getContext(), "روز انتخاب شده نباید قبل از امروز باشد.", Toast.LENGTH_LONG);
+            Utility.centrizeAndShow(toast);
         }
     }
     public  void  changeDate(PersianDate newTime){

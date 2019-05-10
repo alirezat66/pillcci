@@ -1,3 +1,7 @@
+<ScrollView android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    xmlns:android="http://schemas.android.com/apk/res/android" >
 <RelativeLayout android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:passcode="http://schemas.android.com/apk/res-auto"
@@ -15,22 +19,22 @@
         >
         <TextView
             style="@style/NormalText"
-            android:textSize="20sp"
+            android:textSize="16sp"
             android:text="کد ۵ رقمی ارسال شده به"/>
         <TextView
             style="@style/NormalText"
-            android:textSize="20sp"
+            android:textSize="18sp"
             android:id="@+id/txtUser"/>
         <TextView
             style="@style/NormalText"
-            android:textSize="20sp"
+            android:textSize="16sp"
             android:text="را وارد نمایید"/>
 
         <com.nirigo.mobile.view.passcode.PasscodeIndicator
             android:id="@+id/passcode_indicator"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
+            android:layout_marginBottom="4dp"
             android:layout_below="@+id/instruction"
             passcode:indicator_background="@drawable/shape_passcode_indicator_ios"
             passcode:indicator_background_active="@drawable/shape_passcode_indicator_fill_ios"
@@ -51,7 +55,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/white"
-        android:text="ارسال مجدد کد فعالسازی"
+        android:text="ارسال مجدد کد فعال‌سازی"
         android:background="@drawable/ripple_blue"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
@@ -71,7 +75,7 @@
 
         <TextView
             style="@style/NormalText"
-            android:text=" ثانیه تا ارسال مجدد کد فعالسازی"
+            android:text=" ثانیه تا ارسال مجدد کد فعال‌سازی"
             />
         <TextView
             style="@style/NormalText"
@@ -85,11 +89,12 @@
         android:text="تغییر شماره تلفن همراه"
         android:textColor="@color/white"
         android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"
         android:layout_marginBottom="16dp"
         android:id="@+id/btnChangePhone"
         android:textSize="18.0sp"
-
+        android:layout_below="@id/lyTimer"
+        android:layout_marginTop="16dp"
         android:gravity="bottom"
         android:background="@color/transparent"/>
 </RelativeLayout>
+</ScrollView>

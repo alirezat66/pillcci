@@ -1,5 +1,6 @@
 package greencode.ir.pillcci.retrofit;
 
+import android.os.AsyncTask;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -26,6 +27,8 @@ import greencode.ir.pillcci.retrofit.reqobject.sendedDeletedObject;
 import greencode.ir.pillcci.retrofit.reqobject.sendedDeletedUsage;
 import greencode.ir.pillcci.retrofit.respObject.AddUsageResp;
 import greencode.ir.pillcci.retrofit.respObject.ErrorResp;
+import greencode.ir.pillcci.utils.Constants;
+import greencode.ir.pillcci.utils.PreferencesData;
 
 public class SyncController  implements ServerListener {
 
@@ -56,53 +59,23 @@ public class SyncController  implements ServerListener {
 
     @Override
     public void onFailure(int i, String str) {
-
+        String error =str;
     }
 
     public void checkDataBaseForUpdate(){
 
-        AppDatabase database = AppDatabase.getInMemoryDatabase(AppController.getContext());
-        List<PillObject> pills = database.pillObjectDao().getAllUnSyncPill();
-        Profile profile = database.profileDao().getMyProfile();
+        if(PreferencesData.getBoolean(Constants.PREF_Guess)){
 
-        if(pills.size()>0){
-            // agar daroo haye sync nashode sizesh bozorgtar az 0 bood
-            add(pills,profile.getMyId());
         }else {
-            // agar daroo haye sync nashode sizesh bozorgtar az 0 naood yani darooye sync nashode nadashtim
-
-            List<PillUsage> usages = database.pillUsageDao().allNotSyncPill();
-            if(usages.size()>0){
-
-
-                addUsage(usages,profile.getMyId());
-            }else {
-
-                // agar yadavarihaye haye sync nashode sizesh bozorgtar az 0   naood yani yadavarie sync nashode nadashtim
-                List<PillUsage>deletedUsage = database.pillUsageDao().allDeleted();
-                if(deletedUsage.size()>0){
-                    deleteUsage(deletedUsage,profile.getMyId());
-                }else {
-
-                    List<PillObject>deletedObject = database.pillObjectDao().getAllDeletedPill();
-                    if(deletedObject.size()>0) {
-                        delete(deletedObject, profile.getMyId());
-                    }else {
-                        // inja yani darohaye pak shode va .. ham nadarim
-
-                        List<PhoneBook> phoneBooks = database.phoneBookDao().allUnSyncPhone();
-                        if(phoneBooks.size()>0){
-                            addPhone(phoneBooks,profile.getMyId());
-                        }
-                    }
-                }
-            }
-
+            new addDrug().execute();
         }
+
+
     }
     @Override
     public void onSuccess(int i, JsonObject jsonObject) throws JSONException {
         Gson gson = new Gson();
+        PreferencesData.saveLong(Constants.Pref_Last_Update,System.currentTimeMillis());
         if(i==MyMethods.AddDrug.getMethodValue()){
             ErrorResp resp = gson.fromJson(jsonObject,ErrorResp.class);
             if(resp.getError()==0){
@@ -198,8 +171,63 @@ public class SyncController  implements ServerListener {
         }
     }
 
-    public void add(List<PillObject> pills, String myId) {
 
+
+    class addDrug extends AsyncTask<String, String, String> {
+        @Override
+        protected String doInBackground(String... files) {
+            AppDatabase database = AppDatabase.getInMemoryDatabase(AppController.getContext());
+            List<PillObject> pills = database.pillObjectDao().getAllUnSyncPill();
+            Profile profile = database.profileDao().getMyProfile();
+            if(profile!=null) {
+                if (pills.size() > 0) {
+                    // agar daroo haye sync nashode sizesh bozorgtar az 0 bood
+                    add(pills,profile.getMyId());
+
+                } else {
+                    // agar daroo haye sync nashode sizesh bozorgtar az 0 naood yani darooye sync nashode nadashtim
+
+                    List<PillUsage> usages = database.pillUsageDao().allNotSyncPill();
+                    if (usages.size() > 0) {
+
+
+                        addUsage(usages, profile.getMyId());
+                    } else {
+
+                        // agar yadavarihaye haye sync nashode sizesh bozorgtar az 0   naood yani yadavarie sync nashode nadashtim
+                        List<PillUsage> deletedUsage = database.pillUsageDao().allDeleted();
+                        if (deletedUsage.size() > 0) {
+                            deleteUsage(deletedUsage, profile.getMyId());
+                        } else {
+
+                            List<PillObject> deletedObject = database.pillObjectDao().getAllDeletedPill();
+                            if (deletedObject.size() > 0) {
+                                delete(deletedObject, profile.getMyId());
+                            } else {
+                                // inja yani darohaye pak shode va .. ham nadarim
+
+                                List<PhoneBook> phoneBooks = database.phoneBookDao().allUnSyncPhone();
+                                if (phoneBooks.size() > 0) {
+                                    addPhone(phoneBooks, profile.getMyId());
+                                }
+                            }
+                        }
+                    }
+
+                }
+                return "";
+            }else {
+                return "";
+            }
+        }
+
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+        }
+
+    }
+
+    public void add(List<PillObject> pills, String myId) {
         String finalReq = "[";
         for(PillObject pill : pills){
             finalReq += new SendedDrug(pill,myId).toJson().toString();

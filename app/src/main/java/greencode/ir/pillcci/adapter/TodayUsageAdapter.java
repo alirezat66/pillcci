@@ -1,8 +1,6 @@
 package greencode.ir.pillcci.adapter;
 
 import android.content.Context;
-import android.support.v7.widget.CardView;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +8,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.github.florent37.expansionpanel.ExpansionLayout;
 import com.github.florent37.expansionpanel.viewgroup.ExpansionLayoutCollection;
@@ -97,7 +98,7 @@ public class TodayUsageAdapter extends RecyclerView.Adapter<TodayUsageAdapter.Vi
     }
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView txtdooz,txtMedName, txtTime,txtCatName,txtdrName,txtunit,txtrepeatUsage,txtState,txtcat;
+        public TextView txtdooz,txtMedName, txtTime,txtCatName,txtdrName,txtunit,txtrepeatUsage,txtState,txtcat,txtUnitCount,txtDelay;
         public LinearLayout lyEdit,lyCancel,lyAction,lyCatDevider;
         public CardView catColor,root;
         RelativeLayout txtUse,txtCancel,txtJump;
@@ -115,6 +116,7 @@ public class TodayUsageAdapter extends RecyclerView.Adapter<TodayUsageAdapter.Vi
             root = v.findViewById(R.id.root);
             expansionLayout = v.findViewById(R.id.expansionLayout);
             txtMedName =  v.findViewById(R.id.txtMedName);
+            txtUnitCount = v.findViewById(R.id.txtUnitCount);
             txtTime =  v.findViewById(R.id.txtUseTime);
             txtunit =v.findViewById(R.id.txtUnitUsage);
             txtcat = v.findViewById(R.id.txtCat);
@@ -122,6 +124,7 @@ public class TodayUsageAdapter extends RecyclerView.Adapter<TodayUsageAdapter.Vi
             txtdrName = v.findViewById(R.id.txtDrName);
             txtCatName = v.findViewById(R.id.txtCatName);
             txtState = v.findViewById(R.id.txtState);
+            txtDelay = v.findViewById(R.id.txt_delay);
             txtUse = v.findViewById(R.id.txtUse);
             txtCancel = v.findViewById(R.id.txtCancel);
             txtJump = v.findViewById(R.id.txtJump);
@@ -159,8 +162,8 @@ public class TodayUsageAdapter extends RecyclerView.Adapter<TodayUsageAdapter.Vi
 
         holder.swipeLayout.setOffset(position+1);
         holder.expansionLayout.collapse(true);
-        holder.txtMedName .setText(data.getPillName() +" "+ "("+data.getUnitAmount() + " " + data.getUnit()+")");
-
+        holder.txtMedName .setText(data.getPillName()  );
+        holder.txtUnitCount.setText(data.getUnitAmount() + " " + data.getUnit());
         holder.txtcat.setText(data.getCatNme());
         if(data.getCatNme().equals("")||data.getCatNme().equals("عمومی") ){
             holder.txtcat.setVisibility(View.GONE);
@@ -173,7 +176,15 @@ public class TodayUsageAdapter extends RecyclerView.Adapter<TodayUsageAdapter.Vi
         }
 
         holder.txtcat.setTextColor(data.getCatColor());
-        holder.txtTime.setText(PersianCalculater.getHourseAndMin(data.getUsageTime()));
+        holder.txtTime.setText(PersianCalculater.getHourseAndMin(data.getSetedTime()));
+
+        if(data.getSetedTime()==data.getUsageTime()){
+            holder.txtDelay.setText("");
+            holder.txtDelay.setVisibility(View.INVISIBLE);
+        }else {
+            holder.txtDelay.setVisibility(View.VISIBLE);
+            holder.txtDelay.setText(" ("+PersianCalculater.getHourseAndMin(data.getUsageTime())+"\u23F0"+")");
+        }
 
         String[]times = data.getTime().split(":");
         int usageType = data.getState();
@@ -221,7 +232,13 @@ public class TodayUsageAdapter extends RecyclerView.Adapter<TodayUsageAdapter.Vi
 
         PersianDate currentTime = new PersianDate();
         PersianDate date = new PersianDate(data.getUsageTime());
-        PersianDate setedTime = new PersianDate(data.getSetedTime());
+        PersianDate setedTime = new PersianDate(data.getUsageTime());
+
+        if(data.isCancelable()){
+            holder.lyEdit.setVisibility(View.VISIBLE);
+        }else {
+            holder.lyEdit.setVisibility(View.GONE);
+        }
         if(currentTime.getTime()<data.getUsageTime()){
             if(data.getState()!=0){
                 if (data.isCancelable()){
@@ -245,9 +262,9 @@ public class TodayUsageAdapter extends RecyclerView.Adapter<TodayUsageAdapter.Vi
 
         }
 
-        String h = date.getHour()>=10?date.getHour()+"":"0"+date.getHour();
-        String m = date.getMinute()>=10?date.getMinute()+"":"0"+date.getMinute();
-        holder.txtTime.setText(h+":"+m);
+//        String h = setedTime.getHour()>=10?setedTime.getHour()+"":"0"+setedTime.getHour();
+//        String m = setedTime.getMinute()>=10?setedTime.getMinute()+"":"0"+setedTime.getMinute();
+//        holder.txtTime.setText(h+":"+m);
 
 
         if(!state.equals("")){
@@ -370,11 +387,7 @@ public class TodayUsageAdapter extends RecyclerView.Adapter<TodayUsageAdapter.Vi
 
         }
 
-        if(data.isCancelable()){
-            holder.lyEdit.setVisibility(View.VISIBLE);
-        }else {
-            holder.lyEdit.setVisibility(View.GONE);
-        }
+
 
 
         holder.swipeLayout.reset();

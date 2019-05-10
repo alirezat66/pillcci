@@ -23,15 +23,13 @@ public class LoginRequest {
         //2 number empty
         //3 number not valid
         if(this.username.length()>0) {
-            if (this.username.length() == 11) {
+
                 if (this.password.length() > 0) {
                     return 0;
                 } else {
                     return 1;
                 }
-            } else {
-                return 2;
-            }
+
         }else {
             return 3;
         }

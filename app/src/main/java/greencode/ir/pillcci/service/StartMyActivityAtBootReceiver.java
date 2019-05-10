@@ -3,11 +3,9 @@ package greencode.ir.pillcci.service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
-import java.util.List;
-
-import greencode.ir.pillcci.database.PillUsage;
-import greencode.ir.pillcci.utils.DatabaseManager;
+import greencode.ir.pillcci.utils.Constants;
 import greencode.ir.pillcci.utils.Utility;
 
 /**
@@ -18,11 +16,27 @@ public class StartMyActivityAtBootReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        Log.d("restart","we are in broadcast");
         if (Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction())) {
-            List<PillUsage> expendedUsage = DatabaseManager.getAllExpendedPillUsage(context);
-            DatabaseManager.updateToExpendedMode(context,expendedUsage);
+            Log.d("restart","yes we are in if");
+
+
+            Log.d("restart","yes we update all expected in if");
+
             Utility.reCalculateManager(context);
-            context.startService(new Intent(context, SyncService.class));
+            Log.d("restart","yes we calculate again");
+            Intent syncIntent = new Intent(context, SyncService.class);
+            syncIntent.setAction(Constants.ACTION_START_FOREGROUND_SERVICE);
+            SyncService.enqueueWork(context, new Intent());
+
+          /*  if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+              //  context.startService(syncIntent);
+                Log.d("restart","yes we calculate again and syncservice");
+
+            }else {
+                context.startService(syncIntent);
+                Log.d("restart","yes we calculate again and syncservice");
+            }*/
 
         }
     }

@@ -27,7 +27,7 @@
             android:id="@+id/lytop"
             android:gravity="center_horizontal"
             android:orientation="vertical">
-            <android.support.v7.widget.AppCompatImageView
+            <androidx.appcompat.widget.AppCompatImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 app:srcCompat="@drawable/ic_checked"
@@ -73,7 +73,7 @@
             android:orientation="vertical"
             android:layout_centerHorizontal="true"
             android:id="@+id/top2">
-            <android.support.v7.widget.AppCompatImageView
+            <androidx.appcompat.widget.AppCompatImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 app:srcCompat="@drawable/ic_checked"
@@ -120,7 +120,7 @@
             android:id="@+id/top3"
             android:layout_toRightOf="@id/txt_fake_two"
             android:orientation="vertical">
-            <android.support.v7.widget.AppCompatImageView
+            <androidx.appcompat.widget.AppCompatImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 app:srcCompat="@drawable/ic_checked"

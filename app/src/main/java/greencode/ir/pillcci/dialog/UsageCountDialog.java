@@ -2,7 +2,7 @@ package greencode.ir.pillcci.dialog;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.design.widget.BottomSheetDialog;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -10,6 +10,7 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import greencode.ir.pillcci.R;
+import greencode.ir.pillcci.utils.Utility;
 
 /**
  * Created by alireza on 5/18/18.
@@ -122,7 +123,8 @@ public class UsageCountDialog extends BottomSheetDialog {
                 if(finalSelected!=-1) {
                     myInterface.onSuccess(finalSelected,title,count,diffrence);
                 }else {
-                    Toast.makeText(context, "لطفا یک مورد را انتخاب کنید.", Toast.LENGTH_LONG).show();
+                    Toast toast = Toast.makeText(context, "لطفا یک مورد را انتخاب کنید.", Toast.LENGTH_LONG);
+                    Utility.centrizeAndShow(toast);
                 }
             }
         });

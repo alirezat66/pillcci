@@ -1,4 +1,4 @@
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_height="wrap_content"
@@ -22,7 +22,7 @@
                 android:id="@+id/rlText"
                 android:background="@color/white"
                 android:layout_height="wrap_content">
-                <android.support.v7.widget.AppCompatImageView
+                <androidx.appcompat.widget.AppCompatImageView
                     android:adjustViewBounds="true"
                     android:id="@+id/headerIndicator"
                     android:layout_alignParentLeft="true"
@@ -42,12 +42,28 @@
                     android:layoutDirection="rtl"
                     >
 
-                    <TextView
-                        style="@style/BigGray"
-                        android:text=""
-                        android:id="@+id/txtMedName"
-                        android:layout_marginRight="16dp"
-                        android:layout_marginTop="12dp"/>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layoutDirection="rtl"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            style="@style/BigGray"
+                            android:text=""
+                            android:layoutDirection="rtl"
+                            android:id="@+id/txtMedName"
+                            android:layout_marginRight="16dp"
+                            android:layout_marginTop="12dp"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            style="@style/BigGray"
+                            android:id="@+id/unitCount"
+                            android:layout_marginRight="8dp"
+                            android:layout_marginTop="12dp"/>                            />
+                    </LinearLayout>
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -69,7 +85,7 @@
 
             </RelativeLayout>
 
-            <android.support.v7.widget.CardView
+            <androidx.cardview.widget.CardView
                 android:layout_width="12dp"
 
                 android:layout_gravity="right"
@@ -80,7 +96,7 @@
                 app:cardBackgroundColor="@color/red"
                 app:cardCornerRadius="3dp"
                 android:orientation="vertical"
-                android:layout_height="match_parent"></android.support.v7.widget.CardView>
+                android:layout_height="match_parent"></androidx.cardview.widget.CardView>
 
         </com.github.florent37.expansionpanel.ExpansionHeader>
         <com.github.florent37.expansionpanel.ExpansionLayout
@@ -119,7 +135,7 @@
                         android:orientation="vertical"
                         android:gravity="center_horizontal"
                         android:layout_weight="3">
-                        <android.support.v7.widget.AppCompatImageView
+                        <androidx.appcompat.widget.AppCompatImageView
                             android:layout_width="24dp"
                             android:layout_height="24dp"
 
@@ -136,7 +152,7 @@
                         android:orientation="vertical"
                         android:gravity="center_horizontal"
                         android:layout_weight="3">
-                        <android.support.v7.widget.AppCompatImageView
+                        <androidx.appcompat.widget.AppCompatImageView
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             app:srcCompat="@drawable/doctor"/>
@@ -152,7 +168,7 @@
                         android:orientation="vertical"
                         android:gravity="center_horizontal"
                         android:layout_weight="3">
-                        <android.support.v7.widget.AppCompatImageView
+                        <androidx.appcompat.widget.AppCompatImageView
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             app:srcCompat="@drawable/drug"/>
@@ -178,7 +194,7 @@
                         android:orientation="vertical"
                         android:gravity="center_horizontal"
                         android:layout_weight="3">
-                        <android.support.v7.widget.AppCompatImageView
+                        <androidx.appcompat.widget.AppCompatImageView
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             app:srcCompat="@drawable/time_for"
@@ -196,7 +212,7 @@
                         android:gravity="center_horizontal"
                         android:id="@+id/lyEdit"
                         android:layout_weight="3">
-                        <android.support.v7.widget.AppCompatImageView
+                        <androidx.appcompat.widget.AppCompatImageView
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             app:srcCompat="@drawable/edit"/>
@@ -213,13 +229,14 @@
                         android:id="@+id/lyCancel"
                         android:visibility="gone"
                         android:layout_weight="3">
-                        <android.support.v7.widget.AppCompatImageView
+                        <androidx.appcompat.widget.AppCompatImageView
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             app:srcCompat="@drawable/undo"/>
                         <TextView
                             style="@style/SmallTextGray"
-                            android:text="لغو تغییرات"
+                            android:gravity="center_horizontal"
+                            android:text="انصراف از تغییرات"
                             />
                     </LinearLayout>
                 </LinearLayout>
@@ -227,4 +244,4 @@
 
         </com.github.florent37.expansionpanel.ExpansionLayout>
     </LinearLayout>
-</android.support.v7.widget.CardView>
+</androidx.cardview.widget.CardView>

@@ -26,9 +26,10 @@ public class CalcTimesAndSaveUsage {
 
         String pillName=pillObject.getMidname();
         PersianDate persianCalendar = new PersianDate(timeStamp);
-
         String time=PersianCalculater.getHourseAndMin(persianCalendar.getTime());
-        long usageTime=timeStamp;
+        persianCalendar.setSecond(0);
+        long usageTime=persianCalendar.getTime();
+
         int state =0; // 0 = not used ## 1 = used
         String useTime="";// time that we use pill
         long usedTime = 0;
@@ -279,6 +280,7 @@ public class CalcTimesAndSaveUsage {
                 for(int i = 0 ; i <30;/* mikhaym 30 rooz add konim*/ i++){
                     for( int j=0;j<usageTimeLong.size();j++){
                         PersianDate date = new PersianDate(usageTimeLong.get(j));
+
                         date = addDays(i,date);
 
                         PillUsage pillUsage = makepillUsage(pillObject,date.getTime(),j, ++lastLocal);
@@ -637,7 +639,6 @@ public class CalcTimesAndSaveUsage {
                    }
                    usageDay++;
                }
-
             }else if(pillObject.getTypeOfUsage()==2){
                 //har n rooz
                 while (amountOfUse>countingAmount && usageDay <30){
@@ -853,7 +854,9 @@ public class CalcTimesAndSaveUsage {
         String[] usageTime=pillObject.getUnitTimes().split(",");
         ArrayList<Long>usageTimeLong = new ArrayList<>();
         for(String useTime : usageTime){
-            usageTimeLong.add(Long.parseLong(useTime));
+            PersianDate date = new PersianDate(Long.parseLong(useTime));
+            date.setSecond(0);
+            usageTimeLong.add(date.getTime());
         }
         AppDatabase database = AppDatabase.getInMemoryDatabase(context);
         long lastLocal = database.pillUsageDao().getLastId();

@@ -8,18 +8,20 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.TextInputEditText;
-import android.support.v4.app.ActivityCompat;
-import android.support.v7.widget.AppCompatImageView;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import com.google.android.material.textfield.TextInputEditText;
+import androidx.core.app.ActivityCompat;
+import androidx.appcompat.widget.AppCompatImageView;
 import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.hbb20.CountryCodePicker;
 import com.kaopiz.kprogresshud.KProgressHUD;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
@@ -37,6 +39,7 @@ import greencode.ir.pillcci.database.PhoneBook;
 import greencode.ir.pillcci.dialog.ChosePhotoTakerDialog;
 import greencode.ir.pillcci.dialog.PhotoChoserInterface;
 import greencode.ir.pillcci.utils.BaseActivity;
+import greencode.ir.pillcci.utils.NumericKeyBoardTransformationMethod;
 import greencode.ir.pillcci.utils.Utility;
 import pl.aprilapps.easyphotopicker.DefaultCallback;
 import pl.aprilapps.easyphotopicker.EasyImage;
@@ -48,7 +51,7 @@ import pl.aprilapps.easyphotopicker.EasyImage;
 public class ActivityAddPhone extends BaseActivity {
     @BindView(R.id.img_back)
     AppCompatImageView imgBack;
-    @BindView(R.id.txtTitle)
+    @BindView(R.id.title)
     TextView txtTitle;
     @BindView(R.id.imgLogo)
     CircleImageView imgLogo;
@@ -57,23 +60,27 @@ public class ActivityAddPhone extends BaseActivity {
     @BindView(R.id.edtLName)
     TextInputEditText edtLName;
     @BindView(R.id.edtPhone)
-    TextInputEditText edtPhone;
+    EditText edtPhone;
     @BindView(R.id.edtRelation)
     TextInputEditText edtRelation;
     @BindView(R.id.btnInsert)
     Button btnInsert;
     @BindView(R.id.btnDelete)
     Button btnDelete;
-    String[] mPermission = {
-            Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA
-    };
+    String[] mPermission =
+            {
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.CAMERA
+            };
     ChosePhotoTakerDialog dialog;
     private static final int REQUEST_CODE_PERMISSION = 2;
     String b64Image = "";
     KProgressHUD kProgressHUD;
     @BindView(R.id.emptyImage)
     ImageView emptyImage;
-
+    @BindView(R.id.cpCodePicker)
+    CountryCodePicker cpCodePicker;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,9 +93,20 @@ public class ActivityAddPhone extends BaseActivity {
                 checkPermission();
             }
         });
-
+        edtPhone.setTransformationMethod(new NumericKeyBoardTransformationMethod());
+        cpCodePicker.registerCarrierNumberEditText(edtPhone);
+        cpCodePicker.setPhoneNumberValidityChangeListener(new CountryCodePicker.PhoneNumberValidityChangeListener() {
+            @Override
+            public void onValidityChanged(boolean isValidNumber) {
+                if(isValidNumber){
+                    edtPhone.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_check_green, 0);
+                }else {
+                    edtPhone.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+                }
+                // your code
+            }
+        });
     }
-
     @OnClick({R.id.img_back, R.id.imgLogo, R.id.btnInsert, R.id.btnDelete})
     public void onClick(View view) {
         switch (view.getId()) {
@@ -106,32 +124,38 @@ public class ActivityAddPhone extends BaseActivity {
                 break;
         }
     }
-
     private void insertPhone() {
-        if (edtFName.getText().toString().trim().equals("") && edtLName.getText().toString().trim().equals("")) {
-            if (edtFName.getText().toString().trim().equals("")) {
-                edtFName.setError("نام یا نام خانوادگی نمی توانند مقدار نداشته باشند.");
-            } else {
-                edtLName.setError("نام یا نام خانوادگی نمی توانند مقدار نداشته باشند.");
+        if(cpCodePicker.isValidFullNumber()){//){
+            String phone = cpCodePicker.getFullNumberWithPlus();
+            phone = phone.replace("+","00");
+            if (edtFName.getText().toString().trim().equals("") && edtLName.getText().toString().trim().equals("")) {
+                if (edtFName.getText().toString().trim().equals("")) {
+                    edtFName.setError("نام یا نام خانوادگی نمی توانند مقدار نداشته باشند.");
+                } else {
+                    edtLName.setError("نام یا نام خانوادگی نمی توانند مقدار نداشته باشند.");
+                }
+                return;
             }
-            return;
-        }
-        if (edtPhone.getText().toString().equals("")) {
-            edtPhone.setError("شماره تماس وارد نشده است.");
-            return;
-        }
-        AppDatabase database = AppDatabase.getInMemoryDatabase(this);
-        PhoneBook phoneBook = database.phoneBookDao().specialPhone(edtPhone.getText().toString());
-        if (phoneBook == null) {
-            database.phoneBookDao().insertPhone(new PhoneBook(edtFName.getText().toString(), edtLName.getText().toString(), b64Image, edtPhone.getText().toString(), edtRelation.getText().toString(), false));
-            finish();
-        } else {
-            Toast.makeText(this, "با این شماره تماس کاربری ثبت شده است.", Toast.LENGTH_LONG).show();
-        }
+            if (edtPhone.getText().toString().equals("")) {
+                edtPhone.setError("شماره تماس وارد نشده است.");
+                return;
+            }
+            AppDatabase database = AppDatabase.getInMemoryDatabase(this);
+            PhoneBook phoneBook = database.phoneBookDao().specialPhone(phone);
+            if (phoneBook == null) {
+                database.phoneBookDao().insertPhone(new PhoneBook(edtFName.getText().toString(), edtLName.getText().toString(),
+                        b64Image, phone, edtRelation.getText().toString(), false));
+                finish();
+            } else {
+                Toast toast  = Toast.makeText(this, "با این شماره تماس کاربری ثبت شده است.", Toast.LENGTH_LONG);
+                Utility.centrizeAndShow(toast);
 
+            }
+        }else {
+            Toast toast  = Toast.makeText(this, "شماره تلفن صحیح نیست!", Toast.LENGTH_SHORT);
+            Utility.centrizeAndShow(toast);
+        }
     }
-
-
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -141,22 +165,20 @@ public class ActivityAddPhone extends BaseActivity {
                     grantResults[2] == PackageManager.PERMISSION_GRANTED
                     ) {
                 showDialogForImageSelector();
-
             } else {
-                Toast.makeText(this, "برای ادامه نیاز به اجازه دسترسی وجود دارد.", Toast.LENGTH_LONG).show();
+                Toast toast = Toast.makeText(this, "برای ادامه نیاز به اجازه دسترسی وجود دارد.", Toast.LENGTH_LONG);
+                Utility.centrizeAndShow(toast);
             }
         } else {
-            Toast.makeText(this, "برای ادامه نیاز به اجازه دسترسی وجود دارد.", Toast.LENGTH_LONG).show();
+            Toast toast = Toast.makeText(this, "برای ادامه نیاز به اجازه دسترسی وجود دارد.", Toast.LENGTH_LONG);
+            Utility.centrizeAndShow(toast);
         }
     }
-
     private void showDialogForImageSelector() {
-
         dialog = new ChosePhotoTakerDialog(this);
         dialog.setListener(new PhotoChoserInterface() {
             @Override
             public void onSuccess(int type) {
-
                 if (type == 1) {
                     EasyImage.openCamera(ActivityAddPhone.this, 500);
                     //camera chosemn
@@ -166,23 +188,19 @@ public class ActivityAddPhone extends BaseActivity {
                 }
                 dialog.dismiss();
             }
-
             @Override
             public void onRejected() {
                 dialog.dismiss();
             }
         });
         dialog.show();
-
     }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         EasyImage.handleActivityResult(requestCode, resultCode, data, this, new DefaultCallback() {
             @Override
             public void onImagePicked(final File imageFile, EasyImage.ImageSource source, int type) {
-
                 Picasso.with(getApplicationContext())
                         .load(imageFile)
                         .centerCrop()
@@ -192,23 +210,16 @@ public class ActivityAddPhone extends BaseActivity {
                             public void onSuccess() {
                                 new ConvertToB64().execute(imageFile);
                             }
-
                             @Override
                             public void onError() {
-
                             }
                         });
                 emptyImage.setVisibility(View.GONE);
                 imgLogo.setVisibility(View.VISIBLE);
-
-
             }
         });
     }
-
     class ConvertToB64 extends AsyncTask<File, String, String> {
-
-
         @Override
         protected String doInBackground(File... files) {
             File imageFile = files[0];
@@ -224,16 +235,11 @@ public class ActivityAddPhone extends BaseActivity {
             String b64 = Base64.encodeToString(b, Base64.DEFAULT);
             return b64;
         }
-
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
             b64Image = result;
-
-
         }
-
     }
-
     private void checkPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             try {
@@ -243,17 +249,13 @@ public class ActivityAddPhone extends BaseActivity {
                                 != PackageManager.PERMISSION_GRANTED
                         || ActivityCompat.checkSelfPermission(this, mPermission[2])
                         != PackageManager.PERMISSION_GRANTED) {
-
                     ActivityCompat.requestPermissions(this,
                             mPermission, REQUEST_CODE_PERMISSION);
-
                     // If any permission aboe not allowed by user, this condition will execute every tim, else your else part will work
                 } else {
                     showDialogForImageSelector();
-
                 }
             } catch (Exception e) {
-
                 e.printStackTrace();
             }
         } else {

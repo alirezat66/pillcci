@@ -1,12 +1,18 @@
 package greencode.ir.pillcci.activities;
 
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.AppCompatImageView;
-import android.support.v7.widget.Toolbar;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.appcompat.widget.AppCompatImageView;
+import android.transition.Scene;
+import android.transition.Transition;
+import android.transition.TransitionInflater;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -16,6 +22,7 @@ import android.widget.TextView;
 import com.kaopiz.kprogresshud.KProgressHUD;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -24,7 +31,6 @@ import greencode.ir.pillcci.controler.AppDatabase;
 import greencode.ir.pillcci.database.Category;
 import greencode.ir.pillcci.database.PillObject;
 import greencode.ir.pillcci.database.PillUsage;
-import greencode.ir.pillcci.database.Profile;
 import greencode.ir.pillcci.dialog.FinishDialog;
 import greencode.ir.pillcci.dialog.FinishListener;
 import greencode.ir.pillcci.fragments.FragmentComplitationMedic;
@@ -35,6 +41,8 @@ import greencode.ir.pillcci.objects.GeneralFields;
 import greencode.ir.pillcci.objects.UsageFields;
 import greencode.ir.pillcci.retrofit.SyncController;
 import greencode.ir.pillcci.utils.BaseActivity;
+import greencode.ir.pillcci.utils.Constants;
+import greencode.ir.pillcci.utils.PreferencesData;
 import greencode.ir.pillcci.utils.Utility;
 
 import static greencode.ir.pillcci.utils.CalcTimesAndSaveUsage.makePillObject;
@@ -51,10 +59,9 @@ public class AddMedicianActivity extends BaseActivity implements FragmentGeneral
 
     @BindView(R.id.img_back)
     AppCompatImageView imgBack;
-    @BindView(R.id.txtTitle)
+    @BindView(R.id.title)
     TextView txtTitle;
-    @BindView(R.id.toolBar)
-    Toolbar toolBar;
+
     @BindView(R.id.checkedOne)
     AppCompatImageView checkedOne;
     @BindView(R.id.lyNumberOne)
@@ -94,6 +101,15 @@ public class AddMedicianActivity extends BaseActivity implements FragmentGeneral
     KProgressHUD kProgressHUD;
 
 
+    private static final int DELAY = 100;
+    private Scene scene0;
+    private Scene scene1;
+    private Scene scene2;
+    private Scene scene3;
+    private Scene scene4;
+    private final List<View> viewsToAnimate = new ArrayList<>();
+
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -108,13 +124,31 @@ public class AddMedicianActivity extends BaseActivity implements FragmentGeneral
                 showFinishDialog();
             }
         });
+         int isVibrate = (PreferencesData.getBoolean(Constants.PREF_VIBRATE, false) ? 1 : 0);
+        int  isLight = (PreferencesData.getBoolean(Constants.PREF_LOGHT, false) ? 1 : 0);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            setupWindowAnimations();
+        }
 
     }
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    private void setupWindowAnimations() {
+        Transition transition;
+        transition = TransitionInflater.from(this).inflateTransition(R.transition.slide_from_bottom);
+        getWindow().setEnterTransition(transition);
+
+    }
+
+
+
+
+
 
     public void showWaiting() {
         kProgressHUD = KProgressHUD.create(this)
                 .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
-                .setLabel("لطفا منتظر بمانید")
+                .setLabel("")
                 .setDetailsLabel("پیلچی در حال تنظیم یادآورهاست...")
                 .setCancellable(false)
                 .setAnimationSpeed(2)
@@ -156,19 +190,29 @@ public class AddMedicianActivity extends BaseActivity implements FragmentGeneral
         lineOne.setBackgroundColor(getResources().getColor(R.color.tealLight));
         txtStepTwo.setTextColor(getResources().getColor(R.color.black));
         lyNumberTwoText.setBackground(getResources().getDrawable(R.drawable.oval_green));
-        getSupportFragmentManager().beginTransaction().replace(R.id.container, fragments.get(1)).commit();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.setCustomAnimations(R.anim.enter, R.anim.exit);
+        transaction.replace(R.id.container,  fragments.get(1) ).commit();
+  //      getSupportFragmentManager().beginTransaction().replace(R.id.container, fragments.get(1)).commit();
         generalFields = object;
-        txtTitle.setText("افزودن دارو" + "(" + object.getMidName() + ")");
+        txtTitle.setText("افزودن دارو" + " (" + object.getMidName() + ")");
         Utility.hideKeyboard();
 
+    }
+    public static void hideKeyBoardFromActivity(){
+        Utility.hideKeyboard();
     }
 
     @Override
     public void onCancele() {
-
-        Utility.hideKeyboard();
-
-        finish();
+        showFinishDialog();
+     /*   Utility.hideKeyboard();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            finishAfterTransition();
+        }else {
+            finish();
+        }*/
     }
 
     @Override
@@ -178,7 +222,12 @@ public class AddMedicianActivity extends BaseActivity implements FragmentGeneral
         linetwo.setBackgroundColor(getResources().getColor(R.color.tealLight));
         txtStepThree.setTextColor(getResources().getColor(R.color.black));
         lyNumberThreeText.setBackground(getResources().getDrawable(R.drawable.oval_green));
-        getSupportFragmentManager().beginTransaction().replace(R.id.container, fragments.get(2)).commit();
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.setCustomAnimations(R.anim.enter, R.anim.exit);
+        transaction.replace(R.id.container,  fragments.get(2) ).commit();
+   //     getSupportFragmentManager().beginTransaction().replace(R.id.container, fragments.get(2)).commit();
         usageFields = object;
         Utility.hideKeyboard();
     }
@@ -191,8 +240,11 @@ public class AddMedicianActivity extends BaseActivity implements FragmentGeneral
         txtStepTwo.setTextColor(getResources().getColor(R.color.grayLiteText));
         lyNumberTwoText.setBackground(getResources().getDrawable(R.drawable.oval_gray));
 
-
-        getSupportFragmentManager().beginTransaction().replace(R.id.container, fragments.get(0)).commit();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.setCustomAnimations(R.anim.enter, R.anim.exit);
+        transaction.replace(R.id.container,  fragments.get(0) ).commit();
+    //    getSupportFragmentManager().beginTransaction().replace(R.id.container, fragments.get(0)).commit();
         Utility.hideKeyboard();
 
     }
@@ -236,14 +288,10 @@ public class AddMedicianActivity extends BaseActivity implements FragmentGeneral
             usageList = makePillUsageInPerAmountMood(pillObject, this);
             //masraf bar asase mizane daroo;
         }
-
-
         AppDatabase database = AppDatabase.getInMemoryDatabase(this);
-        Profile profile = database.profileDao().getMyProfile();
         database.pillUsageDao().insertPillList(usageList);
         SyncController sync = new SyncController();
         sync.checkDataBaseForUpdate();
-
 
     }
 
@@ -274,7 +322,11 @@ public class AddMedicianActivity extends BaseActivity implements FragmentGeneral
 
         txtStepThree.setTextColor(getResources().getColor(R.color.grayLiteText));
         lyNumberThreeText.setBackground(getResources().getDrawable(R.drawable.oval_gray));
-        getSupportFragmentManager().beginTransaction().replace(R.id.container, fragments.get(1)).commit();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.setCustomAnimations(R.anim.enter, R.anim.exit);
+        transaction.replace(R.id.container,  fragments.get(1) ).commit();
+      //  getSupportFragmentManager().beginTransaction().replace(R.id.container, fragments.get(1)).commit();
         Utility.hideKeyboard();
 
     }
@@ -297,7 +349,11 @@ public class AddMedicianActivity extends BaseActivity implements FragmentGeneral
             @Override
             public void onSuccess() {
                 mydialog.dismiss();
-                finish();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    finishAfterTransition();
+                }else {
+                    finish();
+                }
             }
 
 
@@ -306,7 +362,11 @@ public class AddMedicianActivity extends BaseActivity implements FragmentGeneral
     }
 
     public static String getUnit() {
-        return usageFields.getUnitUsage();
+        if(usageFields!=null) {
+            return usageFields.getUnitUsage();
+        }else {
+            return "";
+        }
     }
 
     class CalcAlarm extends AsyncTask<String, String, String> {
@@ -326,7 +386,12 @@ public class AddMedicianActivity extends BaseActivity implements FragmentGeneral
             super.onPostExecute(result);
             disMissWaiting();
             usageFields = null;
-            finish();
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                finishAfterTransition();
+            }else {
+                finish();
+            }
 
         }
 

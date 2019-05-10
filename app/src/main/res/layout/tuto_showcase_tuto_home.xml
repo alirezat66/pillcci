@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:id="@id/root"
+    tools:background="#000000"
+    >
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/title"
+            android:layout_marginBottom="30dp"
+            android:layout_marginTop="5dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_horizontal"
+                android:layout_marginTop="40dp"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:padding="8dp"
+                    app:srcCompat="@drawable/ic_today_white_pn"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="32dp"
+                    android:layout_marginRight="40dp"
+                    android:layout_marginLeft="40dp"
+
+                    android:text="به صفحه‌ی اصلی خوش اومدی! هر وقت بیای اینجا، داروهای امروز رو می‌بینی!
+"
+                    android:textColor="@android:color/white"
+                    android:textSize="16sp"
+
+                    android:gravity="center_horizontal"
+                    android:textAllCaps="true"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:layout_width="300dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:gravity="center"
+                    android:text="می‌تونی با عوض کردن تاریخ، برنامه دارویی روزهای دیگه رو ببینی.
+"
+                    android:textColor="@android:color/white"
+                    android:textSize="14sp"
+                    />
+                <TextView
+                    android:layout_width="300dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:gravity="center"
+                    android:text="داروهای هر روز طبق نوبت‌ مصرفشون مرتب میشن. میتونی وضعیت مصرف و زمان هر نوبت رو ببینی یا اگر لازم باشه، تغییر بدی."
+                    android:textColor="@android:color/white"
+                    android:textSize="14sp"
+                    />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="متوجه شدم"
+                    android:layout_gravity="left"
+                    android:textColor="@color/white"
+                    android:id="@+id/btn_ok"
+                    android:background="@color/transparent"
+                    android:textSize="18sp"
+                    android:layout_margin="16dp"/>
+            </LinearLayout>
+
+
+
+        </LinearLayout>
+    </ScrollView>
+
+
+</RelativeLayout>

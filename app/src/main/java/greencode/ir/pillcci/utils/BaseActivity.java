@@ -2,8 +2,8 @@ package greencode.ir.pillcci.utils;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
 import greencode.ir.pillcci.controler.AppController;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -11,14 +11,39 @@
         android:layout_height="match_parent"
         android:isScrollContainer="true"
         android:fillViewport="true">
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <include layout="@layout/header_login"
-                android:layout_alignParentTop="true"
-                android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:id="@+id/header"/>
+                android:layout_height="250dp"
+                >
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="215dp"
+                    android:background="#DBCEF2"
+                    android:id="@+id/ly_one"
+                    android:visibility="gone"
+                    ></RelativeLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:visibility="gone"
+                    android:layout_below="@id/ly_one"
+                    android:background="@color/white"
+                    ></LinearLayout>
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/pill_three"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"/>
+
+
+
+
+            </RelativeLayout>
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -38,75 +63,108 @@
                         android:gravity="center_horizontal"
                         android:visibility="invisible"
                         android:layout_marginTop="12dp"/>
-                    <EditText
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/VioletBlue"
+                        android:gravity="center_vertical"
                         android:layout_marginLeft="24dp"
-                        android:selectAllOnFocus="true"
-
                         android:layout_marginRight="24dp"
-                        android:gravity="center_horizontal"
-                        android:textColorHint="@color/hintColor"
-                        android:textColorLink="@color/VioletBlue"
-                        android:inputType="phone"
-                        android:maxLength="11"
-                        android:hint="شماره تلفن همراه"
-                        android:id="@+id/edtUser"
-                        />
+                        >
+                        <com.hbb20.CountryCodePicker
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:ccp_contentColor="@color/black"
+                            app:ccp_textSize="12sp"
+                            app:ccp_showPhoneCode="true"
+                            android:layoutDirection="rtl"
+                            app:ccp_defaultLanguage="FARSI"
+                            android:id="@+id/cpCodePicker"
+                            app:ccp_showNameCode="true"
+                            app:ccp_autoFormatNumber="true"
+                            app:ccp_autoDetectCountry="true"
+                            app:ccp_hintExampleNumberType="MOBILE"
 
-                    <Button
-                        android:layout_width="140dp"
-                        android:layout_height="wrap_content"
-                        android:paddingRight="24dp"
-                        android:paddingLeft="24dp"
-                        android:background="@drawable/ripple_gray"
-                        android:text="دریافت کد"
-                        android:enabled="false"
-                        android:id="@+id/btnGetCode"
-                        android:textSize="18.0sp"
-                        android:layout_marginTop="16dp"
-                        android:layout_gravity="center_horizontal"
-                        android:textColor="@color/white"
-                        />
+                            app:ccp_defaultNameCode="ir"/>
+                        <EditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:backgroundTint="@color/gray"
+                            android:freezesText="true"
+                            android:hint="phone"
+                            android:id="@+id/edtPhone"
+                            android:textSize="14sp"
+                            android:singleLine="true"
+                            android:textColorHint="@color/hintColor"
+                            android:textColorLink="@color/VioletBlue"
+                            android:inputType="numberPassword"
+                            android:textColor="@color/black"
+                            />
+                    </LinearLayout>
+
+
 
 
 
                 </LinearLayout>
-                <RelativeLayout
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingRight="24dp"
+                    android:paddingLeft="24dp"
+                    android:background="@drawable/ripple_pink_round"
+                    android:text="دریافت کد بازیابی"
+                    android:enabled="false"
+                    android:layout_marginRight="24dp"
+                    android:layout_marginLeft="24dp"
+
+                    android:layout_below="@id/lyOne"
+
+                    android:id="@+id/btnGetCode"
+                    android:textSize="18.0sp"
+                    android:layout_marginTop="16dp"
+                    android:layout_gravity="center_horizontal"
+                    android:textColor="@color/white"
+                    />
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:layout_below="@id/lyOne"
-                    android:layout_alignParentBottom="true">
+                    android:weightSum="10"
+                    android:layout_marginBottom="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_below="@id/btnGetCode"
+                    >
                     <Button
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
+                        android:layout_weight="5"
                         android:layout_height="wrap_content"
-                        android:text="ایجاد حساب کاربری"
+                        android:text="ایجاد حساب"
                         android:layout_alignParentBottom="true"
-                        android:textColor="@color/VioletBlue"
-                        android:layout_marginLeft="16dp"
+                        android:textColor="#B4ADC0"
+                        android:layout_marginLeft="24dp"
                         android:id="@+id/btnRegiser"
                         android:textSize="16.0sp"
-                        android:layout_marginRight="16dp"
+                        android:layout_marginRight="4dp"
                         android:layout_alignParentRight="true"
-                        android:background="@color/transparent"/>
+                        android:background="@drawable/ripple_out_line_pink_round"/>
 
                     <Button
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
+                        android:layout_weight="5"
                         android:layout_alignParentBottom="true"
                         android:layout_height="wrap_content"
-                        android:text="ورود به حساب کاربری"
-                        android:textColor="@color/VioletBlue"
+                        android:text="ورود به حساب"
+                        android:textColor="#B4ADC0"
                         android:layout_centerHorizontal="true"
                         android:layout_alignParentLeft="true"
-                        android:layout_marginLeft="16dp"
+                        android:layout_marginLeft="4dp"
                         android:id="@+id/btnLogin"
+                        android:layout_marginRight="24dp"
                         android:textSize="16.0sp"
-                        android:background="@color/transparent"/>
-                </RelativeLayout>
+                        android:background="@drawable/ripple_out_line_pink_round"/>
+                </LinearLayout>
 
             </RelativeLayout>
-        </RelativeLayout>
+        </LinearLayout>
     </ScrollView>
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -5,26 +5,38 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.TextInputEditText;
-import android.support.v4.app.ActivityCompat;
-import android.support.v7.widget.AppCompatImageView;
-import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.transition.Slide;
+import android.transition.Transition;
+import android.transition.Visibility;
 import android.util.Base64;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.appcompat.widget.AppCompatImageView;
+import androidx.core.app.ActivityCompat;
+
 import com.alirezaafkar.sundatepicker.DatePicker;
 import com.alirezaafkar.sundatepicker.interfaces.DateSetListener;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.otaliastudios.autocomplete.Autocomplete;
+import com.otaliastudios.autocomplete.AutocompleteCallback;
+import com.otaliastudios.autocomplete.AutocompletePresenter;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
@@ -37,6 +49,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
 import greencode.ir.pillcci.R;
+import greencode.ir.pillcci.adapter.PillAutoCompletePresenter;
 import greencode.ir.pillcci.database.Profile;
 import greencode.ir.pillcci.dialog.BloodDialog;
 import greencode.ir.pillcci.dialog.BloodInterface;
@@ -61,12 +74,11 @@ import saman.zamani.persiandate.PersianDate;
 public class ActivityProfile extends BaseActivity implements DateSetListener,ProfileInterface, NetworkStateReceiver.NetworkStateReceiverListener {
     @BindView(R.id.img_back)
     AppCompatImageView imgBack;
-    @BindView(R.id.txtTitle)
+    @BindView(R.id.title)
     TextView txtTitle;
-    @BindView(R.id.toolBar)
-    Toolbar toolBar;
+
     @BindView(R.id.imgLogo)
-    ImageView imgLogo;
+    CircleImageView imgLogo;
     @BindView(R.id.txtPhone)
     TextView txtPhone;
     @BindView(R.id.edtFName)
@@ -96,6 +108,7 @@ public class ActivityProfile extends BaseActivity implements DateSetListener,Pro
     int ourSex =0;
     int ourBlood=0;
     boolean hasNet = false;
+    private Autocomplete pillAutocomplete;
 
     ProfilePresenter presenter;
     ChosePhotoTakerDialog dialog;
@@ -112,8 +125,15 @@ public class ActivityProfile extends BaseActivity implements DateSetListener,Pro
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
+
         setContentView(R.layout.activity_profile);
+
         ButterKnife.bind(this);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            setupWindowAnimations();
+        }
+
         firebaseAnalytics = FirebaseAnalytics.getInstance(this);
         Bundle params = new Bundle();
         params.putString("phoneNumber", Utility.getPhoneNumber(this));
@@ -122,6 +142,7 @@ public class ActivityProfile extends BaseActivity implements DateSetListener,Pro
         txtTitle.setText("پروفایل کاربری");
         presenter = new ProfilePresenter(this,this);
         presenter.getProfile();
+        setUpPillNameAutoCompelet();
 
 
 
@@ -168,7 +189,11 @@ public class ActivityProfile extends BaseActivity implements DateSetListener,Pro
         switch (view.getId()) {
             case R.id.img_back:
                 Utility.hideKeyboard();
-                finish();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    finishAfterTransition();
+                }else {
+                    finish();
+                }
                 break;
             case R.id.btnInsert:
                 profile.setAge(edtAge.getText().toString());
@@ -194,7 +219,11 @@ public class ActivityProfile extends BaseActivity implements DateSetListener,Pro
 
                 break;
             case R.id.btnDelete:
-                finish();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    finishAfterTransition();
+                }else {
+                    finish();
+                }
                 break;
         }
     }
@@ -226,7 +255,8 @@ public class ActivityProfile extends BaseActivity implements DateSetListener,Pro
             edtAge.setText(differYear + "");
 
         } else {
-            Toast.makeText(this, "تاریخ تولد باید پیش از تاریخ امروز باشد.", Toast.LENGTH_LONG).show();
+            Toast toast = Toast.makeText(this, "تاریخ تولد باید پیش از تاریخ امروز باشد.", Toast.LENGTH_LONG);
+            Utility.centrizeAndShow(toast);
         }
     }
 
@@ -237,7 +267,11 @@ public class ActivityProfile extends BaseActivity implements DateSetListener,Pro
             ourBlood = profile.getBlood();
             ourSex = profile.getSex();
             edtBirthYear.setText(profile.getBirthDay());
-            txtPhone.setText(profile.getPhone());
+            String phone = profile.getPhone();
+            if(phone.startsWith("00")){
+                phone = phone.replaceFirst("00","+");
+            }
+            txtPhone.setText(phone);
             edtFName.setText(profile.getfName());
             edtLName.setText(profile.getlName());
             edtAge.setText(profile.getAge());
@@ -316,10 +350,8 @@ public class ActivityProfile extends BaseActivity implements DateSetListener,Pro
                     PersianDate date = new PersianDate(System.currentTimeMillis());
                     new DatePicker.Builder()
                             .id(1)
-
-                            .minYear(1300)
-                            .maxYear(date.getShYear())
-                            .maxMonth(date.getShMonth())
+                            .minDate(1300,1,1)
+                            .maxDate(date.getShYear(),date.getShMonth(),1)
                             .showYearFirst(true)
                             .closeYearAutomatically(true)
 
@@ -349,7 +381,12 @@ public class ActivityProfile extends BaseActivity implements DateSetListener,Pro
     @Override
     public void onSaveFinish() {
         Utility.hideKeyboard();
-        finish();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            finishAfterTransition();
+        }else {
+            finish();
+        }
+
     }
 
     @Override
@@ -398,10 +435,12 @@ public class ActivityProfile extends BaseActivity implements DateSetListener,Pro
                 showDialogForImageSelector();
 
             } else {
-                Toast.makeText(this, "برای ادامه نیاز به اجازه دسترسی وجود دارد.", Toast.LENGTH_LONG).show();
+                Toast toast  = Toast.makeText(this, "برای ادامه نیاز به اجازه دسترسی وجود دارد.", Toast.LENGTH_LONG);
+                Utility.centrizeAndShow(toast);
             }
         } else {
-            Toast.makeText(this, "برای ادامه نیاز به اجازه دسترسی وجود دارد.", Toast.LENGTH_LONG).show();
+            Toast toast = Toast.makeText(this, "برای ادامه نیاز به اجازه دسترسی وجود دارد.", Toast.LENGTH_LONG);
+            Utility.centrizeAndShow(toast);
         }
     }
 
@@ -486,5 +525,46 @@ public class ActivityProfile extends BaseActivity implements DateSetListener,Pro
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    private void setupWindowAnimations() {
+        Transition transition;
+        transition = buildEnterTransition();
+
+        getWindow().setEnterTransition(transition);
+    }
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    private Visibility buildEnterTransition() {
+        Slide enterTransition = new Slide();
+        enterTransition.setDuration(getResources().getInteger(R.integer.anim_duration_long));
+        enterTransition.setSlideEdge(Gravity.RIGHT);
+        return enterTransition;
+    }
+
+    private void setUpPillNameAutoCompelet() {
+        float elevation = 6f;
+        Drawable backgroundDrawable = new ColorDrawable(Color.WHITE);
+        AutocompletePresenter<String> presenter = new PillAutoCompletePresenter(this);
+        AutocompleteCallback<String> callback = new AutocompleteCallback<String>() {
+            @Override
+            public boolean onPopupItemClicked(Editable editable, String item) {
+                editable.clear();
+                editable.append(item);
+                return true;
+            }
+
+            public void onPopupVisibilityChanged(boolean shown) {
+            }
+        };
+
+
+        pillAutocomplete = Autocomplete.<String>on(edtAlergy)
+                .with(elevation)
+                .with(backgroundDrawable)
+                .with(presenter)
+                .with(callback)
+                .build();
+
+
+    }
 
 }

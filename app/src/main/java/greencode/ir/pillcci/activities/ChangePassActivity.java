@@ -2,12 +2,11 @@ package greencode.ir.pillcci.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.kaopiz.kprogresshud.KProgressHUD;
@@ -15,12 +14,11 @@ import com.kaopiz.kprogresshud.KProgressHUD;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import de.hdodenhof.circleimageview.CircleImageView;
 import greencode.ir.pillcci.R;
 import greencode.ir.pillcci.interfaces.ChangePassIterface;
+import greencode.ir.pillcci.presenters.ChangePassPresenter;
 import greencode.ir.pillcci.retrofit.reqobject.ChangePassReq;
 import greencode.ir.pillcci.retrofit.respObject.ChangePassRes;
-import greencode.ir.pillcci.presenters.ChangePassPresenter;
 import greencode.ir.pillcci.utils.BaseActivity;
 import greencode.ir.pillcci.utils.Constants;
 import greencode.ir.pillcci.utils.Utility;
@@ -30,16 +28,8 @@ import greencode.ir.pillcci.utils.Utility;
  */
 
 public class ChangePassActivity extends BaseActivity implements ChangePassIterface {
-    @BindView(R.id.imgLogi)
-    CircleImageView imgLogi;
-    @BindView(R.id.txtPilchi)
-    TextView txtPilchi;
-    @BindView(R.id.txtTitle)
-    TextView txtTitle;
-    @BindView(R.id.txtSubTitle)
-    TextView txtSubTitle;
-    @BindView(R.id.error)
-    TextView error;
+
+
     @BindView(R.id.edtUser)
     EditText edtUser;
     @BindView(R.id.edtPass)
@@ -65,9 +55,16 @@ public class ChangePassActivity extends BaseActivity implements ChangePassIterfa
         ButterKnife.bind(this);
         Bundle bundle = getIntent().getExtras();
         if(bundle!=null){
-            edtUser.setText(bundle.getString(Constants.PREF_USER_NAME));
+            String phone = bundle.getString(Constants.PREF_USER_NAME);
+            if(phone.startsWith("00")){
+              phone = phone.replaceFirst("00","+");
+            }
+            edtUser.setText(phone);
             userId = bundle.getString(Constants.PREF_USER_ID);
         }
+
+        edtPass.setTypeface(Utility.getRegularTypeFaceWithOutNumber(this));
+        edtPassRetry.setTypeface(Utility.getRegularTypeFaceWithOutNumber(this));
         presenter = new ChangePassPresenter(this);
     }
 
@@ -88,8 +85,8 @@ public class ChangePassActivity extends BaseActivity implements ChangePassIterfa
         }
     }
     public void showError(String str){
-        error.setVisibility(View.VISIBLE);
-        error.setText(str);
+        Toast toast = Toast.makeText(this, str, Toast.LENGTH_SHORT);
+        Utility.centrizeAndShow(toast);
     }
 
 
@@ -102,20 +99,23 @@ public class ChangePassActivity extends BaseActivity implements ChangePassIterfa
                 break;
             case R.id.btnRegiser:
                 Intent registerIntent = new Intent(this, RegisterActivity.class);
-                registerIntent.putExtra(Constants.PREF_USER_NAME, edtUser.getText().toString());
+                registerIntent.putExtra(Constants.PREF_USER_NAME, getNumber());
                 startActivity(registerIntent);
                 finish();
                 break;
             case R.id.btnLogin:
                 Intent loginIntent = new Intent(this, LoginActivity.class);
-                loginIntent.putExtra(Constants.PREF_USER_NAME, edtUser.getText().toString());
+                loginIntent.putExtra(Constants.PREF_USER_NAME, getNumber());
                 startActivity(loginIntent);
                 finish();
                 break;
         }
     }
 
-
+    public String getNumber(){
+        String user = edtUser.getText().toString().replace("+","00");
+        return user;
+    }
 
     @Override
     public void onPassEmpty() {
@@ -141,15 +141,18 @@ public class ChangePassActivity extends BaseActivity implements ChangePassIterfa
     @Override
     public void onErrorRegister(String error) {
         disMissWaiting();
-        Toast.makeText(this, error, Toast.LENGTH_LONG).show();
+        Toast toast = Toast.makeText(this, error, Toast.LENGTH_LONG);
+        Utility.centrizeAndShow(toast);
+
     }
 
     @Override
     public void onSuccessRegister(ChangePassRes changePassRes) {
         disMissWaiting();
-        Toast.makeText(this, "کلمه عبور با موفقیت تغییر کرد.", Toast.LENGTH_LONG).show();
+        Toast toast = Toast.makeText(this, "کلمه عبور با موفقیت تغییر کرد.", Toast.LENGTH_LONG);
+        Utility.centrizeAndShow(toast);
         Intent loginIntent = new Intent(this, LoginActivity.class);
-        loginIntent.putExtra(Constants.PREF_USER_NAME, edtUser.getText().toString());
+        loginIntent.putExtra(Constants.PREF_USER_NAME, getNumber());
         startActivity(loginIntent);
         finish();
     }
@@ -158,7 +161,7 @@ public class ChangePassActivity extends BaseActivity implements ChangePassIterfa
     public void onBackPressed() {
         super.onBackPressed();
         Intent loginIntent = new Intent(this, LoginActivity.class);
-        loginIntent.putExtra(Constants.PREF_USER_NAME, edtUser.getText().toString());
+        loginIntent.putExtra(Constants.PREF_USER_NAME,getNumber());
         startActivity(loginIntent);
         finish();
 

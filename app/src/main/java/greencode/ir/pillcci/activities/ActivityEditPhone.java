@@ -8,18 +8,20 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.TextInputEditText;
-import android.support.v4.app.ActivityCompat;
-import android.support.v7.widget.AppCompatImageView;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import com.google.android.material.textfield.TextInputEditText;
+import androidx.core.app.ActivityCompat;
+import androidx.appcompat.widget.AppCompatImageView;
 import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.hbb20.CountryCodePicker;
 import com.kaopiz.kprogresshud.KProgressHUD;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
@@ -36,6 +38,7 @@ import greencode.ir.pillcci.controler.AppDatabase;
 import greencode.ir.pillcci.database.PhoneBook;
 import greencode.ir.pillcci.dialog.ChosePhotoTakerDialog;
 import greencode.ir.pillcci.utils.BaseActivity;
+import greencode.ir.pillcci.utils.NumericKeyBoardTransformationMethod;
 import greencode.ir.pillcci.utils.Utility;
 import pl.aprilapps.easyphotopicker.DefaultCallback;
 import pl.aprilapps.easyphotopicker.EasyImage;
@@ -47,7 +50,7 @@ import pl.aprilapps.easyphotopicker.EasyImage;
 public class ActivityEditPhone extends BaseActivity {
     @BindView(R.id.img_back)
     AppCompatImageView imgBack;
-    @BindView(R.id.txtTitle)
+    @BindView(R.id.title)
     TextView txtTitle;
     @BindView(R.id.imgLogo)
     CircleImageView imgLogo;
@@ -56,7 +59,7 @@ public class ActivityEditPhone extends BaseActivity {
     @BindView(R.id.edtLName)
     TextInputEditText edtLName;
     @BindView(R.id.edtPhone)
-    TextInputEditText edtPhone;
+    EditText edtPhone;
     @BindView(R.id.edtRelation)
     TextInputEditText edtRelation;
     @BindView(R.id.btnInsert)
@@ -75,6 +78,8 @@ public class ActivityEditPhone extends BaseActivity {
     PhoneBook book;
     @BindView(R.id.emptyImage)
     ImageView emptyImage;
+    @BindView(R.id.cpCodePicker)
+    CountryCodePicker cpCodePicker;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -101,11 +106,37 @@ public class ActivityEditPhone extends BaseActivity {
                 emptyImage.setVisibility(View.INVISIBLE);
                 imgLogo.setVisibility(View.VISIBLE);
             }
-            edtPhone.setText(book.getPhone());
+
+            edtPhone.setTransformationMethod(new NumericKeyBoardTransformationMethod());
+
+            cpCodePicker.registerCarrierNumberEditText(edtPhone);
+            cpCodePicker.setPhoneNumberValidityChangeListener(new CountryCodePicker.PhoneNumberValidityChangeListener() {
+                @Override
+                public void onValidityChanged(boolean isValidNumber) {
+                    if (isValidNumber) {
+                        edtPhone.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_check_green, 0);
+
+                    } else {
+                        edtPhone.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+
+                    }
+                    // your code
+                }
+            });
+            // cpCodePicker.setcountry(request.getCodePhone());
+            String phone = "";
+            if(book.getPhone().startsWith("")) {
+                 phone = book.getPhone().replaceFirst("00", "+");
+            }else {
+                phone = book.getPhone();
+            }
+            cpCodePicker.setFullNumber(phone);
+           /* edtPhone.setText(request.getPhone());
+            edtPhone.setText(book.getPhone());*/
             edtFName.setText(book.getfName());
             edtLName.setText(book.getlName());
             edtRelation.setText(book.getRelation());
-        }else {
+        } else {
             imgLogo.setVisibility(View.INVISIBLE);
             emptyImage.setVisibility(View.VISIBLE);
         }
@@ -138,27 +169,33 @@ public class ActivityEditPhone extends BaseActivity {
     }
 
     private void insertPhone() {
-        if (edtFName.getText().toString().trim().equals("") && edtLName.getText().toString().trim().equals("")) {
-            if (edtFName.getText().toString().trim().equals("")) {
-                edtFName.setError("نام یا نام خانوادگی نمی توانند مقدار نداشته باشند.");
-            } else {
-                edtLName.setError("نام یا نام خانوادگی نمی توانند مقدار نداشته باشند.");
+
+
+        if(cpCodePicker.isValidFullNumber()) {//){
+            String phone = cpCodePicker.getFullNumberWithPlus();
+            phone = phone.replace("+", "00");
+            if (edtFName.getText().toString().trim().equals("") && edtLName.getText().toString().trim().equals("")) {
+                if (edtFName.getText().toString().trim().equals("")) {
+                    edtFName.setError("نام یا نام خانوادگی نمی توانند مقدار نداشته باشند.");
+                } else {
+                    edtLName.setError("نام یا نام خانوادگی نمی توانند مقدار نداشته باشند.");
+                }
+                return;
             }
-            return;
+
+            AppDatabase database = AppDatabase.getInMemoryDatabase(this);
+            book.setfName(edtFName.getText().toString());
+            book.setlName(edtLName.getText().toString());
+            book.setImg(b64Image);
+            book.setPhone(phone);
+            book.setRelation(edtRelation.getText().toString());
+            book.setState(0);
+            database.phoneBookDao().update(book);
+            finish();
+        }else {
+            Toast toast = Toast.makeText(this, "شماره تلفن صحیح نیست!", Toast.LENGTH_SHORT);
+            Utility.centrizeAndShow(toast);
         }
-        if (edtPhone.getText().toString().equals("")) {
-            edtPhone.setError("شماره تماس وارد نشده است.");
-            return;
-        }
-        AppDatabase database = AppDatabase.getInMemoryDatabase(this);
-        book.setfName(edtFName.getText().toString());
-        book.setlName(edtLName.getText().toString());
-        book.setImg(b64Image);
-        book.setPhone(edtPhone.getText().toString());
-        book.setRelation(edtRelation.getText().toString());
-        book.setState(0);
-        database.phoneBookDao().update(book);
-        finish();
 
     }
 
@@ -174,10 +211,12 @@ public class ActivityEditPhone extends BaseActivity {
                 showDialogForImageSelector();
 
             } else {
-                Toast.makeText(this, "برای ادامه نیاز به اجازه دسترسی وجود دارد.", Toast.LENGTH_LONG).show();
+                Toast toast = Toast.makeText(this, "برای ادامه نیاز به اجازه دسترسی وجود دارد.", Toast.LENGTH_LONG);
+                Utility.centrizeAndShow(toast);
             }
         } else {
-            Toast.makeText(this, "برای ادامه نیاز به اجازه دسترسی وجود دارد.", Toast.LENGTH_LONG).show();
+            Toast toast = Toast.makeText(this, "برای ادامه نیاز به اجازه دسترسی وجود دارد.", Toast.LENGTH_LONG);
+            Utility.centrizeAndShow(toast);
         }
     }
 
@@ -270,9 +309,6 @@ public class ActivityEditPhone extends BaseActivity {
             showDialogForImageSelector();
         }
     }
-
-
-
 
 
 }

@@ -2,9 +2,9 @@ package greencode.ir.pillcci.controler;
 
 //import com.raizlabs.android.dbflow.annotation.Database;
 
-import android.arch.persistence.room.Database;
-import android.arch.persistence.room.Room;
-import android.arch.persistence.room.RoomDatabase;
+import androidx.room.Database;
+import androidx.room.Room;
+import androidx.room.RoomDatabase;
 import android.content.Context;
 
 import greencode.ir.pillcci.database.Category;
@@ -33,7 +33,7 @@ public abstract class AppDatabase extends RoomDatabase {
     public static AppDatabase getInMemoryDatabase(Context context) {
         if (INSTANCE == null) {
             INSTANCE =
-                    Room.databaseBuilder(context.getApplicationContext(), AppDatabase.class,AppDatabase.class.getName())
+                    Room.databaseBuilder(context.getApplicationContext(), AppDatabase.class,"usageDatabase")
                             // To simplify the codelab, allow queries on the main thread.
                             // Don't do this on a real app! See PersistenceBasicSample for an example.
                             .allowMainThreadQueries()

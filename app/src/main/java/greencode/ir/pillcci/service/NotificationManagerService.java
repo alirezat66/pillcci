@@ -6,7 +6,7 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
-import android.support.v4.app.NotificationManagerCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 import greencode.ir.pillcci.R;
 import greencode.ir.pillcci.activities.MainActivity;

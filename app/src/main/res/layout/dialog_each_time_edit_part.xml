@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:background="@color/white"
     >
-    <android.support.v7.widget.Toolbar
+    <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"
         android:background="@color/colorPrimary"
         android:id="@+id/toolbar"
@@ -26,12 +26,12 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/white"
                 android:layout_toLeftOf="@id/img_back"
-                android:text="تایید زمانهای مصرف در روز"
+                android:text="تایید زمان‌های مصرف در روز"
                 android:layout_marginRight="8dp"
                 android:layout_centerVertical="true"
                 android:textSize="16sp"/>
         </RelativeLayout>
-    </android.support.v7.widget.Toolbar>
+    </androidx.appcompat.widget.Toolbar>
 
     <ScrollView
         android:id="@+id/scroll"
@@ -39,7 +39,7 @@
         android:layout_height="match_parent"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="36dp"
+        android:layout_marginTop="56dp"
         android:fillViewport="true">
 
         <RelativeLayout
@@ -49,13 +49,15 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="16dp">
+                android:layout_height="match_parent"
+                android:layout_marginBottom="64dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="5"
                     android:layoutDirection="rtl"
                     android:orientation="vertical">
 
@@ -63,12 +65,12 @@
 
 
 
-                    <android.support.v7.widget.RecyclerView
+                    <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/container"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
 
-                        android:orientation="vertical"></android.support.v7.widget.RecyclerView>
+                        android:orientation="vertical"></androidx.recyclerview.widget.RecyclerView>
 
                 </LinearLayout>
 
@@ -109,7 +111,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="4"
-                android:text="عدم تایید"
+                android:text="بازگشت"
                 android:background="@drawable/border_red"
                 android:textColor="@color/bright_pink"
                 android:textSize="16.0sp" />

@@ -8,7 +8,7 @@
     android:background="@color/backColor"
 
     >
-    <android.support.v7.widget.CardView
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:cardCornerRadius="0dp"
@@ -38,15 +38,16 @@
                         android:gravity="center_vertical|right"
                         android:layout_marginRight="16dp"
                         android:text="روزهای مصرف"/>
-                    <TextView
+                    <com.codesgood.views.JustifiedTextView
                         android:layout_width="wrap_content"
                         android:layout_height="56dp"
                         android:id="@+id/txtTypeOfDays"
                         android:gravity="center_vertical|right"
                         android:layout_marginRight="4dp"
                         android:layout_toLeftOf="@id/txtDaysOfUse"
+                        android:layout_toRightOf="@id/headerIndicator"
                         android:text="(هر روز)"/>
-                    <android.support.v7.widget.AppCompatImageView
+                    <androidx.appcompat.widget.AppCompatImageView
                         android:adjustViewBounds="true"
                         android:id="@+id/headerIndicator"
                         android:layout_alignParentLeft="true"
@@ -152,15 +153,15 @@
                 </LinearLayout>
             </com.github.florent37.expansionpanel.ExpansionLayout>
         </LinearLayout>
-    </android.support.v7.widget.CardView>
-    <android.support.v7.widget.CardView
+    </androidx.cardview.widget.CardView>
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:cardCornerRadius="0dp"
         android:layout_marginRight="16dp"
         android:layout_marginLeft="16dp"
         app:cardElevation="4dp"
-        android:layout_marginTop="16dp">
+        android:layout_marginTop="8dp">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -179,6 +180,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="56dp"
+                        android:layout_alignParentRight="true"
                         android:gravity="center_vertical|right"
                         android:layout_marginRight="16dp"
                         android:id="@+id/txtTitleDate"
@@ -187,19 +189,29 @@
                         android:layout_width="wrap_content"
                         android:layout_height="56dp"
                         android:id="@+id/txtStartDate"
+                        android:textSize="12sp"
                         android:gravity="center_vertical|right"
                         android:layout_marginRight="4dp"
                         android:layout_toLeftOf="@id/txtTitleDate"
                         android:text="1397/23/8"/>
                     <TextView
                         android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="-"
+                        android:layout_toLeftOf="@id/txtStartDate"
+                        android:layout_marginRight="0dp"
+                        android:id="@+id/dash"
+                        android:layout_centerVertical="true"/>
+                    <TextView
+                        android:layout_width="wrap_content"
                         android:layout_height="56dp"
                         android:id="@+id/txtStartTime"
+                        android:textSize="12sp"
                         android:gravity="center_vertical|right"
-                        android:layout_marginRight="4dp"
-                        android:layout_toLeftOf="@id/txtStartDate"
+                        android:layout_marginRight="0dp"
+                        android:layout_toLeftOf="@id/dash"
                         android:text="۱۸:۳۰" />
-                    <android.support.v7.widget.AppCompatImageView
+                    <androidx.appcompat.widget.AppCompatImageView
                         android:adjustViewBounds="true"
                         android:id="@+id/headerIndicator2"
                         android:layout_alignParentLeft="true"
@@ -274,15 +286,15 @@
                 </LinearLayout>
             </com.github.florent37.expansionpanel.ExpansionLayout>
         </LinearLayout>
-    </android.support.v7.widget.CardView>
-    <android.support.v7.widget.CardView
+    </androidx.cardview.widget.CardView>
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:cardCornerRadius="0dp"
         android:layout_marginRight="16dp"
         android:layout_marginLeft="16dp"
         app:cardElevation="4dp"
-        android:layout_marginTop="16dp">
+        android:layout_marginTop="8dp">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -311,10 +323,11 @@
                         android:id="@+id/txtPerDay"
                         android:gravity="center_vertical|right"
                         android:layout_marginRight="4dp"
+                        android:layout_toRightOf="@id/headerIndicator3"
                         android:layout_toLeftOf="@id/txtTitlePerDay"
                         android:text="۱ نوبت"/>
 
-                    <android.support.v7.widget.AppCompatImageView
+                    <androidx.appcompat.widget.AppCompatImageView
                         android:adjustViewBounds="true"
                         android:id="@+id/headerIndicator3"
                         android:layout_alignParentLeft="true"
@@ -490,16 +503,16 @@
                 </LinearLayout>
             </com.github.florent37.expansionpanel.ExpansionLayout>
         </LinearLayout>
-    </android.support.v7.widget.CardView>
-    <android.support.v7.widget.CardView
+    </androidx.cardview.widget.CardView>
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:cardCornerRadius="0dp"
         android:layout_marginRight="16dp"
         android:layout_marginLeft="16dp"
         app:cardElevation="4dp"
-        android:layout_marginBottom="16dp"
-        android:layout_marginTop="16dp">
+        android:layout_marginTop="8dp"
+        >
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -511,6 +524,7 @@
                 app:expansion_headerIndicator="@id/headerIndicator4"
                 app:expansion_layout="@id/expansionLayout4"
                 android:layoutDirection="rtl"
+
                 app:expansion_toggleOnClick="true">
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -539,7 +553,7 @@
                         android:layout_toLeftOf="@id/txtUseCount"
                         android:text="عدد"/>
 
-                    <android.support.v7.widget.AppCompatImageView
+                    <androidx.appcompat.widget.AppCompatImageView
                         android:adjustViewBounds="true"
                         android:id="@+id/headerIndicator4"
                         android:layout_alignParentLeft="true"
@@ -558,21 +572,22 @@
                 android:orientation="vertical"
                 android:id="@+id/expansionLayout4"
 
+
                 >
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layoutDirection="rtl"
-
-                    android:layout_marginRight="16dp"
                     android:orientation="vertical">
-                    <android.support.design.widget.TextInputEditText
+                    <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
                         android:selectAllOnFocus="true"
                         android:focusableInTouchMode="true"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="16dp"
                         android:hint="تعداد"
+                        android:layout_marginRight="16dp"
+
                         android:id="@+id/edtEachTime"
                         android:layout_alignParentLeft="true"
                         android:focusable="true"
@@ -580,48 +595,116 @@
                         android:maxLength="5"
                         android:inputType="numberDecimal"
                         />
-                    <fr.ganfra.materialspinner.MaterialSpinner
+                    <com.isapanah.awesomespinner.AwesomeSpinner
                         android:id="@+id/spinner"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="5dp"
                         android:layout_marginLeft="16dp"
-                        app:ms_enableFloatingLabel="false"
-                        app:ms_enableErrorLabel="false"
-                        app:ms_baseColor="@color/grayText"
-                        app:ms_thickness="1dp"
-                        app:ms_isRtl="true"
-                        app:ms_arrowColor="@color/colorPrimary"
-                        app:ms_arrowSize="14dp"
-                        app:ms_alignLabels="false"
-                        app:ms_floatingLabelColor="@color/grayText"/>
-                    <android.support.design.widget.TextInputLayout
+                        app:spinnerDirection="rtl"
+                        android:layout_marginRight="16dp"
+
+                        /><TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="12sp"
+                    android:layout_margin="16dp"
+                    android:textColor="@color/gray"
+                    android:text="زمان و میزان مصرف در هر نوبت را می‌توانی در ادامه مشاهده کرده و تغییر دهی."/>
+                </LinearLayout>
+            </com.github.florent37.expansionpanel.ExpansionLayout>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="0dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="16dp"
+        app:cardElevation="4dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginTop="8dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layoutDirection="rtl"
+            android:orientation="vertical">
+            <com.github.florent37.expansionpanel.ExpansionHeader
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                app:expansion_headerIndicator="@id/headerIndicator5"
+                app:expansion_layout="@id/expansionLayout5"
+                android:layoutDirection="rtl"
+
+                app:expansion_toggleOnClick="true">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <com.codesgood.views.JustifiedTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="56dp"
+                        android:gravity="center_vertical|right"
+                        android:layout_marginRight="16dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_toRightOf="@id/headerIndicator5"
+                        android:text="توضیحات (اختیاری)"/>
+
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:adjustViewBounds="true"
+                        android:id="@+id/headerIndicator5"
+                        android:layout_alignParentLeft="true"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="16dp"
+                        android:layout_centerVertical="true"
+                        android:layout_width="wrap_content"
+                        app:srcCompat="@drawable/ic_right" />
+                </RelativeLayout>
+
+
+            </com.github.florent37.expansionpanel.ExpansionHeader>
+            <com.github.florent37.expansionpanel.ExpansionLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:id="@+id/expansionLayout5"
+
+
+                >
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layoutDirection="rtl"
+                    android:layout_marginRight="16dp"
+                    android:orientation="vertical">
+
+                    <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:theme="@style/MyEditText"
                         app:counterMaxLength="140"
+                        android:layoutDirection="ltr"
+                        android:textDirection="ltr"
                         android:layout_marginBottom="16dp"
                         android:layout_marginLeft="16dp"
                         app:counterEnabled="true"
                         android:layout_height="wrap_content">
-                        <android.support.design.widget.TextInputEditText
+                        <com.google.android.material.textfield.TextInputEditText
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="توضیحات ( مثلا : بعد از غذا مصرف شود)"
+                            android:hint="مثلا: بعد از غذا مصرف شود."
                             android:maxLines="8"
-
                             android:maxLength="140"
-
                             android:enabled="false"
                             android:layoutDirection="rtl"
                             android:id="@+id/edtDescription"
                             android:textColor="@color/grayText"
                             />
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
                 </LinearLayout>
             </com.github.florent37.expansionpanel.ExpansionLayout>
         </LinearLayout>
-    </android.support.v7.widget.CardView>
+    </androidx.cardview.widget.CardView>
 
 
 

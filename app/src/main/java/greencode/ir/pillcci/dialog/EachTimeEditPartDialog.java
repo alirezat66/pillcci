@@ -4,14 +4,14 @@ import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.BottomSheetDialog;
-import android.support.design.widget.BottomSheetDialogFragment;
-import android.support.design.widget.TextInputEditText;
-import android.support.v4.app.FragmentManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import com.google.android.material.textfield.TextInputEditText;
+import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,10 +27,10 @@ import greencode.ir.pillcci.R;
 import greencode.ir.pillcci.adapter.EditEachTimeAdapter;
 import greencode.ir.pillcci.objects.EachUsage;
 import greencode.ir.pillcci.timepicker.TimePickerDialog;
-import greencode.ir.pillcci.timepicker.data.Type;
 import greencode.ir.pillcci.timepicker.listener.OnDateSetListener;
 import greencode.ir.pillcci.utils.KeyboardUtil;
 import greencode.ir.pillcci.utils.PersianCalculater;
+import greencode.ir.pillcci.utils.Utility;
 import saman.zamani.persiandate.PersianDate;
 
 /**
@@ -131,7 +131,8 @@ public class EachTimeEditPartDialog extends BottomSheetDialogFragment implements
                 if (isCurrect) {
                     myInterface.onSuccess(adapter.getList());
                 } else {
-                    Toast.makeText(context, "میزان مصرف نمی تواند مقدار خالی داشته باشد.", Toast.LENGTH_LONG).show();
+                    Toast toast = Toast.makeText(context, "میزان مصرف نمی‌تواند مقدار خالی داشته باشد.", Toast.LENGTH_LONG);
+                    Utility.centrizeAndShow(toast);
                 }
             }
         });
@@ -205,7 +206,7 @@ public class EachTimeEditPartDialog extends BottomSheetDialogFragment implements
     }
 
 
-    @Override
+   /* @Override
     public void selectTime(EachUsage eachUsage) {
         data = eachUsage;
 
@@ -222,7 +223,7 @@ public class EachTimeEditPartDialog extends BottomSheetDialogFragment implements
                 .setHourText("")
                 .setMinuteText("")
                 .setWheelItemTextSize(16)
-                .setCancelStringId("لغو")
+                .setCancelStringId("انصراف")
                 .setThemeColor(R.color.colorPrimary)
                 .setTitleStringId("انتخاب زمان")
                 .setSureStringId("انتخاب")
@@ -232,7 +233,7 @@ public class EachTimeEditPartDialog extends BottomSheetDialogFragment implements
                 .build();
         dialog.show(supportedFragmentManager, "انتخاب زمان");
     }
-
+*/
     @Override
     public void onDateSet(TimePickerDialog timePickerView, long millseconds) {
 
@@ -241,7 +242,8 @@ public class EachTimeEditPartDialog extends BottomSheetDialogFragment implements
         selectedDate.setHour(selectedHMDate.getHour());
         selectedDate.setMinute(selectedHMDate.getMinute());
         if (selectedDate.getTime() < startTimeDate) {
-            Toast.makeText(context, "زمان انتخاب شده نباید قبل از زمان شروع باشد.", Toast.LENGTH_SHORT).show();
+            Toast toast = Toast.makeText(context, "زمان انتخاب شده نباید قبل از زمان شروع باشد.", Toast.LENGTH_SHORT);
+            Utility.centrizeAndShow(toast);
         } else {
             adapter.updatePilTime(data, selectedDate);
             edtStartEvrayDay.setText(calculateFirst(adapter.getList()));
@@ -252,5 +254,10 @@ public class EachTimeEditPartDialog extends BottomSheetDialogFragment implements
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+    }
+
+    @Override
+    public void selectTime(EachUsage eachUsage, int position) {
+
     }
 }

@@ -1,4 +1,4 @@
-<LinearLayout android:layout_width="match_parent"
+<ScrollView android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:isScrollContainer="true"
@@ -7,37 +7,48 @@
     android:orientation="vertical"
 
     xmlns:android="http://schemas.android.com/apk/res/android">
+    <LinearLayout android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:isScrollContainer="true"
+        android:background="@color/backColor"
+        android:fillViewport="true"
+        android:orientation="vertical"
+        >
+        <include layout="@layout/toolbar_base"></include>
 
-    <android.support.v7.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:cardElevation="4dp">
-    <android.support.v7.widget.Toolbar
-        android:layout_width="match_parent"
-        android:background="@color/colorPrimary"
-        android:elevation="4dp"
-        android:layout_height="wrap_content">
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:background="@color/colorPrimary"
-        android:id="@+id/header"
-        android:layout_alignParentTop="true">
-        <TextView
-            style="@style/BigBlue_18"
-            android:textSize="18sp"
-            android:textColor="@color/white"
-            android:layout_marginRight="16dp"
-            android:layout_marginTop="16dp"
-            android:id="@+id/txtToday"
-            android:layout_centerVertical="true"
-            android:layout_alignParentRight="true"
-            android:text="سایر موارد"/>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/cardCall"
+            >
 
-    </RelativeLayout>
-    </android.support.v7.widget.Toolbar>
-    </android.support.v7.widget.CardView>
-    <RelativeLayout
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layoutDirection="rtl"
+                android:padding="24dp"
+                android:layout_centerHorizontal="true"
+                android:gravity="center_vertical"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/out_line_red_round"
+                android:orientation="horizontal">
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    app:srcCompat="@drawable/ic_call"
+                    />
+                <TextView
+                    style="@style/BigBlue"
+                    android:textColor="@color/grayText"
+                    android:text="تماس‌های ضروری"
+                    android:textSize="16dp"
+                    android:layout_marginRight="8dp"/>
+            </LinearLayout>
+
+        </RelativeLayout>
+
+        <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/cardProfile"
@@ -61,6 +72,9 @@
                 android:id="@+id/profileImg"
                 android:layout_height="32dp"
                 android:visibility="gone"
+                app:ibg_civ_border_color="#010101"
+                app:ibg_civ_border_width="1dp"
+
                 android:src="@drawable/user_pn"
 
                 />
@@ -77,34 +91,6 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/cardCall"
-        >
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layoutDirection="rtl"
-            android:padding="12dp"
-            android:gravity="center_vertical"
-
-            android:orientation="horizontal">
-            <android.support.v7.widget.AppCompatImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                app:srcCompat="@drawable/ic_call"
-                />
-            <TextView
-                style="@style/BigBlue"
-                android:textColor="@color/grayText"
-                android:text="تماس های ضروری"
-                android:textSize="16dp"
-                android:layout_marginRight="8dp"/>
-        </LinearLayout>
-
-    </RelativeLayout>
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:id="@+id/cardBot"
         >
 
@@ -116,15 +102,15 @@
             android:gravity="center_vertical"
 
             android:orientation="horizontal">
-            <android.support.v7.widget.AppCompatImageView
+            <androidx.appcompat.widget.AppCompatImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                app:srcCompat="@drawable/ic_android_grey_600"
+                app:srcCompat="@drawable/ic_bot"
                 />
             <TextView
                 style="@style/BigBlue"
                 android:textColor="@color/grayText"
-                android:text="بات تلگرام"
+                android:text="ربات گزارش مصرف پیلچی در تلگرام"
                 android:textSize="16dp"
                 android:layout_marginRight="8dp"/>
         </LinearLayout>
@@ -144,7 +130,7 @@
             android:padding="12dp"
             android:gravity="center_vertical"
             android:orientation="horizontal">
-            <android.support.v7.widget.AppCompatImageView
+            <androidx.appcompat.widget.AppCompatImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 app:srcCompat="@drawable/ic_setting"
@@ -171,7 +157,7 @@
             android:padding="12dp"
             android:gravity="center_vertical"
             android:orientation="horizontal">
-            <android.support.v7.widget.AppCompatImageView
+            <androidx.appcompat.widget.AppCompatImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 app:srcCompat="@drawable/ic_share"
@@ -188,6 +174,34 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/feedBackCard"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layoutDirection="rtl"
+            android:padding="12dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                app:srcCompat="@drawable/ic_feedback"
+                />
+            <TextView
+                style="@style/BigBlue"
+                android:text="بازخورد شما"
+                android:textSize="16sp"
+                android:textColor="@color/grayText"
+                android:layout_marginRight="8dp"/>
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:id="@+id/lawCard"
         >
 
@@ -198,7 +212,7 @@
             android:padding="12dp"
             android:gravity="center_vertical"
             android:orientation="horizontal">
-            <android.support.v7.widget.AppCompatImageView
+            <androidx.appcompat.widget.AppCompatImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 app:srcCompat="@drawable/ic_sharayet"
@@ -225,11 +239,11 @@
             android:padding="12dp"
             android:gravity="center_vertical"
             android:orientation="horizontal">
-            <android.support.v7.widget.AppCompatImageView
+            <androidx.appcompat.widget.AppCompatImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
 
-                app:srcCompat="@drawable/ic_off"
+                app:srcCompat="@drawable/ic_highlight_off"
                 />
             <TextView
                 style="@style/BigBlue"
@@ -253,7 +267,7 @@
             android:padding="12dp"
             android:gravity="center_vertical"
             android:orientation="horizontal">
-            <android.support.v7.widget.AppCompatImageView
+            <androidx.appcompat.widget.AppCompatImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 app:srcCompat="@drawable/ic_exit"
@@ -268,4 +282,42 @@
 
     </RelativeLayout>
 
-</LinearLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/cardEnter"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layoutDirection="rtl"
+            android:padding="12dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                app:srcCompat="@drawable/ic_exit"
+                />
+            <TextView
+                style="@style/BigBlue"
+                android:text="ورود"
+                android:textSize="16sp"
+                android:textColor="@color/grayText"
+                android:layout_marginRight="8dp"/>
+        </LinearLayout>
+
+
+
+    </RelativeLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="24dp"
+            android:elevation="4dp"
+            android:id="@+id/txt_version"
+            android:gravity="center_horizontal"
+            android:textSize="12sp"/>
+    </LinearLayout>
+</ScrollView>

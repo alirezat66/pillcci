@@ -3,7 +3,7 @@ package greencode.ir.pillcci.adapter;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView;
 import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +26,7 @@ public class BotAdapter extends RecyclerView.Adapter<BotAdapter.ViewHolder>  {
     ArrayList<BotObject> list;
     Context context;
     ViewHolder viewHolder1;
+
 
     public onPhoneClick myListener;
 
@@ -93,8 +94,14 @@ public class BotAdapter extends RecyclerView.Adapter<BotAdapter.ViewHolder>  {
 
 
         holder.txtPhone.setText(data.getName());
-        holder.txtTell.setText(data.getPhoneNumber());
-        holder.lyEdit.setOnClickListener(new View.OnClickListener() {
+        String phone = "";
+        if(data.getPhoneNumber().startsWith("00")){
+            phone = data.getPhoneNumber().replaceFirst("00","+");
+        }else {
+            phone  = data.getPhoneNumber();
+        }
+        holder.txtTell.setText(phone);
+        holder.imgDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 myListener.onItemDelete(data);
@@ -103,7 +110,7 @@ public class BotAdapter extends RecyclerView.Adapter<BotAdapter.ViewHolder>  {
         holder.imgDelete.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_delete_grey_500));
         if(data.getImg().equals("")){
             holder.imgLogo.setVisibility(View.VISIBLE);
-            holder.imgLogo.setImageResource(R.drawable.ic_add_user);
+            holder.imgLogo.setImageResource(R.drawable.no_image_person);
             holder.imgUser.setVisibility(View.INVISIBLE);
         }else {
             holder.imgLogo.setVisibility(View.INVISIBLE);

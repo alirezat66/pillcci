@@ -4,14 +4,20 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.constraint.ConstraintLayout;
-import android.support.v4.app.Fragment;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.Fragment;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 import com.kaopiz.kprogresshud.KProgressHUD;
 
 import java.util.ArrayList;
@@ -19,19 +25,25 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import greencode.ir.pillcci.R;
+import greencode.ir.pillcci.controler.AppDatabase;
+import greencode.ir.pillcci.database.Profile;
 import greencode.ir.pillcci.fragments.FragmentSignUpStepOne;
 import greencode.ir.pillcci.fragments.FragmentSignUpStepSetPass;
 import greencode.ir.pillcci.fragments.FragmentSignUpStepThree;
 import greencode.ir.pillcci.interfaces.RegisterStepOneInterface;
 import greencode.ir.pillcci.interfaces.SetPassInterface;
+import greencode.ir.pillcci.objects.LoginResponse;
 import greencode.ir.pillcci.objects.RegisterRequest;
 import greencode.ir.pillcci.objects.RegisterResponse;
 import greencode.ir.pillcci.presenters.PresenterRegisterStepOne;
 import greencode.ir.pillcci.presenters.SetPassPresenter;
+import greencode.ir.pillcci.retrofit.reqobject.LoginRequest;
 import greencode.ir.pillcci.retrofit.reqobject.SignUpRequest;
 import greencode.ir.pillcci.utils.BaseActivity;
 import greencode.ir.pillcci.utils.Constants;
 import greencode.ir.pillcci.utils.NetworkStateReceiver;
+import greencode.ir.pillcci.utils.PreferencesData;
+import greencode.ir.pillcci.utils.Utility;
 
 /**
  * Created by alireza on 5/11/18.
@@ -55,6 +67,9 @@ public class RegisterActivity extends BaseActivity implements NetworkStateReceiv
     ArrayList<Fragment> fragments = new ArrayList<>();
     boolean hasNet = false;
 
+    String phone;
+    String pass;
+
     int state = 1; //1 step one 2/ step two 3/step three
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -66,15 +81,19 @@ public class RegisterActivity extends BaseActivity implements NetworkStateReceiv
         fragments.add(new FragmentSignUpStepThree());
         registerRequest = new RegisterRequest();
         Bundle bundle = getIntent().getExtras();
-        if (bundle != null) {
-            registerRequest.setUserName(bundle.getString(Constants.PREF_USER_NAME));
-        }
+
         state=1;
+        if (bundle != null) {
+
+            registerRequest.setCodePhone(bundle.getInt(Constants.PREF_CODE));
+            registerRequest.setPhone(bundle.getString(Constants.PREF_USER_Phone));
+        }
         getSupportFragmentManager().beginTransaction().replace(R.id.container, fragments.get(0)).commit();
         networkStateReceiver = new NetworkStateReceiver();
         networkStateReceiver.addListener(this);
         this.registerReceiver(networkStateReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
         presenter = new PresenterRegisterStepOne(this);
+
     }
 
     public void showWaiting() {
@@ -126,7 +145,7 @@ public class RegisterActivity extends BaseActivity implements NetworkStateReceiv
     @Override
     public void onInvalid() {
         disMissWaiting();
-        showError("نام کاربری صحیح نمی باشد.");
+        showError("نام کاربری صحیح نیست.");
     }
 
     @Override
@@ -168,11 +187,76 @@ public class RegisterActivity extends BaseActivity implements NetworkStateReceiv
 
     }
 
+    @Override
+    public void onLoginValid(LoginResponse resp) {
+        disMissWaiting();
+        hiddenError();
+        PreferencesData.saveBool(Constants.PREF_LOGIN, true);
+        final Profile profile = resp.getProfile(); //new Profile(edtUser.getText().toString(),"","",0,0,"","","","","","");
+        AppDatabase database = AppDatabase.getInMemoryDatabase(this);
+        database.profileDao().insertProfile(profile);
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                        if (!task.isSuccessful()) {
+                            Log.w("hilevel", "getInstanceId failed", task.getException());
+                            if(kProgressHUD.isShowing()){
+                                kProgressHUD.dismiss();
+                                showError("اشکال در دسترسی به شبکه. لطفا دوباره تلاش کن!");
+                            }
+                            return;
+                        }
+                        // Get new Instance ID token
+                        String token = task.getResult().getToken();
+                        // Log and toast
+                        String msg = getString(R.string.msg_token_fmt, token);
+                        PreferencesData.saveBool(Constants.PREF_Guess, false);
+                        PreferencesData.saveString(Constants.Pref_Token,token);
+                        AppDatabase database = AppDatabase.getInMemoryDatabase(RegisterActivity.this);
+                        String userId = database.profileDao().getMyProfile().getMyId();
+                        presenter.updateToken(userId,token);
+
+                        Log.d("hilevel", msg);
+                    }
+                });
+
+
+    }
+
+    @Override
+    public void onUpdateInvalidToken() {
+        PreferencesData.saveBool("tokenSeted",false);
+        Intent intent = new Intent(RegisterActivity.this,MainActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    @Override
+    public void onUpdateToken() {
+        PreferencesData.saveBool("tokenSeted",true);
+        Intent intent = new Intent(RegisterActivity.this,MainActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    public void showWaitingLoad() {
+        kProgressHUD = KProgressHUD.create(this)
+                .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
+                .setLabel("لطفا منتظر بمانید")
+                .setDetailsLabel("درحال همگام سازی سوابق ...")
+                .setCancellable(false)
+                .setAnimationSpeed(2)
+                .setDimAmount(0.8f)
+                .setBackgroundColor(getResources().getColor(R.color.colorPrimary))
+                .show();
+    }
+
+
     public void showError(String str) {
         disMissWaiting();
-        error.setVisibility(View.VISIBLE);
-        error.setText(str);
-
+        Toast toast =  Toast.makeText(this, str, Toast.LENGTH_LONG);
+        Utility.centrizeAndShow(toast);
 
     }
 
@@ -183,7 +267,18 @@ public class RegisterActivity extends BaseActivity implements NetworkStateReceiv
     @Override
     public void onRegisterButton(RegisterRequest request) {
         registerRequest = request;
-        presenter.checkUser(request.getUserName(),request.getMoarefCode());
+
+        presenter.checkUser(request.getUserName(),request.getMoarefCode(),this);
+    }
+
+    @Override
+    public void onInvide() {
+        showError("نام کاربری اشتباه است.");
+    }
+
+    @Override
+    public void onEmpty() {
+        showError("نام کاربری را وارد کنید.");
     }
 
     @Override
@@ -210,16 +305,19 @@ public class RegisterActivity extends BaseActivity implements NetworkStateReceiv
     @Override
     public void onErrorRegister(String error) {
         disMissWaiting();
-        Toast.makeText(this, error, Toast.LENGTH_LONG).show();
+        Toast toast = Toast.makeText(this, error, Toast.LENGTH_LONG);
+        Utility.centrizeAndShow(toast);
     }
 
     @Override
     public void onSuccessRegister(RegisterResponse request) {
-        disMissWaiting();
-        Intent intent = new Intent(this,LoginActivity.class);
+
+        LoginRequest req = new LoginRequest(phone,pass);
+        presenter.tryToLogin(req);
+       /* Intent intent = new Intent(this,LoginActivity.class);
         intent.putExtra(Constants.PREF_USER_NAME,request.getUserName());
-        startActivity(intent);
-        finish();
+        startActivity(intent);*/
+      /*  finish();*/
         /*prepareNewPage();
         registerRequest.setCode(request.getValidCode());
         state=2;
@@ -236,11 +334,13 @@ public class RegisterActivity extends BaseActivity implements NetworkStateReceiv
     @Override
     public void onSetPass(RegisterRequest request) {
         registerRequest=request;
-
+        pass = request.getPass();
+        phone = request.getUserName();
         if (hasNet) {
-            presenterSetPass.checkValidation(new RegisterRequest(request.getUserName(), request.getPass(), request.getRetryPass(), request.getMoarefCode()));
+            presenterSetPass.checkValidation(request);
         } else {
-            Toast.makeText(this, "لطفا پس از اطمینان از اتصال به اینترنت مجددا اقدام فرمایید.", Toast.LENGTH_LONG).show();
+            Toast toast = Toast.makeText(this, "لطفا پس از اطمینان از اتصال به اینترنت مجددا اقدام فرمایید.", Toast.LENGTH_LONG);
+            Utility.centrizeAndShow(toast);
         }
     }
 

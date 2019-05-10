@@ -1,13 +1,151 @@
 <RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android" >
-    <include layout="@layout/toolbar_call"/>
-    <android.support.v7.widget.RecyclerView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/white"
+    android:id="@+id/toolBar" >
+    <androidx.appcompat.widget.Toolbar
+       android:layout_alignParentTop="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:elevation="5dp"
+        android:fitsSystemWindows="true"
+        android:layoutDirection="ltr"
+        android:minHeight="56dp"
+        android:id="@+id/toolbar"
+        tools:ignore="VectorDrawableCompat"
+        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            >
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/img_back"
+                android:layout_width="wrap_content"
+                android:layout_marginRight="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_height="56dp"
+                android:layout_alignParentRight = "true"
+                android:layout_centerVertical="true"
+                android:scaleType="centerInside"
+                app:srcCompat="@drawable/ic_arrow_forward"
+
+                />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:padding="16dp"
+                android:id="@+id/imgAdd"
+                app:srcCompat="@drawable/ic_add_white_24dp"/>
+
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:maxLines="1"
+                android:text="تماس‌های ضروری"
+                android:layout_toLeftOf="@id/img_back"
+                android:layout_centerInParent="true"
+                android:id="@+id/title"/>
+
+
+        </RelativeLayout>
+
+    </androidx.appcompat.widget.Toolbar>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="همیاران دعوت شده"
+        android:layout_alignParentRight="true"
+        android:layout_margin="8dp"
+        android:id="@+id/txt_hamyar"
+        android:visibility="gone"
+        android:layout_below="@id/toolbar"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="180dp"
+        android:id="@+id/mainphone"
+
+        android:gravity="center"
+        android:layout_marginTop="16dp"
+        android:orientation="horizontal"
+        android:layout_below="@id/txt_hamyar">
+    <LinearLayout
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:orientation="vertical"
+        android:layout_marginRight="20dp"
+        android:id="@+id/lyInfo"
+        android:gravity="center_horizontal|center_vertical"
+        android:background="@drawable/out_line_pink_round"
+        >
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:src="@drawable/medical_information"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#656565"
+            android:layout_marginTop="8dp"
+            android:text="اطلاعات دارویی"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#7A52BE"
+            android:text="1490"
+            />
+    </LinearLayout>
+        <LinearLayout
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:orientation="vertical"
+            android:id="@+id/lyOrgance"
+            android:gravity="center_horizontal|center_vertical"
+            android:background="@drawable/out_line_red_round"
+            >
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+
+            android:src="@drawable/healthcare_and_medical"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#656565"
+            android:layout_marginTop="8dp"
+            android:text="اورژانس"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#FF5368"
+            android:text="115"
+            />
+        </LinearLayout>
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@id/mainphone"
+
         android:id="@+id/list"
-        android:layout_marginTop="56dp"
-        ></android.support.v7.widget.RecyclerView>
+
+        ></androidx.recyclerview.widget.RecyclerView>
 
 </RelativeLayout>

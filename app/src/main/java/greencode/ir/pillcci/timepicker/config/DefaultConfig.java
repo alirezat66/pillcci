@@ -14,7 +14,7 @@ public class DefaultConfig {
     public static final int TV_SELECTOR_COLOR = 0XFF404040;
     public static final int TV_SIZE = 12;
     public static final boolean CYCLIC = true;
-    public static String CANCEL = "لغو";
+    public static String CANCEL = "انصراف";
     public static String SURE = "تایید";
     public static String TITLE = "انتخاب زمان";
     public static String YEAR = "سال";

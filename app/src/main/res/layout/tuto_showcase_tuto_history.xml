@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:id="@+id/root"
+    tools:background="#000000"
+    >
+
+
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/title"
+        android:layout_marginBottom="30dp"
+        android:layout_marginTop="5dp"
+        android:weightSum="2"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal"
+            android:layout_marginTop="50dp"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                app:srcCompat="@drawable/ic_history"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:gravity="center_horizontal"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp"
+                android:text="گزارش مصرف همه‌ی داروهایی که نوبت مصرفشون رسیده و گذشته رو اینجا پیدا کن!"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                android:textAllCaps="true"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="40dp"
+                android:layout_marginLeft="40dp"
+                android:layout_marginTop="32dp"
+                android:text="می‌تونی با استفاده از فیلترها یه دارو یا مصرف کننده‌ی خاص رو برای گزارش انتخاب کنی، یا بازه‌ی زمانی گزارش رو تعیین کنی."
+                android:gravity="center"
+                android:textColor="@android:color/white"
+                android:textSize="14sp"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="متوجه شدم"
+                android:layout_gravity="left"
+                android:textColor="@color/white"
+                android:id="@+id/btn_ok"
+                android:background="@color/transparent"
+                android:textSize="18sp"
+                android:layout_margin="16dp"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:visibility="invisible"
+                android:id="@+id/center_view"></Button>
+        </LinearLayout>
+        ‌
+
+
+
+    </LinearLayout>
+</ScrollView>
+
+
+
+</RelativeLayout>

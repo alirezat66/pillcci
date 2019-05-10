@@ -3,7 +3,7 @@ package greencode.ir.pillcci.retrofit;
 public enum serverErrors {
     NullError("خطای دریافت اطلاعات.", 0),
     NotJsaonResponse("خطای نوع اطلاعات ورودی", 1),
-    ServerError("خطایی در ارتباط با سرور پیش آمده است . لطفا دوباره تلاش کنید.", 2),
+    ServerError("اشکال در دسترسی به شبکه. لطفا دوباره تلاش کن!", 2),
     Authorized("401", 3);
 
     private String errorName;

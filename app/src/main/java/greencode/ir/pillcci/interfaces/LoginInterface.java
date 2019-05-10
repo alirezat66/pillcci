@@ -30,4 +30,8 @@ public interface LoginInterface {
     void onDrugReady(ArrayList<PillObject> posts, ArrayList<PillUsage>usages, ArrayList<PhoneBook>phoneBooks);
 
     void onEmptyDrug();
+
+    void onUpdateToken();
+
+    void onUpdateInvalidToken();
 }

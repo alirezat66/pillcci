@@ -96,6 +96,16 @@ public interface reqInterface {
     @POST("user/delete_number")
     Call<JsonObject> deleteBot(@Field("user_id")String user_id,@Field("data")String data);
 
+    @FormUrlEncoded
+    @POST("user/token/update")
+    Call<JsonObject> updateToken(@Field("user_id")String user_id,@Field("gtoken")String gtoken);
+
+    @FormUrlEncoded
+    @POST("user/token/remove")
+    Call<JsonObject> removeToken(@Field("user_id")String user_id,@Field("token")String gtoken);
+
+
+
 
 
 

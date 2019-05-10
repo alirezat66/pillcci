@@ -1,42 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@color/colorPrimary"
+    android:layout_height="250dp"
   >
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="215dp"
+        android:background="#DBCEF2"
+        android:id="@+id/ly_one"
 
-   <de.hdodenhof.circleimageview.CircleImageView
-       android:layout_width="96dp"
-       android:layout_height="96dp"
-       android:src="@mipmap/ic_launcher"
-       android:layout_marginTop="16dp"
-       android:id="@+id/imgLogi"
-       android:layout_centerHorizontal="true"/>
-    <TextView
-        style="@style/BigText"
-        android:text="پیلچی"
-        android:id="@+id/txtPilchi"
-        android:textSize="30sp"
-        android:layout_below="@id/imgLogi"
+        ></RelativeLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:layout_below="@id/ly_one"
+        android:background="@color/white"
+        ></LinearLayout>
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/login_image"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"/>
-    <TextView
-        style="@style/BigText"
-        android:text="ورود به حساب کاربری"
-        android:id="@+id/txtTitle"
-        android:textSize="18sp"
-        android:layout_below="@id/txtPilchi"
-        android:layout_centerHorizontal="true"
-        />
-    <TextView
-        style="@style/SmallText"
-        android:text="نام کاربری شماره تلفن همراهتان است"
-        android:layout_below="@id/txtTitle"
-        android:id="@+id/txtSubTitle"
-        android:layout_marginTop="8dp"
-        android:textSize="14.0sp"
 
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="16dp"/>
 
 
 

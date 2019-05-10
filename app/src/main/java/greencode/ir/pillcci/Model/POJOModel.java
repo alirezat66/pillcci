@@ -49,6 +49,7 @@ import greencode.ir.pillcci.retrofit.respObject.ChangePassStepOneRes;
 import greencode.ir.pillcci.retrofit.respObject.ChangePassStepTwoRes;
 import greencode.ir.pillcci.retrofit.respObject.ErrorResp;
 import greencode.ir.pillcci.retrofit.respObject.SignUpResponse;
+import greencode.ir.pillcci.utils.PreferencesData;
 
 /**
  * Created by alireza on 5/11/18.
@@ -132,6 +133,7 @@ public class POJOModel implements ServerListener {
     }
 
     public void changePass(final ChangePassStepOneReq req) {
+
         CallerService.forgetPassStepOne(req,this);
     }
 
@@ -151,7 +153,11 @@ public class POJOModel implements ServerListener {
         }else if(i == MyMethods.ResendSMS.getMethodValue()){
             validationPresenter.errorReady(str);
         }else if(i == MyMethods.Login.getMethodValue()){
-            loginPresenter.errorReady(str);
+            if(loginPresenter!=null) {
+                loginPresenter.errorReady(str);
+            }else {
+                presenterRegisterStepOne.errorReady(str);
+            }
         }else if(i==MyMethods.ForgetPassStepOne.getMethodValue()){
             changePassOnePresenter.sendError(str);
         }else if(i==MyMethods.ForgetPassStepTwo.getMethodValue()){
@@ -164,7 +170,6 @@ public class POJOModel implements ServerListener {
             loginPresenter.GetDrugsError();
         }
         else if(i==MyMethods.RemoveAccount.getMethodValue()){
-
                 morePresenter.onError(str);
         }else if(i==MyMethods.GetBotList.getMethodValue()){
             botListPresenter.onError(str);
@@ -172,6 +177,12 @@ public class POJOModel implements ServerListener {
             botAddPresenter.onError(str);
         }else if(i==MyMethods.DeleteFromBot.getMethodValue()){
             botListPresenter.onError(str);
+        }else if(i==MyMethods.UpdateToken.getMethodValue()){
+            if (loginPresenter!=null) {
+                loginPresenter.onTokenInvalidUpdate();
+            }else {
+                presenterRegisterStepOne.onTokenInvalidUpdate();
+            }
         }
     }
 
@@ -209,9 +220,22 @@ public class POJOModel implements ServerListener {
         }else if(i == MyMethods.Login.getMethodValue()){
             if(error.getError()==0){
                 LoginResponse data = gson.fromJson(jsonObject.toString(),LoginResponse.class);
-                loginPresenter.responseReady(data);
+                if(jsonObject.has("token")) {
+                    String token = jsonObject.get("token").getAsString();
+                    PreferencesData.saveString("token",token);
+                }
+                if(loginPresenter!=null){
+                    loginPresenter.responseReady(data);
+
+                }else {
+                    presenterRegisterStepOne.responseReady(data);
+                }
             }else {
-                loginPresenter.errorReady(error.getMessage());
+                if(loginPresenter!=null) {
+                    loginPresenter.errorReady(error.getMessage());
+                }else {
+                    presenterRegisterStepOne.errorReady(error.getMessage());
+                }
             }
         }else if(i==MyMethods.ForgetPassStepOne.getMethodValue()){
            if(error.getError()==0){
@@ -284,6 +308,12 @@ public class POJOModel implements ServerListener {
             }else {
                 botListPresenter.onError(error.getMessage());
             }
+        }else if(i==MyMethods.UpdateToken.getMethodValue()){
+            if(loginPresenter!=null) {
+                loginPresenter.onTokenUpdated();
+            }else {
+                presenterRegisterStepOne.onTokenUpdated();
+            }
         }
     }
     public ErrorResp myError(JsonObject object) {
@@ -336,5 +366,11 @@ public class POJOModel implements ServerListener {
     public void deletBotObject(String myId, BotObject phoneBook) {
         String data = "[" +phoneBook.toJson().toString()+"]";
         CallerService.deleteBotObject(this,myId,data);
+    }
+    public void updateToken(String myId, String token) {
+        CallerService.updateToken(this,myId,token);
+    }
+    public void removeToken(String myId, String token) {
+        CallerService.removeToken(this,myId,token);
     }
 }

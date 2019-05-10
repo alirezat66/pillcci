@@ -12,17 +12,10 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.TextInputEditText;
-import android.support.v4.app.ActivityCompat;
-import android.support.v7.widget.AppCompatImageView;
-import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Base64;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -32,9 +25,16 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatImageView;
+import androidx.core.app.ActivityCompat;
+
 import com.alirezaafkar.sundatepicker.DatePicker;
 import com.alirezaafkar.sundatepicker.interfaces.DateSetListener;
 import com.github.florent37.expansionpanel.ExpansionLayout;
+import com.google.android.material.textfield.TextInputEditText;
+import com.isapanah.awesomespinner.AwesomeSpinner;
 import com.kaopiz.kprogresshud.KProgressHUD;
 import com.kevalpatel.ringtonepicker.RingtonePickerDialog;
 import com.kevalpatel.ringtonepicker.RingtonePickerListener;
@@ -44,9 +44,6 @@ import com.otaliastudios.autocomplete.AutocompletePresenter;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 import com.zcw.togglebutton.ToggleButton;
-
-import org.xdty.preference.colorpicker.ColorPickerDialog;
-import org.xdty.preference.colorpicker.ColorPickerSwatch;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -58,12 +55,13 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
-import fr.ganfra.materialspinner.MaterialSpinner;
 import greencode.ir.pillcci.R;
 import greencode.ir.pillcci.adapter.CatAutoCompletePresenter;
 import greencode.ir.pillcci.adapter.DrAutoCompletePresenter;
 import greencode.ir.pillcci.adapter.PillAutoCompletePresenter;
 import greencode.ir.pillcci.adapter.ResultAutoCompletePresenter;
+import greencode.ir.pillcci.colorpicker.colorpicker.ColorPickerDialog;
+import greencode.ir.pillcci.colorpicker.colorpicker.ColorPickerSwatch;
 import greencode.ir.pillcci.controler.AppDatabase;
 import greencode.ir.pillcci.database.Category;
 import greencode.ir.pillcci.database.PillObject;
@@ -103,10 +101,9 @@ import static greencode.ir.pillcci.utils.CalcTimesAndSaveUsage.makePillUsageInPe
 public class ActivityEditPill extends BaseActivity implements OnDateSetListener, DateSetListener {
     @BindView(R.id.img_back)
     AppCompatImageView imgBack;
-    @BindView(R.id.txtTitle)
+    @BindView(R.id.title)
     TextView txtTitle;
-    @BindView(R.id.toolBar)
-    Toolbar toolBar;
+
     @BindView(R.id.imgLogo)
     CircleImageView imgLogo;
     @BindView(R.id.iv_camera)
@@ -206,7 +203,7 @@ public class ActivityEditPill extends BaseActivity implements OnDateSetListener,
     @BindView(R.id.edtEachTime)
     TextInputEditText edtEachTime;
     @BindView(R.id.spinner)
-    MaterialSpinner spinner;
+    AwesomeSpinner spinner;
     @BindView(R.id.edtDescription)
     TextInputEditText edtDescription;
     @BindView(R.id.txtUseType)
@@ -238,6 +235,24 @@ public class ActivityEditPill extends BaseActivity implements OnDateSetListener,
     LiquidRadioButton radio8;
     @BindView(R.id.radio9)
     LiquidRadioButton radio9;
+    @BindView(R.id.colorLy)
+    LinearLayout colorLy;
+    @BindView(R.id.expansionLayout)
+    ExpansionLayout expansionLayout;
+    @BindView(R.id.headerIndicator_three)
+    AppCompatImageView headerIndicatorThree;
+    @BindView(R.id.expansionLayout_three)
+    ExpansionLayout expansionLayoutThree;
+    @BindView(R.id.txtDay)
+    TextView txtDay;
+    @BindView(R.id.ly_one)
+    LinearLayout lyOne;
+    @BindView(R.id.txt_count)
+    TextView txtCount;
+    @BindView(R.id.txt_type)
+    TextView txtType;
+    @BindView(R.id.ly_second)
+    LinearLayout lySecond;
 
     private int mSelectedColor;
     private int mSelectedColorFirst;
@@ -311,9 +326,10 @@ public class ActivityEditPill extends BaseActivity implements OnDateSetListener,
             @Override
             public void onClick(View v) {
                 Utility.hideKeyboard();
-                finish();
+                backDialog();
             }
         });
+
         btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -346,17 +362,37 @@ public class ActivityEditPill extends BaseActivity implements OnDateSetListener,
         Utility.hideKeyboard();
     }
 
+    @Override
+    public void onBackPressed() {
+        if(isChange() || isCheckSecond()){
+            backDialog();
+            return;
+        }
+        super.onBackPressed();
+
+    }
+
     private void backToLastStateComplete(int lastType) {
         if (lastType == 1) {
+      //      radioAll.setChecked(true);
+            txtUseType.setText("مصرف همیشگی");
+            disableOne();
+            disableSecond();
             radioAll.setChecked(true);
-            txtUseType.setText("مصرف مداوم");
         } else if (lastType == 2) {
+       //     radioTime.setChecked(true);
+            txtUseType.setText("" + totalDay + " روز");
+            enableOne();
             radioTime.setChecked(true);
-            txtUseType.setText("مصرف برای " + totalDay + " روز");
-        } else if (lastType == 3) {
-            radioCount.setChecked(true);
+            txtDay.setText(totalDay+"");
 
-            txtUseType.setText("مصرف به میزان " + totalUseAmount + " " + unitUse);
+        } else if (lastType == 3) {
+          //  radioCount.setChecked(true);
+            enableSecond();
+            radioTime.setChecked(true);
+            txtCount.setText(totalUseAmount+"");
+            txtType.setText(unitUse);
+            txtUseType.setText("" + totalUseAmount + " " + unitUse);
 
         }
 
@@ -367,9 +403,9 @@ public class ActivityEditPill extends BaseActivity implements OnDateSetListener,
         type = object.getUseType();
         typeFirst = object.getUseType();
         totalDay = object.getAllUseDays();
-        countOfUseDays =object.getAllUseDays()+"";
+        countOfUseDays = object.getAllUseDays() + "";
         totalUseAmount = object.getTotalAmounts();
-        amountOfUse = object.getTotalAmounts()+"";
+        amountOfUse = object.getTotalAmounts() + "";
         backToLastStateComplete(type);
 
         txtUnitReminder.setText(object.getUnitUse());
@@ -393,7 +429,7 @@ public class ActivityEditPill extends BaseActivity implements OnDateSetListener,
                 if (on) {
                     hasReminder = true;
                     reminderDayLayout.setVisibility(View.VISIBLE);
-                    remiderBeforLay.setVisibility(View.VISIBLE);
+                    remiderBeforLay.setVisibility(View.GONE);
                     edtReminderDay.setEnabled(true);
                     edtCountOfPill.setEnabled(true);
 
@@ -402,7 +438,7 @@ public class ActivityEditPill extends BaseActivity implements OnDateSetListener,
                     }
                     if (type == 2) {
                         double amount = 0;
-                        for (String mount : AddMedicianActivity.getUsageFields().getUnitsCount()) {
+                        for (String mount :unitsCount) {
                             amount += Double.parseDouble(mount);
                         }
 
@@ -426,40 +462,107 @@ public class ActivityEditPill extends BaseActivity implements OnDateSetListener,
             @Override
             public void onClick(View v) {
                 type = 1;
-                backToLastState(type);
+                backToLastStateComplete(type);
+                disableSecond();
+                disableOne();
+                backToLastStateComplete(type);
             }
         });
         radioTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getDayDialog();
+                enableOne();
+            }
+        });
+        lyOne.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(radioTime.isChecked()) {
+                    enableOne();
+                    disableSecond();
+                    getDayDialog();
+                }
             }
         });
 
-        radioCount.setOnClickListener(new View.OnClickListener() {
+        lySecond.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getAmountDialog();
+                if(radioTime.isChecked())
+                {
+                    getAmountDialog();
+                    enableSecond();
+                    disableOne();
+                }
             }
         });
 
 
     }
+    private void disableSecond() {
+        txtCount.setText("----");
+        int childCount = lySecond.getChildCount();
+
+        for (int i = 0; i < childCount; i++) {
+            View v = lySecond.getChildAt(i);
+            if (v instanceof TextView) {
+                ((TextView) v).setTextColor(getResources().getColor(R.color.gray));
+            }
+        }
+    }
+    private void disableOne() {
+        txtDay.setText("----");
+        int childCount = lyOne.getChildCount();
+        for (int i = 0; i < childCount; i++) {
+            View v = lyOne.getChildAt(i);
+            if (v instanceof TextView) {
+                ((TextView) v).setTextColor(getResources().getColor(R.color.gray));
+            }
+        }
+
+    }
+
+    private void enableOne() {
+        type = 2;
+        int childCount = lyOne.getChildCount();
+        txtDay.setText("1");
+        txtCount.setText("----");
+
+
+        for (int i = 0; i < childCount; i++) {
+            View v = lyOne.getChildAt(i);
+            if (v instanceof TextView) {
+                ((TextView) v).setTextColor(getResources().getColor(R.color.black));
+            }
+        }
+
+    }
+    private void enableSecond() {
+        type = 3;
+        txtCount.setText(totalUseAmount+"");
+        int childCount = lySecond.getChildCount();
+        for (int i = 0; i < childCount; i++) {
+            View v = lySecond.getChildAt(i);
+            if (v instanceof TextView) {
+                ((TextView) v).setTextColor(getResources().getColor(R.color.black));
+            }
+        }
+    }
 
     private void getAmountDialog() {
-        final AmountDialog dialog = new AmountDialog(this, totalUseAmount);
+        final AmountDialog dialog = new AmountDialog(this, totalUseAmount, unitUse);
         dialog.setListener(new AmountInterface() {
             @Override
             public void onSuccess(double amount) {
                 totalUseAmount = amount;
                 type = 3;
-                backToLastState(type);
+                backToLastStateComplete(type);
                 dialog.dismiss();
             }
 
             @Override
             public void onCancel() {
-                backToLastState(type);
+                backToLastStateComplete(type);
                 dialog.dismiss();
             }
         });
@@ -473,14 +576,14 @@ public class ActivityEditPill extends BaseActivity implements OnDateSetListener,
             public void onSuccess(int days) {
                 totalDay = days;
                 type = 2;
-                backToLastState(type);
+                backToLastStateComplete(type);
                 dialog.dismiss();
             }
 
             @Override
             public void onCancel(int lastType) {
 
-                backToLastState(type);
+                backToLastStateComplete(type);
                 dialog.dismiss();
             }
         });
@@ -570,7 +673,7 @@ public class ActivityEditPill extends BaseActivity implements OnDateSetListener,
         }
 
         txtStartUsageTime.setText(PersianCalculater.getHourseAndMin(object.getFirstAlarmTime()));
-        txtStartTime.setText(PersianCalculater.getHourseAndMin(object.getFirstAlarmTime()) + " - ");
+        txtStartTime.setText( PersianCalculater.getHourseAndMin(object.getFirstAlarmTime()));
         txtStartDate.setText(PersianCalculater.getYearMonthAndDay(object.getFirstAlarmTime()));
         txtStartUsageDate.setText(PersianCalculater.getYearMonthAndDay(object.getFirstAlarmTime()));
         edtDescription.setText(object.getDescription());
@@ -614,6 +717,13 @@ public class ActivityEditPill extends BaseActivity implements OnDateSetListener,
             }
         });
         spinner.setAdapter(adapter);
+        spinner.setOnSpinnerItemClickListener(new AwesomeSpinner.onSpinnerItemClickListener<String>() {
+            @Override
+            public void onItemSelected(int position, String s) {
+                unitUse = ITEMS[position];
+                txtUsage.setText(unitUse);
+            }
+        });
         int pos = 0;
         for (int i = 0; i < ITEMS.length; i++) {
             if (unitUse.equals(ITEMS[i])) {
@@ -622,18 +732,8 @@ public class ActivityEditPill extends BaseActivity implements OnDateSetListener,
             }
         }
         spinner.setSelection(pos);
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                unitUse = ITEMS[position];
-                txtUsage.setText(unitUse);
-            }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
 
-            }
-        });
         rgOne.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -697,13 +797,15 @@ public class ActivityEditPill extends BaseActivity implements OnDateSetListener,
         if (lastType == 1) {
             radioEvryDay.setChecked(true);
             txtTypeOfDays.setText("(هر روز)");
+            disableSecond();
+            disableOne();
         } else if (lastType == 2) {
             radioDaysInterval.setChecked(true);
             txtTypeOfDays.setText("(هر " + dayRepeat + " روز)");
         } else if (lastType == 3) {
             radioSpecificDays.setChecked(true);
             String dayStr = makeDays(daysOfUsage);
-            txtTypeOfDays.setText("( روزهای : " + dayStr + " )");
+            txtTypeOfDays.setText("( " + dayStr + " )");
 
         } else {
             radiobirthControl.setChecked(true);
@@ -731,199 +833,35 @@ public class ActivityEditPill extends BaseActivity implements OnDateSetListener,
         startTimeHour = persianCalendar.getHour();
         startTimeMin = persianCalendar.getMinute();
         txtStartUsageTime.setText(PersianCalculater.getHourseAndMin(millseconds));
-        txtStartTime.setText(PersianCalculater.getHourseAndMin(millseconds) + " - ");
-        //disableAfterThree();
-    }
-
-    private void showDialogOne() {
-        /*final DayRepeatDialog dialog = new DayRepeatDialog(this, this, getSupportFragmentManager(),
-                typeDayUsage, daysOfUsage, dayRepeat, ourStartTimeStamp);
-        dialog.setListener(new DayRepeatInterface() {
-
-
-            @Override
-            public void onSuccess(int type, int eachdays, String startDate, String title, ArrayList<String> days, long startTimeStamp) {
-
-
-                //  disableAfterOne();
-                typeDayUsage = type;
-                usageStartDate = startDate;
-                daysOfUsage = days;
-                dayRepeat = eachdays;
-                if (type == 1 || type == 2) {
-                    isRegular = true;
-                    useDays.setText(title + " - شروع از : " + startDate);
-                } else if (type == 3) {
-                    if (days.size() == 7) {
-                        isRegular = true;
-                        typeDayUsage = 1;
-                        useDays.setText("هر روز - شروع از :" + startDate);
-                    } else {
-                        isRegular = false;
-                        String ourdays = "";
-
-
-                        for (String day : days) {
-                            ourdays += day;
-                            ourdays += ",";
-                        }
-                        if (ourdays.length() > 0) {
-                            ourdays = ourdays.substring(0, ourdays.length() - 1);
-                        }
-                        useDays.setText(title + " " + ourdays + "\n" + "  شروع از :" + startDate);
-                    }
-                } else if (type == 4) {
-                    isRegular = true;
-
-                    useDays.setText(title + " - شروع از : " + startDate);
-                }
-                usePartDays.setEnabled(true);
-                PersianDate date = new PersianDate(startTimeStamp);
-                date.setHour(0);
-                date.setMinute(0);
-                ourStartTimeStamp = date.getTime();
-                dialog.dismiss();
-            }
-
-            @Override
-            public void onRejected() {
-                dialog.dismiss();
-            }
-        });
-        dialog.show(getSupportFragmentManager(), dialog.getTag());*/
-    }
-
-    private void showDialogTwo() {
-        /*final UsageCountDialog dialogUsage = new UsageCountDialog(this, countOfUsagePerDay);
-        dialogUsage.setListener(new UsageCountInterface() {
-            @Override
-            public void onSuccess(int selected, String title, int count, double difrent) {
-                diffrenceOfUsage = difrent;
-                countOfUsagePerDay = count;
-                usePartDays.setText(title);
-                edtStartTime.setEnabled(true);
-                disablePartFour();
-                dialogUsage.dismiss();
-            }
-
-            @Override
-            public void onRejected() {
-                dialogUsage.dismiss();
-            }
-        });
-        dialogUsage.show();*/
+        txtStartTime.setText( PersianCalculater.getHourseAndMin(millseconds));
 
     }
 
-    private void showDialogThree() {
 
-        /*timePickerDialog = Utility.getTimeDialog(this, getResources().getColor(R.color.colorPrimary));
-
-        timePickerDialog.show(getSupportFragmentManager(), "انتخاب زمان");*/
-       /* final SelectTimeDialog selectTimeDialog = new SelectTimeDialog(getContext());
-        selectTimeDialog.setListener(new SelectTimeInterface() {
-            @Override
-            public void onSuccess(String startDate,int time,int min) {
-                startTimeHour  = time;
-                startTimeMin=min;
-                edtStartTime.setText(startDate);
-                selectTimeDialog.dismiss();
-                edtUseEachTime.setEnabled(true);
-                disableAfterThree();
-            }
-
-            @Override
-            public void onRejected() {
-                selectTimeDialog.dismiss();
-            }
-        });
-        selectTimeDialog.show();*/
+    public boolean isCheckSecond(){
+        // check mikone kolan taghiri dashtim ya na
+        if(!edtcatName.getText().toString().equals(catName)){
+            return true;
+        }else if(!edtDrName.getText().toString().equals(object.getDrName())){
+            return  true;
+        }else if(!edtDescription.getText().toString().equals(object.getDescription())){
+            return true;
+        }else if(!edtMedName.getText().toString().equals(object.getMidname())){
+            return true;
+        }else if(!edtUseRes.getText().toString().equals(object.getCouseOfUse())){
+            return true;
+        }else if(!edtcatName.getText().toString().equals(object.getCatName())){
+            return true;
+        }else if(!edtRing.getText().toString().equals(object.getCatring())){
+            return true;
+        }else if(!object.getUnitUse().equals(spinner.getSelectedItem())){
+            return true;
+        }else {
+            return false;
+        }
     }
-
-    private void showDialogFour() {
-       /* final EachTimeDialog eachTimeDialog = new EachTimeDialog(this, unitUse, countEachUse);
-        eachTimeDialog.setListener(new EachTimeInterface() {
-            @Override
-            public void onSuccess(double count, final String unit) {
-                countEachUse = count;
-                unitUse = unit;
-                eachTimeDialog.dismiss();
-
-                final EachTimeEditPartDialog editDialog = new EachTimeEditPartDialog(ActivityEditPill.this, startTimeHour, startTimeMin, countOfUsagePerDay, diffrenceOfUsage, unitUse, countEachUse, getSupportFragmentManager(), ourStartTimeStamp);
-                editDialog.setListener(new EachTimeEditPart() {
-                    @Override
-                    public void onSuccess(ArrayList<EachUsage> usages) {
-                        unitsCount = new ArrayList<>();
-                        unitTimes = new ArrayList<>();
-                        for (EachUsage use : usages) {
-                            unitsCount.add(use.getEachUse());
-                            unitTimes.add(use.getStartDay());
-                        }
-
-
-                        String temp = unitsCount.get(0);
-                        boolean allSame = true;
-                        for (String use : unitsCount) {
-                            if (!use.equals(temp)) {
-                                allSame = false;
-                                break;
-                            }
-                        }
-
-                        if (allSame) {
-                            edtUseEachTime.setText(temp + " " + unitUse + " در هر وعده");
-                        } else {
-                            String finalStr = "به ترتیب ";
-                            for (String use : unitsCount) {
-                                finalStr += use;
-                                finalStr += ",";
-                            }
-                            finalStr = finalStr.substring(0, finalStr.length() - 1);
-                            finalStr = finalStr + " " + unitUse;
-                            finalStr += " در ساعت(های): ";
-                            for (long timeStr : unitTimes) {
-                                finalStr += PersianCalculater.getHourseAndMin(timeStr);
-                                finalStr += ",";
-                            }
-                            finalStr = finalStr.substring(0, finalStr.length() - 1);
-                            edtUseEachTime.setText(finalStr);
-                        }
-                        edtDescription.setEnabled(true);
-                        edtDescription.setFocusable(true);
-                        String str = edtUseEachTime.getText().toString().replace(".0", "");
-                        edtUseEachTime.setText(str);
-                        txtUnit.setText(unitUse);
-                        txtUnitReminder.setText(unitUse);
-                        editDialog.dismiss();
-
-                    }
-
-                    @Override
-                    public void onRejected() {
-                        editDialog.dismiss();
-
-                    }
-                });
-                editDialog.show(getSupportFragmentManager(), eachTimeDialog.getTag());
-
-
-            }
-
-            @Override
-            public void onRejected() {
-                eachTimeDialog.dismiss();
-            }
-        });
-        eachTimeDialog.show(getSupportFragmentManager(), eachTimeDialog.getTag());*/
-    }
-
-    private void disablePartFour() {
-       /* edtUseEachTime.setText("");
-        countEachUse = 0;
-        unitUse = "";*/
-    }
-
     public boolean isChange() {
+        // check mikone ke taghir dar hadi hast taghirat ke monjar be pak shodan va az aval set shodan beshe ya na
         if (dayRepeat != dayRepeatFirst) {
             return true;
         } else if (typeDayUsage != typeDayUsageFirst) {
@@ -954,7 +892,8 @@ public class ActivityEditPill extends BaseActivity implements OnDateSetListener,
             return true;
         } else if (!amountOfUse.equals(totalUseAmount + "")) {
             return true;
-        } else {
+        }
+        else {
             return false;
         }
        /* if(dayRepeat!=dayRepeatFirst || typeDayUsage!=typeDayUsageFirst||
@@ -1306,7 +1245,8 @@ public class ActivityEditPill extends BaseActivity implements OnDateSetListener,
         startActivityForResult(intent, 2911);
 
     }
-    public  void  changeDate(PersianDate newTime){
+
+    public void changeDate(PersianDate newTime) {
         PersianDate date = new PersianDate(System.currentTimeMillis());
         PersianDate ourTime = new PersianDate(ourStartTimeStamp);
         date.setShYear(newTime.getShYear());
@@ -1319,11 +1259,12 @@ public class ActivityEditPill extends BaseActivity implements OnDateSetListener,
         txtStartDate.setText(PersianCalculater.getYearMonthAndDay(ourStartTimeStamp));
 
     }
+
     private void showDialogSelectDay() {
         final DaySelectedDialog dialog = new DaySelectedDialog(this, daysOfUsage);
         dialog.setListener(new DayOfWeekInterface() {
             @Override
-            public void onSuccess(ArrayList<String> days,PersianDate persianDate) {
+            public void onSuccess(ArrayList<String> days, PersianDate persianDate) {
 
 
                 if (days.size() == 7) {
@@ -1336,7 +1277,7 @@ public class ActivityEditPill extends BaseActivity implements OnDateSetListener,
                     daysOfUsage = days;
                     String dayStr = makeDays(daysOfUsage);
                     dayRepeat = 0;
-                    txtTypeOfDays.setText("( روزهای : " + dayStr + " )");
+                    txtTypeOfDays.setText("( " + dayStr + " )");
                     typeDayUsage = 3;
                     isRegular = 0;
                 }
@@ -1393,7 +1334,8 @@ public class ActivityEditPill extends BaseActivity implements OnDateSetListener,
             txtStartUsageDate.setText(PersianCalculater.getYearMonthAndDay(ourStartTimeStamp));
             txtStartDate.setText(PersianCalculater.getYearMonthAndDay(ourStartTimeStamp));
         } else {
-            Toast.makeText(this, "روز انتخاب شده نباید قبل از امروز باشد.", Toast.LENGTH_LONG).show();
+            Toast toast = Toast.makeText(this, "روز انتخاب شده نباید قبل از امروز باشد.", Toast.LENGTH_LONG);
+            Utility.centrizeAndShow(toast);
         }
     }
 
@@ -1561,7 +1503,7 @@ public class ActivityEditPill extends BaseActivity implements OnDateSetListener,
         ringtonePickerBuilder.setPositiveButtonText("انتخاب");
 
 //set text to display as negative button. (Optional)
-        ringtonePickerBuilder.setCancelButtonText("لغو");
+        ringtonePickerBuilder.setCancelButtonText("انصراف");
         ringtonePickerBuilder.setPlaySampleWhileSelection(true);
 
         ringtonePickerBuilder.setListener(new RingtonePickerListener() {
@@ -1588,7 +1530,9 @@ public class ActivityEditPill extends BaseActivity implements OnDateSetListener,
                 showDialogForImageSelector();
 
             } else {
-                Toast.makeText(this, "برای ادامه،نیاز به اجازه دسترسی وجود دارد.", Toast.LENGTH_LONG).show();
+                Toast toast = Toast.makeText(this, "برای ادامه،نیاز به اجازه دسترسی وجود دارد.", Toast.LENGTH_LONG);
+                Utility.centrizeAndShow(toast);
+
             }
         } else if (requestCode == REQUEST_CODE_PERMISSION_Light) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED
@@ -1601,7 +1545,8 @@ public class ActivityEditPill extends BaseActivity implements OnDateSetListener,
 
             }
         } else {
-            Toast.makeText(this, "برای ادامه، نیاز به اجازه دسترسی وجود دارد.", Toast.LENGTH_LONG).show();
+            Toast toast = Toast.makeText(this, "برای ادامه، نیاز به اجازه دسترسی وجود دارد.", Toast.LENGTH_LONG);
+            Utility.centrizeAndShow(toast);
         }
 
     }
@@ -1609,7 +1554,7 @@ public class ActivityEditPill extends BaseActivity implements OnDateSetListener,
 
     public boolean checkValidationGeneral() {
         if (edtMedName.getText().toString().length() == 0) {
-            edtMedName.setError("نام دارو باید وارد شود.");
+            edtMedName.setError("نام دارو را وارد کن!");
             edtMedName.requestFocus();
             return false;
         } else {
@@ -1643,7 +1588,7 @@ public class ActivityEditPill extends BaseActivity implements OnDateSetListener,
                 reminderDay = 0;
             }
 
-        }else {
+        } else {
             reminderDay = 0;
 
         }
@@ -1654,11 +1599,12 @@ public class ActivityEditPill extends BaseActivity implements OnDateSetListener,
             totalcount = totalUseAmount;
         }
 
-        if (radioTime.isChecked()) {
+        if (type==2) {
 
 
             if (totalTime <= 0) {
-                Toast.makeText(this, "مقدار مصرف در این حالت باید حداقل ۱ روز باشد.", Toast.LENGTH_LONG).show();
+                Toast toast = Toast.makeText(this, "مقدار مصرف در این حالت باید حداقل ۱ روز باشد.", Toast.LENGTH_LONG);
+                Utility.centrizeAndShow(toast);
                 return false;
             }
 
@@ -1667,16 +1613,18 @@ public class ActivityEditPill extends BaseActivity implements OnDateSetListener,
             if (type == 4) {
                 int startDay = Integer.parseInt(startAndStop.get(0));
                 if (totalTime <= startDay) {
-                    Toast.makeText(this, "در چرخه ضد بارداری مقدار مصرف باید از تعداد روزهای استفاده چرخه بیشتر باشد. ", Toast.LENGTH_LONG).show();
-                    return false;
+                   Toast toast =  Toast.makeText(this, "در چرخه ضد بارداری مقدار مصرف باید از تعداد روزهای استفاده چرخه بیشتر باشد. ", Toast.LENGTH_LONG);
+                   Utility.centrizeAndShow(toast);
+                   return false;
                 }
             }
 
         }
-        if (radioCount.isChecked()) {
+        if (type==3) {
 
             if (totalcount <= 0) {
-                Toast.makeText(this, "میزان مصرف در این حالت صحیح نیست.", Toast.LENGTH_LONG).show();
+                Toast toast = Toast.makeText(this, "میزان مصرف در این حالت صحیح نیست.", Toast.LENGTH_LONG);
+                Utility.centrizeAndShow(toast);
                 return false;
             } else {
 
@@ -1689,7 +1637,8 @@ public class ActivityEditPill extends BaseActivity implements OnDateSetListener,
                     }
                 }
                 if (amount > totalcount) {
-                    Toast.makeText(this, "میزان مصرف وارد شده از مصرف یک روز شما کمتر می باشد.", Toast.LENGTH_LONG).show();
+                    Toast toast = Toast.makeText(this, "مقدار وارد شده از مصرفِ یک روز این دارو کمتر است.", Toast.LENGTH_LONG);
+                    Utility.centrizeAndShow(toast);
                     return false;
                 }
                 if (typeDayUsage == 4) {
@@ -1705,7 +1654,8 @@ public class ActivityEditPill extends BaseActivity implements OnDateSetListener,
                     }
                     amount = amount * startDay;
                     if (amount > totalcount) {
-                        Toast.makeText(this, "در چرخه ضد بارداری، میزان داروی تجویز شده باید حداقل یک چرخه باشد.", Toast.LENGTH_LONG).show();
+                       Toast toast =  Toast.makeText(this, " در چرخه ضد بارداری، میزان داروی تجویز شده باید حداقل یک چرخه باشد.", Toast.LENGTH_LONG);
+                       Utility.centrizeAndShow(toast);
                         return false;
                     }
                 }
@@ -1722,7 +1672,8 @@ public class ActivityEditPill extends BaseActivity implements OnDateSetListener,
 
     public boolean checkValidationUsage() {
         if (countEachUse == 0) {
-            Toast.makeText(this, "وارد کردن همه فیلدها جز فیلد توضیحات اجباری است.", Toast.LENGTH_LONG).show();
+            Toast toast = Toast.makeText(this, "وارد کردن همه فیلدها جز فیلد توضیحات اجباری است.", Toast.LENGTH_LONG);
+            Utility.centrizeAndShow(toast);
             return false;
         } else {
             return true;
@@ -1748,7 +1699,7 @@ public class ActivityEditPill extends BaseActivity implements OnDateSetListener,
                 // complitation info
                 int totalTime = 0;
                 double totalcount = 0;
-                int reminderCount = 0;
+                double reminderCount = 0;
                 int reminderDay = 0;
 
 
@@ -1760,7 +1711,7 @@ public class ActivityEditPill extends BaseActivity implements OnDateSetListener,
                         reminderDay = 0;
                     }
                     try {
-                        reminderCount = Integer.parseInt(edtCountOfPill.getText().toString());
+                        reminderCount = Double.parseDouble(edtCountOfPill.getText().toString());
                     } catch (NumberFormatException ex) {
                         ex.printStackTrace();
                         reminderCount = 0;
@@ -1769,20 +1720,7 @@ public class ActivityEditPill extends BaseActivity implements OnDateSetListener,
                 } else {
                     reminderCount = 0;
                     reminderDay = 0;
-                    try {
-                        reminderCount = Integer.parseInt(edtCountOfPill.getText().toString());
-                    } catch (NumberFormatException ex) {
-                        ex.printStackTrace();
-                        reminderCount = 0;
-                    }
-                    if (reminderDay == 0) {
-                        Toast.makeText(this, "تعداد روزهای پیش از یادآوری ذکر نشده است.", Toast.LENGTH_LONG).show();
 
-                    }
-                    if (reminderCount == 0) {
-                        Toast.makeText(this, "تعداد کل داروهای موجود ذکر نشده است.", Toast.LENGTH_LONG).show();
-
-                    }
                 }
 
                 pillObject.setReminderDays(reminderDay);
@@ -1823,7 +1761,7 @@ public class ActivityEditPill extends BaseActivity implements OnDateSetListener,
         } else {
 
             if (checkValidationUsage() && checkValidationComplitation() && checkValidationGeneral()) {
-                final FinishDialog dialog = new FinishDialog(this, "از ویرایش اطمینان دارید؟", "شما اطلاعات اصلی دارو را تغییر داده اید. در صورت تایید تمامی یادآوری های تنظیم شده این دارو حذف شده و مجددا تنظیم می شود.");
+                final FinishDialog dialog = new FinishDialog(this, "از ویرایش دارو مطمئنی", "پس از ویرایش، تمامی یادآورهای فعلی این دارو حذف و یادآورهای جدید تنظیم می‌شوند.");
                 dialog.setListener(new FinishListener() {
                     @Override
                     public void onReject() {
@@ -1839,6 +1777,28 @@ public class ActivityEditPill extends BaseActivity implements OnDateSetListener,
                 dialog.show();
             }
         }
+    }
+
+    public void backDialog(){
+        if(isChange() || isCheckSecond()){
+            final FinishDialog dialog = new FinishDialog(this, "", "تغییرات ذخیره نشده‌اند، آیا از بازگشت مطمئنی؟");
+            dialog.setListener(new FinishListener() {
+                @Override
+                public void onReject() {
+                    dialog.dismiss();
+                }
+
+                @Override
+                public void onSuccess() {
+                    dialog.dismiss();
+                    finish();
+                }
+            });
+            dialog.show();
+        }else {
+            finish();
+        }
+
     }
 
     private void showLastPage() {
@@ -1882,10 +1842,10 @@ public class ActivityEditPill extends BaseActivity implements OnDateSetListener,
                 totalcount = totalUseAmount;
             }
 
-            if (radioTime.isChecked()) {
+            if (type==2) {
                 ArrayList<String> startAndStop = daysOfUsage;
             }
-            if (radioCount.isChecked()) {
+            if (type==3) {
 
 
                 double amount = 0;
@@ -1990,7 +1950,7 @@ public class ActivityEditPill extends BaseActivity implements OnDateSetListener,
             usageList = makePillUsageInPerCountMood(pillObject, this);
 
         } else if (pillObject.getUseType() == 3) {
-            usageList = makePillUsageInPerAmountMood(pillObject,this);
+            usageList = makePillUsageInPerAmountMood(pillObject, this);
             //masraf bar asase mizane daroo;
         }
         AppDatabase database = AppDatabase.getInMemoryDatabase(this);
@@ -2035,7 +1995,7 @@ public class ActivityEditPill extends BaseActivity implements OnDateSetListener,
     public void showWaiting() {
         kProgressHUD = KProgressHUD.create(this)
                 .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
-                .setLabel("لطفا منتظر بمانید")
+                .setLabel("")
                 .setDetailsLabel("پیلچی در حال تنظیم یادآورهاست...")
                 .setCancellable(false)
                 .setAnimationSpeed(2)

@@ -1,0 +1,45 @@
+<RelativeLayout android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:id="@+id/header"
+        android:background="@color/colorPrimary"
+        android:layout_alignParentTop="true"
+        android:layout_height="?attr/actionBarSize">
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:padding="16dp"
+            app:srcCompat="@drawable/ic_arrow_forward"
+            android:id="@+id/img_back"
+            android:layout_centerVertical="true"
+            android:visibility="visible"
+            android:layout_alignParentRight="true"
+            />
+
+        <TextView
+            style="@style/BigBlue_18"
+            android:textSize="18sp"
+            android:id="@+id/title"
+            android:layout_toLeftOf="@id/img_back"
+            android:textColor="@color/white"
+            android:layout_centerVertical="true"
+            android:text="گزارش مصرف"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:layout_marginTop="56dp">
+        <WebView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/wb_terms"></WebView>
+
+
+    </RelativeLayout>
+</RelativeLayout>

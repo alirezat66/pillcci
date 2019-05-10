@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:id="@+id/root"
+    tools:background="#000000"
+    >
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:layout_marginBottom="60dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/title"
+            android:layout_marginBottom="56dp"
+            android:layout_marginTop="5dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_horizontal"
+                android:layout_marginTop="0dp"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    app:srcCompat="@drawable/ic_more_horiz"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginRight="40dp"
+                    android:layout_marginLeft="40dp"
+
+                    android:text="توی این صفحه می‌تونی:"
+                    android:textColor="@android:color/white"
+                    android:textSize="16sp"
+
+                    android:gravity="center_horizontal"
+                    android:textAllCaps="true"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="40dp"
+                    android:layout_marginRight="40dp"
+                    android:layout_marginTop="20dp"
+                    android:gravity="center"
+                    android:text="پروفایلت، حساب کاربریت و تنظیمات برنامه رو مدیریت کنی!"
+                    android:textColor="@android:color/white"
+                    android:textSize="14sp"
+                    />
+                <TextView
+                    android:layout_width="300dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:gravity="center"
+                    android:text="کسایی رو که پیگیر مصرف داروهات هستند به بات تلگرام پیلچی متصل کنی!"
+                    android:textColor="@android:color/white"
+                    android:textSize="14sp"
+                    />
+                <TextView
+                    android:layout_width="300dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:gravity="center"
+                    android:text="شماره تماس‌های اضطراریت رو برای دسترسی سریع و آسون اضافه کنی."
+                    android:textColor="@android:color/white"
+                    android:textSize="14sp"
+                    />
+
+                <TextView
+                    android:layout_width="300dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:gravity="center"
+                    android:text="پیلچی رو به دوستات معرفی کنی و با تیم ما در تماس باشی!"
+                    android:textColor="@android:color/white"
+                    android:textSize="14sp" />
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="متوجه شدم"
+                    android:layout_gravity="left"
+                    android:textColor="@color/white"
+                    android:id="@+id/btn_ok"
+                    android:background="@color/transparent"
+                    android:textSize="18sp"
+                    android:layout_margin="16dp"/>
+            </LinearLayout>
+
+
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</RelativeLayout>

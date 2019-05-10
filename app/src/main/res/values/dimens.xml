@@ -6,6 +6,10 @@
     <dimen name="indicator_radius">8dp</dimen>
 
 
+    <integer name="anim_duration_very_long">1500</integer>
+    <integer name="anim_duration_long">500</integer>
+    <integer name="anim_duration_medium">300</integer>
+
 
     <dimen name="picker_default_text_size">12sp</dimen>
     <dimen name="picker_toolbar_height">40dp</dimen>
@@ -15,6 +19,11 @@
     <dimen name="picker_line_mar">15dp</dimen>
     <dimen name="picker_height">230dp</dimen>
 
+
+    <dimen name="color_swatch_large">64dip</dimen>
+    <dimen name="color_swatch_small">48dip</dimen>
+    <dimen name="color_swatch_margins_large">8dip</dimen>
+    <dimen name="color_swatch_margins_small">4dip</dimen>
 
 
 

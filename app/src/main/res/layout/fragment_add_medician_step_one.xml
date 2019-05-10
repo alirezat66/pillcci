@@ -23,8 +23,8 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="0dp"
             android:layout_marginLeft="0dp">
-        <include layout="@layout/general_layout_add"
-            ></include>
+
+            <include layout="@layout/general_layout_add"></include>
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"

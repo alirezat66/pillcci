@@ -15,21 +15,23 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.TextInputEditText;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+
+import com.google.android.material.textfield.TextInputEditText;
 import com.kevalpatel.ringtonepicker.RingtonePickerDialog;
 import com.kevalpatel.ringtonepicker.RingtonePickerListener;
 import com.otaliastudios.autocomplete.Autocomplete;
@@ -38,9 +40,6 @@ import com.otaliastudios.autocomplete.AutocompletePresenter;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 import com.zcw.togglebutton.ToggleButton;
-
-import org.xdty.preference.colorpicker.ColorPickerDialog;
-import org.xdty.preference.colorpicker.ColorPickerSwatch;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -56,6 +55,8 @@ import greencode.ir.pillcci.adapter.CatAutoCompletePresenter;
 import greencode.ir.pillcci.adapter.DrAutoCompletePresenter;
 import greencode.ir.pillcci.adapter.PillAutoCompletePresenter;
 import greencode.ir.pillcci.adapter.ResultAutoCompletePresenter;
+import greencode.ir.pillcci.colorpicker.colorpicker.ColorPickerDialog;
+import greencode.ir.pillcci.colorpicker.colorpicker.ColorPickerSwatch;
 import greencode.ir.pillcci.controler.AppDatabase;
 import greencode.ir.pillcci.database.Category;
 import greencode.ir.pillcci.database.PillObject;
@@ -74,7 +75,7 @@ import pl.aprilapps.easyphotopicker.EasyImage;
  * Created by alireza on 5/15/18.
  */
 
-public class FragmentGeneralMedic extends Fragment {
+public class FragmentGeneralMedic extends Fragment  {
     onActionStepOne onAction;
     @BindView(R.id.imgLogo)
     CircleImageView imgLogo;
@@ -102,6 +103,8 @@ public class FragmentGeneralMedic extends Fragment {
     ToggleButton toggleVibrate;
     @BindView(R.id.toggleLight)
     ToggleButton toggleLight;
+    @BindView(R.id.colorLy)
+    LinearLayout colorLy;
     private int mSelectedColor;
     ChosePhotoTakerDialog dialog;
     private static final int REQUEST_CODE_PERMISSION = 2;
@@ -184,20 +187,22 @@ public class FragmentGeneralMedic extends Fragment {
                 showDialogForImageSelector();
 
             } else {
-                Toast.makeText(getContext(), "برای ادامه،نیاز به اجازه دسترسی وجود دارد.", Toast.LENGTH_LONG).show();
+                Toast toast = Toast.makeText(getContext(), "برای ادامه،نیاز به اجازه دسترسی وجود دارد.", Toast.LENGTH_LONG);
+                Utility.centrizeAndShow(toast);
             }
         } else if (requestCode == REQUEST_CODE_PERMISSION_Light) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED
                     ) {
-                isLight=1;
+                isLight = 1;
 
             } else {
-                isLight =0;
+                isLight = 0;
                 toggleLight.setToggleOff();
 
             }
         } else {
-            Toast.makeText(getContext(), "برای ادامه، نیاز به اجازه دسترسی وجود دارد.", Toast.LENGTH_LONG).show();
+            Toast toast = Toast.makeText(getContext(), "برای ادامه، نیاز به اجازه دسترسی وجود دارد.", Toast.LENGTH_LONG);
+            Utility.centrizeAndShow(toast);
         }
     }
 
@@ -208,6 +213,7 @@ public class FragmentGeneralMedic extends Fragment {
         View view = inflater.inflate(R.layout.fragment_add_medician_step_one, container, false);
         ButterKnife.bind(this, view);
         mSelectedColor = ContextCompat.getColor(getContext(), R.color.flamingo);
+        colorLy.setBackgroundColor(mSelectedColor);
         edtColor.setText("رنگ یادآور");
         edtColor.setTextColor(mSelectedColor);
         edtMedName.requestFocus();
@@ -215,52 +221,59 @@ public class FragmentGeneralMedic extends Fragment {
         setUpDrNameAutoComplete();
         setUpCatNameAutoComplete();
         setUpResultAutoCompele();
-        isVibrate = ( PreferencesData.getBoolean(Constants.PREF_VIBRATE,false)?1:0);
-        isLight = (PreferencesData.getBoolean(Constants.PREF_LOGHT,false)?1:0);
+        colorLy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setColorDialog();
+            }
+        });
+        isVibrate = (PreferencesData.getBoolean(Constants.PREF_VIBRATE, false) ? 1 : 0);
+        isLight = (PreferencesData.getBoolean(Constants.PREF_LOGHT, false) ? 1 : 0);
 
-        if(AddMedicianActivity.getGeneralFields()!=null){
+        if (AddMedicianActivity.getGeneralFields() != null) {
 
-            isVibrate=AddMedicianActivity.getGeneralFields().getIsVibrate();
-            isLight=AddMedicianActivity.getGeneralFields().getIsLight();
+            isVibrate = AddMedicianActivity.getGeneralFields().getIsVibrate();
+            isLight = AddMedicianActivity.getGeneralFields().getIsLight();
         }
-        if(isVibrate==1) {
+        if (isVibrate == 1) {
             toggleVibrate.setToggleOn();
-        }else {
+        } else {
             toggleVibrate.setToggleOff();
         }
-        if(isLight==1) {
+        if (isLight == 1) {
             toggleLight.setToggleOn();
-        }else {
+        } else {
             toggleLight.setToggleOff();
         }
         toggleVibrate.setOnToggleChanged(new ToggleButton.OnToggleChanged() {
             @Override
             public void onToggle(boolean on) {
-                if(on){
-                    isVibrate=1;
-                }else {
-                    isVibrate=0;
+                if (on) {
+                    isVibrate = 1;
+                } else {
+                    isVibrate = 0;
                 }
             }
         });
         toggleLight.setOnToggleChanged(new ToggleButton.OnToggleChanged() {
             @Override
             public void onToggle(boolean on) {
-                if(on) {
+                if (on) {
 
                     checkPermissionLight();
-                }else {
-                    isLight=0;
+                } else {
+                    isLight = 0;
 
                 }
             }
         });
 
-        ringTone = RingtoneManager
-                .getDefaultUri(RingtoneManager.TYPE_RINGTONE).toString();
-
+        ringTone = PreferencesData.getString(Constants.PREF_RingTone, RingtoneManager
+                .getDefaultUri(RingtoneManager.TYPE_RINGTONE).toString());;
+        edtRing.setText(ringTone);
         return view;
     }
+
 
     private void setUpCatNameAutoComplete() {
         float elevation = 6f;
@@ -274,6 +287,7 @@ public class FragmentGeneralMedic extends Fragment {
                 editable.append(item.getName());
                 ringTone = item.getRingtone();
                 mSelectedColor = item.getColor();
+                colorLy.setBackgroundColor(mSelectedColor);
                 edtColor.setTextColor(item.getColor());
                 return true;
 
@@ -305,6 +319,7 @@ public class FragmentGeneralMedic extends Fragment {
                 editable.append(item);
                 return true;
             }
+
             public void onPopupVisibilityChanged(boolean shown) {
             }
         };
@@ -355,18 +370,18 @@ public class FragmentGeneralMedic extends Fragment {
             try {
                 if (ActivityCompat.checkSelfPermission(getContext(), mPermission[2])
                         != PackageManager.PERMISSION_GRANTED) {
-                    String[]permissionLight ={mPermission[2]};
+                    String[] permissionLight = {mPermission[2]};
                     requestPermissions(
                             permissionLight, REQUEST_CODE_PERMISSION_Light);
                     // If any permission aboe not allowed by user, this condition will execute every tim, else your else part will work
                 } else {
-                   isLight=1;
+                    isLight = 1;
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
         } else {
-            isLight=1;
+            isLight = 1;
         }
 
     }
@@ -393,7 +408,7 @@ public class FragmentGeneralMedic extends Fragment {
 
     private void insertData() {
         if (edtMedName.getText().toString().length() == 0) {
-            edtMedName.setError("نام دارو باید وارد شود.");
+            edtMedName.setError("نام دارو را وارد کن!");
             edtMedName.requestFocus();
         } else {
 
@@ -402,7 +417,7 @@ public class FragmentGeneralMedic extends Fragment {
             PillObject object = database.pillObjectDao().specialPil(edtMedName.getText().toString(), edtCatName.getText().toString());
             if (object == null) {
                 GeneralFields generalFields = new GeneralFields(edtMedName.getText().toString(), b64Image, edtUseRes.getText().toString(),
-                        edtDrName.getText().toString(), edtCatName.getText().toString(), mSelectedColor, ringTone,isLight,isVibrate);
+                        edtDrName.getText().toString(), edtCatName.getText().toString(), mSelectedColor, ringTone, isLight, isVibrate);
                 onAction.onSaveButton(generalFields);
             } else {
                 if (object.getCatName().equals(edtCatName.getText().toString()) || ((object.getCatName().equals("")) && edtCatName.getText().toString().trim().equals(""))) {
@@ -410,7 +425,7 @@ public class FragmentGeneralMedic extends Fragment {
                     edtMedName.requestFocus();
                 } else {
                     GeneralFields generalFields = new GeneralFields(edtMedName.getText().toString(), b64Image, edtUseRes.getText().toString(),
-                            edtDrName.getText().toString(), edtCatName.getText().toString(), mSelectedColor, ringTone,isLight,isVibrate);
+                            edtDrName.getText().toString(), edtCatName.getText().toString(), mSelectedColor, ringTone, isLight, isVibrate);
                     onAction.onSaveButton(generalFields);
                 }
 
@@ -435,8 +450,8 @@ public class FragmentGeneralMedic extends Fragment {
         ringtonePickerBuilder.setListener(new RingtonePickerListener() {
             @Override
             public void OnRingtoneSelected(String ringtoneName, Uri ringtoneUri) {
-                if(ringtoneUri!=null) {
-                    edtRing.setText(ringtoneName);
+                if (ringtoneUri != null) {
+                    edtRing.setText(ringtoneUri.toString());
                     ringTone = ringtoneUri.toString();
 
                 }
@@ -447,12 +462,15 @@ public class FragmentGeneralMedic extends Fragment {
     }
 
     private void setColorDialog() {
+
+
         int[] mColors = getResources().getIntArray(R.array.default_rainbow);
         ColorPickerDialog dialog = ColorPickerDialog.newInstance(R.string.color_picker,
                 mColors,
                 mSelectedColor,
                 5, // Number of columns
                 ColorPickerDialog.SIZE_SMALL,
+
                 true // True or False to enable or disable the serpentine effect
                 //0, // stroke width
                 //Color.BLACK // stroke color
@@ -463,7 +481,9 @@ public class FragmentGeneralMedic extends Fragment {
             @Override
             public void onColorSelected(int color) {
                 mSelectedColor = color;
+
                 edtColor.setTextColor(mSelectedColor);
+                colorLy.setBackgroundColor(mSelectedColor);
                 edtColor.setText("رنگ یادآور");
 
             }
@@ -542,6 +562,8 @@ public class FragmentGeneralMedic extends Fragment {
         String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
         return Uri.parse(path);
     }
+
+
 
     public interface onActionStepOne {
         public void onSaveButton(GeneralFields obj);

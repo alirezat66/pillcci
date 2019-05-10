@@ -5,12 +5,6 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.BottomSheetDialog;
-import android.support.design.widget.BottomSheetDialogFragment;
-import android.support.design.widget.TextInputEditText;
-import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,8 +17,15 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.FragmentManager;
+
 import com.alirezaafkar.sundatepicker.DatePicker;
 import com.alirezaafkar.sundatepicker.interfaces.DateSetListener;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -37,6 +38,7 @@ import greencode.ir.pillcci.R;
 import greencode.ir.pillcci.controler.AppController;
 import greencode.ir.pillcci.utils.KeyboardUtil;
 import greencode.ir.pillcci.utils.PersianCalculater;
+import greencode.ir.pillcci.utils.Utility;
 import me.omidh.liquidradiobutton.LiquidRadioButton;
 import saman.zamani.persiandate.PersianDate;
 
@@ -178,6 +180,11 @@ public class DayRepeatDialog extends BottomSheetDialogFragment implements DateSe
             @Override
             public void onTagLongClick(final int position, String text) {
                 // ...
+            }
+
+            @Override
+            public void onSelectedTagDrag(int position, String text) {
+
             }
 
             @Override
@@ -351,21 +358,25 @@ public class DayRepeatDialog extends BottomSheetDialogFragment implements DateSe
 
 
             } else {
-                Toast.makeText(context, "تاریخ شروع انتخاب نشده است.", Toast.LENGTH_LONG).show();
+                Toast toast  =Toast.makeText(context, "تاریخ شروع انتخاب نشده است.", Toast.LENGTH_LONG);
+                Utility.centrizeAndShow(toast);
 
             }
         } else if (radioEachDay.isChecked()) {
             if (edtStartEachDay.getText().toString().length() == 0) {
-                Toast.makeText(context, "تاریخ شروع انتخاب نشده است.", Toast.LENGTH_LONG).show();
+                Toast toast = Toast.makeText(context, "تاریخ شروع انتخاب نشده است.", Toast.LENGTH_LONG);
+                Utility.centrizeAndShow(toast);
             } else if (dayRepeat.getText().toString().length() == 0) {
-                Toast.makeText(context, "توالی روزها انتخاب نشده است.", Toast.LENGTH_LONG).show();
+                Toast toast = Toast.makeText(context, "توالی روزها انتخاب نشده است.", Toast.LENGTH_LONG);
+                Utility.centrizeAndShow(toast);
             } else {
                 selectedDay = new ArrayList<>();
                 myInterface.onSuccess(2, Integer.parseInt(dayRepeat.getText().toString()), edtStartEachDay.getText().toString(), "هر " + dayRepeat.getText().toString() + " روز ", selectedDay, startTimeStamp);
             }
         } else if (radioEvryWeek.isChecked()) {
             if (selectedDay.size() == 0) {
-                Toast.makeText(context, "هیچ روزی انتخاب نشده است.", Toast.LENGTH_LONG).show();
+                Toast toast = Toast.makeText(context, "هیچ روزی انتخاب نشده است.", Toast.LENGTH_LONG);
+                Utility.centrizeAndShow(toast);
             } else {
 
                 PersianDate tempPersianCalendar = nowPersianDate;
@@ -386,15 +397,19 @@ public class DayRepeatDialog extends BottomSheetDialogFragment implements DateSe
             }
         } else if(radioBirth.isChecked()){
             if(edtBirthlUse.getText().toString().length()==0){
-                Toast.makeText(context, "تعداد روزهای مصرف مشخص نشده است.", Toast.LENGTH_LONG).show();
+                Toast toast = Toast.makeText(context, "تعداد روزهای مصرف مشخص نشده است.", Toast.LENGTH_LONG);
+                Utility.centrizeAndShow(toast);
             }else if(edtBirthStop.getText().length()==0){
-                Toast.makeText(context, "تعداد روزهای توقف مصرف مشخص نشده است.", Toast.LENGTH_LONG).show();
+                Toast toast = Toast.makeText(context, "تعداد روزهای توقف مصرف مشخص نشده است.", Toast.LENGTH_LONG);
+                Utility.centrizeAndShow(toast);
+
             }else {
                 String passtDays = edtPastDay.getText().toString().equals("")?"0":edtPastDay.getText().toString();
                 int past = Integer.parseInt(passtDays);
                 int use  = Integer.parseInt(edtBirthlUse.getText().toString());
                 if(past>=use){
-                    Toast.makeText(context, "تعداد روزهای سپری شده نباید از روزهای چرخه بیشتر باشد.", Toast.LENGTH_SHORT).show();
+                    Toast toast = Toast.makeText(context, "تعداد روزهای سپری شده نباید از روزهای چرخه بیشتر باشد.", Toast.LENGTH_SHORT);
+                    Utility.centrizeAndShow(toast);
                     return;
                 }
                 selectedDay=new ArrayList<>();
@@ -406,7 +421,8 @@ public class DayRepeatDialog extends BottomSheetDialogFragment implements DateSe
             }
         }
         else {
-            Toast.makeText(context, "یکی از نحوه های زمان های موجود را انتخاب کنید.", Toast.LENGTH_LONG).show();
+           Toast toast = Toast.makeText(context, "یکی از نحوه های زمان های موجود را انتخاب کنید.", Toast.LENGTH_LONG);
+           Utility.centrizeAndShow(toast);
         }
     }
 
@@ -503,7 +519,8 @@ public class DayRepeatDialog extends BottomSheetDialogFragment implements DateSe
             date.setShDay(day);
             startTimeStamp = date.getTime();
         } else {
-            Toast.makeText(context, "روز انتخاب شده نباید قبل از امروز باشد.", Toast.LENGTH_LONG).show();
+           Toast toast = Toast.makeText(context, "روز انتخاب شده نباید قبل از امروز باشد.", Toast.LENGTH_LONG);
+           Utility.centrizeAndShow(toast);
         }
     }
 

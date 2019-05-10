@@ -4,12 +4,8 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
+import android.text.Html;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -21,20 +17,29 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.core.app.ActivityOptionsCompat;
+import androidx.core.util.Pair;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.alirezaafkar.sundatepicker.DatePicker;
 import com.alirezaafkar.sundatepicker.interfaces.DateSetListener;
 import com.crashlytics.android.answers.Answers;
 import com.crashlytics.android.answers.CustomEvent;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -57,8 +62,11 @@ import greencode.ir.pillcci.dialog.YesNoListener;
 import greencode.ir.pillcci.retrofit.SyncController;
 import greencode.ir.pillcci.timepicker.TimePickerDialog;
 import greencode.ir.pillcci.timepicker.listener.OnDateSetListener;
+import greencode.ir.pillcci.utils.Constants;
 import greencode.ir.pillcci.utils.DatabaseManager;
 import greencode.ir.pillcci.utils.PersianCalculater;
+import greencode.ir.pillcci.utils.PreferencesData;
+import greencode.ir.pillcci.utils.TransitionHelper;
 import greencode.ir.pillcci.utils.Utility;
 import saman.zamani.persiandate.PersianDate;
 
@@ -68,6 +76,12 @@ import saman.zamani.persiandate.PersianDate;
 
 public class FragmentToday extends Fragment implements OnDateSetListener, TodayUsageAdapter.UsageInterface, DateSetListener {
 
+    @BindView(R.id.txt_empty_title)
+    TextView txtEmptyTitle;
+    @BindView(R.id.txt_empty_desc)
+    TextView txtEmptyDesc;
+    @BindView(R.id.root_empty)
+    RelativeLayout rootEmpty;
     private FirebaseAnalytics mFirebaseAnalytics;
 
     @BindView(R.id.countOfDay)
@@ -101,9 +115,9 @@ public class FragmentToday extends Fragment implements OnDateSetListener, TodayU
     PillUsage jumperItem;
 
     private static final String FORMAT = "%02d:%02d";
+    String filterSearch = "";
 
-
-    @BindView(R.id.txtTitle)
+    @BindView(R.id.title)
     TextView txtTitle;
     @BindView(R.id.txtParsDay)
     TextView txtParsDay;
@@ -121,11 +135,21 @@ public class FragmentToday extends Fragment implements OnDateSetListener, TodayU
     @BindView(R.id.lyOne)
     LinearLayout lyOne;
 
+
+    static final String EXTRA_TYPE = "type";
+    static final int TYPE_XML = 1;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        edtSearch.setText("");
+        filterSearch = "";
+    }
 
     @Nullable
     @Override
@@ -133,23 +157,33 @@ public class FragmentToday extends Fragment implements OnDateSetListener, TodayU
         final View view = inflater.inflate(R.layout.fragment_today, container, false);
         ButterKnife.bind(this, view);
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(getContext());
-
+        btnPrev.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_arrow_forward_blue));
         AppDatabase database = AppDatabase.getInMemoryDatabase(getContext());
 
-
-
+        fabBtn.bringToFront();
+        edtSearch.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_SEARCH) {
+                    filter(edtSearch.getText().toString());
+                }
+                return true;
+            }
+        });
         pageExist = true;
         imgSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               Answers.getInstance().logCustom(new CustomEvent("Search")
-                                .putCustomAttribute("page", "usageDay")
-                                .putCustomAttribute("phone",AppDatabase.getInMemoryDatabase(getContext()).profileDao().getMyProfile().getPhone()));
+                if (!PreferencesData.getBoolean(Constants.PREF_Guess, getContext())) {
+                    Answers.getInstance().logCustom(new CustomEvent("Search")
+                            .putCustomAttribute("page", "usageDay")
+                            .putCustomAttribute("phone", AppDatabase.getInMemoryDatabase(getContext()).profileDao().getMyProfile().getPhone()));
 
+                }
                 Bundle params = new Bundle();
                 params.putString("phoneNumber", Utility.getPhoneNumber(getContext()));
                 mFirebaseAnalytics.logEvent("main_search", params);
-                        visibleSearch();
+                visibleSearch();
             }
         });
         imgClose.setOnClickListener(new View.OnClickListener() {
@@ -198,6 +232,12 @@ public class FragmentToday extends Fragment implements OnDateSetListener, TodayU
                 showTimeDialo();
             }
         });
+        txtParsDay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showTimeDialo();
+            }
+        });
         SyncController syn = new SyncController();
         syn.checkDataBaseForUpdate();
         return view;
@@ -210,8 +250,7 @@ public class FragmentToday extends Fragment implements OnDateSetListener, TodayU
         calendar.setTimeInMillis(justNow);
         new DatePicker.Builder()
                 .id(1)
-
-                .minYear(selectedDay.getShYear())
+                .minDate(selectedDay.getShYear(),selectedDay.getShMonth(),selectedDay.getShDay())
                 .showYearFirst(false)
                 .closeYearAutomatically(true)
                 .theme(R.style.DialogTheme)
@@ -226,7 +265,7 @@ public class FragmentToday extends Fragment implements OnDateSetListener, TodayU
             ArrayList<PillUsage> filteredList = new ArrayList<>();
             if (usages.size() > 0) {
                 for (PillUsage usage : usages) {
-                    if (usage.getPillName().startsWith(s)) {
+                    if (usage.getPillName().toLowerCase().startsWith(s.toLowerCase())) {
                         filteredList.add(usage);
                     }
                 }
@@ -276,6 +315,13 @@ public class FragmentToday extends Fragment implements OnDateSetListener, TodayU
         makeList(selectedDay);
     }
 
+    public void empty(){
+        rootEmpty.setVisibility(View.VISIBLE);
+        txtEmptyTitle.setText("هنوز دارویی ثبت نشده!");
+        String htmlStringWithMathSymbols = "+ را بزن تا اولین دارو را ثبت کنیم! ";
+
+        txtEmptyDesc.setText(Html.fromHtml(htmlStringWithMathSymbols));
+    }
     private void makeList(PersianDate date) {
         long startDay = getStartOfDay(date);
         long endDay = getEndOfDay(date);
@@ -285,17 +331,15 @@ public class FragmentToday extends Fragment implements OnDateSetListener, TodayU
         if (usages != null) {
 
             countOfDay.setText(usages.size() + "");
-
             adapter = new TodayUsageAdapter(getContext(), usages, this);
-
             list.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
             list.setAdapter(adapter);
             if (usages.size() > 0) {
-
+                rootEmpty.setVisibility(View.GONE);
                 countOfUsed.setText(adapter.getUsedUsageCount() + "");
             } else {
                 countOfUsed.setText("0");
-
+                empty();
             }
             updateProgress(usages.size(), adapter.getUsedUsageCount());
             if (adapter.getItemCount() > 0) {
@@ -309,15 +353,17 @@ public class FragmentToday extends Fragment implements OnDateSetListener, TodayU
                 if (position > 1)
                     list.scrollToPosition(position - 2);
             }
+            filter(edtSearch.getText().toString());
         } else {
             updateProgress(0, 0);
-
+            empty();
             countOfDay.setText("0");
             countOfDay.setText("0");
             countOfUsed.setText("0");
+
         }
 
-        PillUsage pillUsage = database.pillUsageDao().getNearestUsage(System.currentTimeMillis());
+        /*PillUsage pillUsage = database.pillUsageDao().getNearestUsage(System.currentTimeMillis());
         if (pillUsage != null) {
             long dif = pillUsage.getUsageTime() - System.currentTimeMillis();
             dif = dif + 60000;
@@ -326,7 +372,7 @@ public class FragmentToday extends Fragment implements OnDateSetListener, TodayU
 
         } else {
             difrenceLayout.setVisibility(View.GONE);
-        }
+        }*/
     }
 
     @Override
@@ -334,67 +380,6 @@ public class FragmentToday extends Fragment implements OnDateSetListener, TodayU
         makePage();
         super.onResume();
     }
-
-    public void startCounter(long dif) {
-        if (countDownTimer == null) {
-            countDownTimer = new CountDownTimer(dif, 1000) { // adjust the milli seconds here
-
-                public void onTick(long millisUntilFinished) {
-
-                    txtNextRemind.setText("" + String.format(FORMAT,
-                            TimeUnit.MILLISECONDS.toHours(millisUntilFinished),
-                            TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished) - TimeUnit.HOURS.toMinutes(
-                                    TimeUnit.MILLISECONDS.toHours(millisUntilFinished)),
-                            TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) - TimeUnit.MINUTES.toSeconds(
-                                    TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished))));
-                }
-
-                public void onFinish() {
-                    AppDatabase database1 = AppDatabase.getInMemoryDatabase(getContext());
-                    PillUsage pillUsage = database1.pillUsageDao().getNearestUsage(System.currentTimeMillis());
-                    if (pillUsage != null) {
-                        long dif = pillUsage.getUsageTime() - System.currentTimeMillis();
-                        dif = dif + 60000;
-                        startCounter(dif);
-                        difrenceLayout.setVisibility(View.GONE);
-
-                    } else {
-                        difrenceLayout.setVisibility(View.GONE);
-                    }
-                }
-            }.start();
-        } else {
-            countDownTimer.cancel();
-            countDownTimer = new CountDownTimer(dif, 1000) { // adjust the milli seconds here
-
-                public void onTick(long millisUntilFinished) {
-
-                    txtNextRemind.setText("" + String.format(FORMAT,
-                            TimeUnit.MILLISECONDS.toHours(millisUntilFinished),
-                            TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished) - TimeUnit.HOURS.toMinutes(
-                                    TimeUnit.MILLISECONDS.toHours(millisUntilFinished)),
-                            TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) - TimeUnit.MINUTES.toSeconds(
-                                    TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished))));
-                }
-
-                public void onFinish() {
-                    AppDatabase database1 = AppDatabase.getInMemoryDatabase(getContext());
-                    PillUsage pillUsage = database1.pillUsageDao().getNearestUsage(System.currentTimeMillis());
-                    if (pillUsage != null) {
-                        long dif = pillUsage.getUsageTime() - System.currentTimeMillis();
-                        dif = dif + 60000;
-                        startCounter(dif);
-                        difrenceLayout.setVisibility(View.GONE);
-
-                    } else {
-                        difrenceLayout.setVisibility(View.GONE);
-                    }
-                }
-            }.start();
-        }
-
-    }
-
 
 
     private long getStartOfDay(PersianDate date) {
@@ -416,15 +401,18 @@ public class FragmentToday extends Fragment implements OnDateSetListener, TodayU
     public void onDateSet(TimePickerDialog timePickerView, long millseconds) {
         if (jumperItem == null) {
             PersianDate calendar = new PersianDate(millseconds);
-            Toast.makeText(getContext(), calendar.getShYear() + "", Toast.LENGTH_LONG).show();
+            Toast toast = Toast.makeText(getContext(), calendar.getShYear() + "", Toast.LENGTH_LONG);
+            Utility.centrizeAndShow(toast);
         } else {
             PersianDate selDate = new PersianDate(millseconds);
 
             PersianDate nowDate = new PersianDate(System.currentTimeMillis());
             if (nowDate.getHour() > selDate.getHour()) {
-                Toast.makeText(getContext(), "زمان انتخابی نباید قبل از زمان فعلی باشد.", Toast.LENGTH_LONG).show();
+                Toast toast = Toast.makeText(getContext(), "زمان انتخابی نباید قبل از زمان فعلی باشد.", Toast.LENGTH_LONG);
+                Utility.centrizeAndShow(toast);
             } else if (nowDate.getHour() == selDate.getHour() && nowDate.getMinute() > selDate.getMinute()) {
-                Toast.makeText(getContext(), "زمان انتخابی نباید قبل از زمان فعلی باشد.", Toast.LENGTH_LONG).show();
+                Toast toast =Toast.makeText(getContext(), "زمان انتخابی نباید قبل از زمان فعلی باشد.", Toast.LENGTH_LONG);
+                Utility.centrizeAndShow(toast);
             } else {
                 nowDate.setHour(selDate.getHour());
                 nowDate.setMinute(selDate.getMinute());
@@ -440,6 +428,7 @@ public class FragmentToday extends Fragment implements OnDateSetListener, TodayU
 
 
                 updateList();
+
             }
 
         }
@@ -463,6 +452,14 @@ public class FragmentToday extends Fragment implements OnDateSetListener, TodayU
                 dialog.dismiss();
                 Utility.reCalculateManager(getContext());
                 updateList();
+
+                if(adapter!=null){
+                    if(adapter.getItemCount()>0){
+                        rootEmpty.setVisibility(View.GONE);
+                    }
+                }else {
+                    empty();
+                }
 
             }
 
@@ -563,7 +560,7 @@ public class FragmentToday extends Fragment implements OnDateSetListener, TodayU
         Bundle params = new Bundle();
         params.putString("phoneNumber", Utility.getPhoneNumber(getContext()));
         mFirebaseAnalytics.logEvent("cancel_act_with_button", params);
-        final FinishDialog dialog = new FinishDialog(getContext(), "از لغو تغییرات اطمینان دارید؟", "در صورت لغو تغییرات، دارو به حالت قبل از مصرف و یا عدم مصرف بر می گردد و در زمان مشخص به شما هشدار می دهد.");
+        final FinishDialog dialog = new FinishDialog(getContext(), "از لغو تغییرات اطمینان دارید؟", "در صورت لغو تغییرات، دارو به حالت قبل از مصرف و یا عدم مصرف بر‌می گردد و در زمان مشخص به شما هشدار می‌دهد.");
         dialog.setListener(new FinishListener() {
             @Override
             public void onReject() {
@@ -600,7 +597,7 @@ public class FragmentToday extends Fragment implements OnDateSetListener, TodayU
         mFirebaseAnalytics.logEvent("main_edit_with_button", params);
         if (item.getState() != 0) {
             AppDatabase database = AppDatabase.getInMemoryDatabase(getContext());
-            List<PillObject>list = database.pillObjectDao().getAllPill();
+            List<PillObject> list = database.pillObjectDao().getAllPill();
             PillObject pillObject = database.pillObjectDao().specialPil(item.getPillName(), item.getCatNme());
             final CancelEditDialog dialog = new CancelEditDialog(getContext(), pillObject);
             dialog.setListener(new CancelListener() {
@@ -608,6 +605,7 @@ public class FragmentToday extends Fragment implements OnDateSetListener, TodayU
                 public void onReject() {
                     dialog.dismiss();
                 }
+
                 @Override
                 public void onSuccess(int type) {
                     if (type == 1) {
@@ -663,46 +661,45 @@ public class FragmentToday extends Fragment implements OnDateSetListener, TodayU
             });
             dialog.show();
         } else {
-            Toast.makeText(getContext(), "پیش از مصرف و یا لغو ویرایش امکانپذیر نیست.", Toast.LENGTH_LONG).show();
+            Toast toast  = Toast.makeText(getContext(), "پیش از مصرف یا انصراف مصرف دارو، ویرایش وضعیت مصرف ممکن نیست.", Toast.LENGTH_LONG);
+            Utility.centrizeAndShow(toast);
         }
     }
 
     @Override
     public void CanNotCancel() {
-        Toast.makeText(getContext(), "شما پیش از این، از دارو را لغو کرده اید.", Toast.LENGTH_LONG).show();
+        Toast toast = Toast.makeText(getContext(), "شما پیش از این، این دارو را لغو کرده اید.", Toast.LENGTH_LONG);
+        Utility.centrizeAndShow(toast);
     }
 
     @Override
     public void CanNotSkip() {
-        Toast.makeText(getContext(), "امکان پرش برای این دارو وجود ندارد.", Toast.LENGTH_LONG).show();
-
+       Toast toast =  Toast.makeText(getContext(), "امکان پرش برای این دارو وجود ندارد.", Toast.LENGTH_LONG);
+       Utility.centrizeAndShow(toast);
     }
 
     @Override
     public void CanNotAccept() {
-        Toast.makeText(getContext(), "شما پیش از این ، دارو را مصرف کرده اید.", Toast.LENGTH_LONG).show();
+        Toast toast = Toast.makeText(getContext(), "شما پیش از این ، دارو را مصرف کرده اید.", Toast.LENGTH_LONG);
+        Utility.centrizeAndShow(toast);
     }
 
     @Override
     public void onLeftOne() {
-        Toast.makeText(getContext(), "left one", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onLeftTwo() {
-        Toast.makeText(getContext(), "left two", Toast.LENGTH_SHORT).show();
 
     }
 
     @Override
     public void onRightOne() {
-        Toast.makeText(getContext(), "right one", Toast.LENGTH_SHORT).show();
 
     }
 
     @Override
     public void onRightTwo() {
-        Toast.makeText(getContext(), "right two", Toast.LENGTH_SHORT).show();
 
     }
 
@@ -712,9 +709,9 @@ public class FragmentToday extends Fragment implements OnDateSetListener, TodayU
         AppDatabase database = AppDatabase.getInMemoryDatabase(getContext());
         ArrayList<PillUsage> usages = new ArrayList<>(database.pillUsageDao().listPillToday(startDay, endDay));
         adapter.updateList(startDay, endDay);
-
-        PillUsage pillUsage = database.pillUsageDao().getNearestUsage(System.currentTimeMillis());
-        if (pillUsage != null) {
+        filter(edtSearch.getText().toString());
+        //PillUsage pillUsage = database.pillUsageDao().getNearestUsage(System.currentTimeMillis());
+       /* if (pillUsage != null) {
             long dif = pillUsage.getUsageTime() - System.currentTimeMillis();
             dif = dif + 60000;
             startCounter(dif);
@@ -722,7 +719,7 @@ public class FragmentToday extends Fragment implements OnDateSetListener, TodayU
 
         } else {
             difrenceLayout.setVisibility(View.GONE);
-        }
+        }*/
 
         updateProgress(adapter.getItemCount(), adapter.getUsedUsageCount());
 
@@ -765,20 +762,34 @@ public class FragmentToday extends Fragment implements OnDateSetListener, TodayU
 
     }
 
-    @OnClick({R.id.btnPrev, R.id.btnNext,R.id.fabBtn})
+    @OnClick({R.id.btnPrev, R.id.btnNext, R.id.fabBtn})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btnPrev:
-                    pervDate();
+                pervDate();
                 break;
             case R.id.btnNext:
-                    nextDate();
+                nextDate();
                 break;
             case R.id.fabBtn:
+
                 Intent intent = new Intent(getContext(), AddMedicianActivity.class);
-                startActivity(intent);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    intent.putExtra(EXTRA_TYPE, TYPE_XML);
+                    transitionTo(intent);
+                } else {
+                    startActivity(intent);
+                }
                 break;
         }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    @SuppressWarnings("unchecked")
+    void transitionTo(Intent i) {
+        final Pair<View, String>[] pairs = TransitionHelper.createSafeTransitionParticipants(getActivity(), true);
+        ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(), pairs);
+        startActivity(i, transitionActivityOptions.toBundle());
     }
 
     private void nextDate() {
@@ -790,26 +801,28 @@ public class FragmentToday extends Fragment implements OnDateSetListener, TodayU
         String title = selectedDay.dayName() + " " + selectedDay.getShDay() + " " + selectedDay.monthName();
         txtParsDay.setText(title);
         makeList(selectedDay);
+
+
     }
 
     private void pervDate() {
         PersianDate current = new PersianDate(System.currentTimeMillis());
-        if(current.getShMonth()==selectedDay.getShMonth() && current.getShDay()==selectedDay.getShDay()){
+       /* if(current.getShMonth()==selectedDay.getShMonth() && current.getShDay()==selectedDay.getShDay()){
 
-        }else {
-            if(current.getShMonth()==selectedDay.getShMonth() && selectedDay.getShDay()-current.getShDay()==1){
-                // alan fardayim
-                selectedDay.addDay(-1);
-                btnPrev.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_arrow_forward_grey));
-            }else {
-                selectedDay.addDay(-1);
-                btnPrev.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_arrow_forward_blue));
-            }
-
-
-            String title = selectedDay.dayName() + " " + selectedDay.getShDay() + " " + selectedDay.monthName();
-            txtParsDay.setText(title);
-            makeList(selectedDay);
+        }else {*/
+        if (current.getShMonth() == selectedDay.getShMonth() && selectedDay.getShDay() - current.getShDay() == 1) {
+            // alan fardayim
+            selectedDay.addDay(-1);
+            btnPrev.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_arrow_forward_blue));
+        } else {
+            selectedDay.addDay(-1);
+            btnPrev.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_arrow_forward_blue));
         }
+
+
+        String title = selectedDay.dayName() + " " + selectedDay.getShDay() + " " + selectedDay.monthName();
+        txtParsDay.setText(title);
+        makeList(selectedDay);
+        /* }*/
     }
 }
