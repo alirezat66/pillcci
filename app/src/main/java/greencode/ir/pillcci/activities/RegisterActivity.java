@@ -4,15 +4,14 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.LinearLayout;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
-import android.util.Log;
-import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -51,10 +50,7 @@ import greencode.ir.pillcci.utils.Utility;
 
 public class RegisterActivity extends BaseActivity implements NetworkStateReceiver.NetworkStateReceiverListener, RegisterStepOneInterface, FragmentSignUpStepOne.onActionStepOne, SetPassInterface, FragmentSignUpStepSetPass.onActionStepTwo,FragmentSignUpStepThree.onActionStepThree {
 
-    @BindView(R.id.netError)
-    TextView netError;
-    @BindView(R.id.error)
-    TextView error;
+
     @BindView(R.id.container)
     LinearLayout container;
     @BindView(R.id.root)
@@ -128,14 +124,12 @@ public class RegisterActivity extends BaseActivity implements NetworkStateReceiv
 
     @Override
     public void networkAvailable() {
-        netError.setVisibility(View.GONE);
         hasNet = true;
     }
 
     @Override
     public void networkUnavailable() {
         hasNet = false;
-        netError.setVisibility(View.VISIBLE);
     }
 
     public static RegisterRequest getRequest() {
@@ -167,8 +161,8 @@ public class RegisterActivity extends BaseActivity implements NetworkStateReceiv
        */
     }
     private void prepareNewPage(){
-        error.setVisibility(View.GONE);
-        netError.setVisibility(View.GONE);
+       /* error.setVisibility(View.GONE);
+        netError.setVisibility(View.GONE);*/
     }
 
     @Override
@@ -261,7 +255,9 @@ public class RegisterActivity extends BaseActivity implements NetworkStateReceiv
     }
 
     public void hiddenError() {
+/*
         error.setVisibility(View.INVISIBLE);
+*/
     }
 
     @Override

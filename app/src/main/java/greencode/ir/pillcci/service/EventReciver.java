@@ -70,6 +70,7 @@ public class EventReciver extends BroadcastReceiver {
 
     private void startAlarm(Context context) {
 
+
             Utility.appendLog("we are try to start alarm ");
 
             Intent alarmIntent = new Intent();
@@ -79,6 +80,7 @@ public class EventReciver extends BroadcastReceiver {
 
             context.startActivity(alarmIntent);
             Utility.appendLog("we start alarm ");
+
 
 
     }

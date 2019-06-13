@@ -66,6 +66,7 @@
                                     <TextView
                                         style="@style/BigGray"
                                         android:text=""
+                                        android:gravity="center_horizontal"
                                         android:id="@+id/txtMedName"
                                         android:layout_marginRight="16dp"
                                         android:layout_marginTop="12dp"/>
@@ -78,9 +79,11 @@
                                         <TextView
                                             style="@style/BigGray"
                                             android:text=""
+                                            android:gravity="center_horizontal"
                                             android:id="@+id/txtUseTime"/>
                                         <TextView
                                             style="@style/BigGray"
+                                            android:gravity="center_horizontal"
                                             android:id="@+id/txtState"/>
                                     </LinearLayout>
 
@@ -148,6 +151,7 @@
                                         <TextView
                                             style="@style/SmallTextGray"
                                             android:id="@+id/txtCatName"
+                                            android:gravity="center_horizontal"
                                             android:text=""
                                             />
                                     </LinearLayout>
@@ -164,6 +168,7 @@
                                         <TextView
                                             style="@style/SmallTextGray"
                                             android:text=""
+                                            android:gravity="center_horizontal"
                                             android:id="@+id/txtDrName"
                                             />
                                     </LinearLayout>
@@ -181,6 +186,7 @@
                                             style="@style/SmallTextGray"
                                             android:id="@+id/txtUnitUsage"
                                             android:text=""
+                                            android:gravity="center_horizontal"
                                             />
                                     </LinearLayout>
                                 </LinearLayout>
@@ -207,6 +213,7 @@
                                         <TextView
                                             style="@style/SmallTextGray"
                                             android:text=""
+                                            android:gravity="center_horizontal"
                                             android:id="@+id/txtRepeatCount"
                                             />
                                     </LinearLayout>
@@ -222,6 +229,7 @@
                                             android:layout_height="24dp"
                                             app:srcCompat="@drawable/edit"/>
                                         <TextView
+                                            android:gravity="center_horizontal"
                                             style="@style/SmallTextGray"
                                             android:text="ویرایش مصرف"
                                             />
@@ -233,6 +241,7 @@
                                         android:gravity="center_horizontal"
                                         android:id="@+id/lyCancel"
                                         android:visibility="gone"
+
                                         android:layout_weight="3">
                                         <androidx.appcompat.widget.AppCompatImageView
                                             android:layout_width="24dp"
@@ -240,6 +249,7 @@
                                             android:visibility="visible"
                                             app:srcCompat="@drawable/undo"/>
                                         <TextView
+                                            android:gravity="center"
                                             style="@style/SmallTextGray"
                                             android:text="انصراف از تغییرات"
                                             />
@@ -300,7 +310,7 @@
                                         android:layout_height="wrap_content"
                                         android:textSize="12.0sp"
                                         android:text="مصرف شد"
-
+                                        android:gravity="center_horizontal"
                                         android:layout_centerHorizontal="true"
                                         android:layout_below="@id/imgUse"
                                         android:layout_marginTop="4dp"
@@ -360,7 +370,7 @@
                                             android:layout_height="wrap_content"
                                             android:textSize="12.0sp"
                                             android:text="عدم مصرف"
-
+                                            android:gravity="center_horizontal"
                                             android:layout_centerHorizontal="true"
                                             android:layout_below="@id/imgCancel"
                                             android:layout_marginTop="4dp"
@@ -406,7 +416,7 @@
                                             android:layout_height="wrap_content"
                                             android:textSize="12.0sp"
                                             android:text="تغییر زمان"
-
+                                            android:gravity="center_horizontal"
                                             android:layout_centerHorizontal="true"
                                             android:layout_below="@id/imgUndo"
                                             android:layout_marginTop="4dp"
@@ -441,6 +451,7 @@
                     android:id="@+id/txtUse"
                     android:textColor="@color/white"
                     android:textSize="16sp"
+
                     android:layout_height="wrap_content"
                     android:padding="8dp"
                     android:text="مصرف"/>

@@ -48,6 +48,8 @@ public interface PillUsageDao {
 
    @Query("DELETE FROM pilusage WHERE pillName = :pillName and catName= :pillCat")
    public void deletePill(String pillName,String pillCat);
+    @Query("DELETE FROM pilusage WHERE pillName = :pillName and catName= :pillCat and setedTime=:timeStamp")
+    public void deleteSamePill(String pillName,String pillCat,long timeStamp);
     @Update
     void update(PillUsage pillUsage);
     @Update
@@ -84,7 +86,7 @@ public interface PillUsageDao {
     PillUsage getPillLastUsage(String pillName,String catname);
 
 
-    @Query("select * from pilusage where usageTime < :nextMonthTime and (state =1 or state = 2 or state = 3) order by usageTime  ")
+    @Query("select * from pilusage where 0 < :nextMonthTime and  (state =1 or state = 2 or state = 3) order by usageTime  ")
     List<PillUsage> getHistory(long nextMonthTime);
     @Query("SELECT Count(*) FROM pilusage where pillName=:midname and catName=:catname and (state = 1 or state = 3)" )
     int getCountOfAllUsage(String midname,String catname);
@@ -103,7 +105,7 @@ public interface PillUsageDao {
     @Query("select id from (select * from pilusage order by id desc limit 1)")
     long getLastId();
 
-    @Query("update pilusage set  state = 4  WHERE pillName = :name and catName= :catName and setedTime>:time ")
+    @Query("update pilusage set  state = 4  WHERE pillName = :name and catName= :catName and setedTime>:time and state = 0")
     void deleteTempPill(String name, String catName, long time);
     @Query("update pilusage set  state = 4  WHERE pillName = :name and catName= :catName ")
     public void deleteTempPill(String name,String catName);
@@ -112,4 +114,8 @@ public interface PillUsageDao {
     void deleteAllDeleted();
     @Query("select * from pilusage where state = 2 and pillId = :pillId")
     List<PillUsage> getCanceledUsages(int pillId);
+
+    @Query("SELECT Count(*) FROM pilusage where pillName=:midname and catName=:catname and setedTime=:setedTime" )
+    int isSame(String midname,String catname,long setedTime);
+
 }

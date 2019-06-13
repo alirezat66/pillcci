@@ -59,7 +59,7 @@ public class ColorPreference extends Preference implements ColorPickerSwatch
             mColumns = a.getInt(R.styleable.ColorPreference_columns, 5);
             mMaterial = a.getBoolean(R.styleable.ColorPreference_material, true);
             mBackwardsOrder = a.getBoolean(R.styleable.ColorPreference_backwardsOrder, true);
-            mStrokeWidth = a.getInt(R.styleable.ColorPreference_strokeWidth, 0);
+            mStrokeWidth = a.getInt(R.styleable.ColorPreference_strokeW, 0);
             mStrokeColor = a.getColor(R.styleable.ColorPreference_strokeColor, 0xff000000);
         } finally {
             a.recycle();

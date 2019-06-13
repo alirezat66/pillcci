@@ -5,19 +5,21 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import androidx.annotation.Nullable;
-import com.google.android.material.appbar.AppBarLayout;
-import com.google.android.material.appbar.CollapsingToolbarLayout;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.textfield.TextInputEditText;
-import androidx.core.widget.NestedScrollView;
-import androidx.cardview.widget.CardView;
-import androidx.appcompat.widget.Toolbar;
 import android.util.Base64;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
+import androidx.core.widget.NestedScrollView;
+
+import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.List;
 
@@ -162,7 +164,18 @@ public class ActivityPilDetail extends BaseActivity {
         txtused.setText(" مصرف شده :" +"\n"+ usedAmountStr+" / "+strTotal);
         // changeToolbarFont(toolbar, this);
         useDays.setText(object.getshowDays());
-        usePartDays.setText("هر " + (int) object.getDiffrenceOfUsage() + " ساعت");
+
+        String[] times  = object.getUnitTimes().split(",");
+        String strTimesList = "";
+        for(String s : times){
+            String hhmm = PersianCalculater.getHourseAndMin(Long.parseLong(s));
+            strTimesList = strTimesList + hhmm;
+            strTimesList = strTimesList +",";
+        }
+        if(strTimesList.length()>0){
+            strTimesList = strTimesList.substring(0,strTimesList.length()-1);
+        }
+        usePartDays.setText(strTimesList);
         edtStartTime.setText(PersianCalculater.getHourseAndMin(object.getStardHour(),object.getStartMin()));
         edtDescription.setText(object.getDescription());
         edtUseEachTime.setText(object.getEachTime());

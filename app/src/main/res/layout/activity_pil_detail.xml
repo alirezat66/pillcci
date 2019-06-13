@@ -276,14 +276,14 @@
                             <com.google.android.material.textfield.TextInputEditText
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:hint="نوبت های مصرف در هر روز"
+                                android:hint="ساعت شروع"
                                 android:maxLines="1"
-                                android:focusable="false"
-                                android:enabled="false"
                                 android:selectAllOnFocus="true"
 
-                                android:layoutDirection="rtl"
-                                android:id="@+id/usePartDays"
+                                android:id="@+id/edtStartTime"
+                                android:focusable="false"
+                                android:enabled="false"
+
                                 android:textColor="@color/grayText"
                                 />
                         </com.google.android.material.textfield.TextInputLayout>
@@ -294,14 +294,14 @@
                             <com.google.android.material.textfield.TextInputEditText
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:hint="ساعت شروع"
+                                android:hint="نوبت های مصرف در هر روز"
                                 android:maxLines="1"
-                                android:selectAllOnFocus="true"
-
-                                android:id="@+id/edtStartTime"
                                 android:focusable="false"
                                 android:enabled="false"
+                                android:selectAllOnFocus="true"
 
+                                android:layoutDirection="rtl"
+                                android:id="@+id/usePartDays"
                                 android:textColor="@color/grayText"
                                 />
                         </com.google.android.material.textfield.TextInputLayout>

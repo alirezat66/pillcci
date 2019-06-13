@@ -88,16 +88,14 @@ public class FragmentToday extends Fragment implements OnDateSetListener, TodayU
     TextView countOfDay;
     @BindView(R.id.countOfUsed)
     TextView countOfUsed;
-    @BindView(R.id.txtNextRemind)
-    TextView txtNextRemind;
+
     @BindView(R.id.list)
     RecyclerView list;
 
     @BindView(R.id.fabBtn)
     FloatingActionButton fabBtn;
     TodayUsageAdapter adapter;
-    @BindView(R.id.difrenceLayout)
-    LinearLayout difrenceLayout;
+
     @BindView(R.id.imgSearch)
     ImageView imgSearch;
     @BindView(R.id.imgClose)
@@ -124,8 +122,7 @@ public class FragmentToday extends Fragment implements OnDateSetListener, TodayU
 
     @BindView(R.id.progressBar)
     ProgressBar progressBar;
-    @BindView(R.id.btnDateChange)
-    Button btnChangeDate;
+
     @BindView(R.id.btnPrev)
     ImageView btnPrev;
     @BindView(R.id.btnNext)
@@ -226,12 +223,7 @@ public class FragmentToday extends Fragment implements OnDateSetListener, TodayU
                 }
             }
         });
-        btnChangeDate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showTimeDialo();
-            }
-        });
+
         txtParsDay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -424,10 +416,8 @@ public class FragmentToday extends Fragment implements OnDateSetListener, TodayU
                 jumperItem.setTime(PersianCalculater.getHourseAndMin(selDate.getTime()));
                 jumperItem.setIsSync(0);
                 database.pillUsageDao().update(jumperItem);
-                Utility.reCalculateManager(getContext());
-
-
                 updateList();
+                Utility.reCalculateManager(getContext());
 
             }
 

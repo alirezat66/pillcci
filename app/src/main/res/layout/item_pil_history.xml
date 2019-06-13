@@ -53,12 +53,14 @@
                             android:text=""
                             android:layoutDirection="rtl"
                             android:id="@+id/txtMedName"
+                            android:gravity="center_horizontal"
                             android:layout_marginRight="16dp"
                             android:layout_marginTop="12dp"/>
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             style="@style/BigGray"
+                            android:gravity="center_horizontal"
                             android:id="@+id/unitCount"
                             android:layout_marginRight="8dp"
                             android:layout_marginTop="12dp"/>                            />
@@ -73,10 +75,12 @@
                         <TextView
                             style="@style/BigGray"
                             android:text=""
+                            android:gravity="center_horizontal"
                             android:textSize="14sp"
                             android:id="@+id/txtUseTime"/>
                         <TextView
                             style="@style/BigGray"
+                            android:gravity="center_horizontal"
                             android:id="@+id/txtState"/>
                     </LinearLayout>
 
@@ -143,6 +147,7 @@
                         <TextView
                             style="@style/SmallTextGray"
                             android:id="@+id/txtCatName"
+                            android:gravity="center_horizontal"
                             android:text=""
                             />
                     </LinearLayout>
@@ -159,6 +164,7 @@
                         <TextView
                             style="@style/SmallTextGray"
                             android:text=""
+                            android:gravity="center_horizontal"
                             android:id="@+id/txtDrName"
                             />
                     </LinearLayout>
@@ -176,6 +182,7 @@
                             style="@style/SmallTextGray"
                             android:id="@+id/txtUnitUsage"
                             android:text=""
+                            android:gravity="center_horizontal"
                             />
                     </LinearLayout>
                 </LinearLayout>
@@ -202,6 +209,7 @@
                         <TextView
                             style="@style/SmallTextGray"
                             android:text=""
+                            android:gravity="center_horizontal"
                             android:id="@+id/txtRepeatCount"
                             />
                     </LinearLayout>
@@ -219,6 +227,7 @@
                         <TextView
                             style="@style/SmallTextGray"
                             android:text="ویرایش"
+                            android:gravity="center_horizontal"
                             />
                     </LinearLayout>
                     <LinearLayout
@@ -237,6 +246,8 @@
                             style="@style/SmallTextGray"
                             android:gravity="center_horizontal"
                             android:text="انصراف از تغییرات"
+
+
                             />
                     </LinearLayout>
                 </LinearLayout>

@@ -9,44 +9,11 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:id="@+id/errorLayout"
-            >
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/white"
-                android:background="@color/colorAccent"
-                android:layout_alignParentTop="true"
-                android:paddingTop="10dp"
-                android:visibility="gone"
-                android:id="@+id/netError"
-
-                android:text="اتصال به اینترنت برقرار نیست"
-                android:gravity="center"
-                android:paddingBottom="10dp"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/white"
-                android:background="@color/colorAccent"
-                android:layout_alignParentTop="true"
-                android:paddingTop="10dp"
-                android:visibility="gone"
-                android:id="@+id/error"
-                android:text="اتصال به اینترنت برقرار نیست"
-                android:gravity="center"
-                android:paddingBottom="10dp"/>
-        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:layout_below="@id/errorLayout"
             android:background="@color/white"
             android:id="@+id/container"/>
     </RelativeLayout>

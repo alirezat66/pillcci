@@ -29,6 +29,7 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import co.ronash.pushe.Pushe;
 import greencode.ir.pillcci.R;
 import greencode.ir.pillcci.controler.AppDatabase;
 import greencode.ir.pillcci.fragments.FragmentHistory;
@@ -60,15 +61,15 @@ public class MainActivity extends BaseActivity implements ServerListener /*imple
     RelativeLayout container;
     private ArrayList<Fragment> fragmentList;
     FragmentManager fragmentManager;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
-
+        Pushe.initialize(this,true);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-
-
 
         addFragmentList();
          fragmentManager = getSupportFragmentManager();
@@ -236,7 +237,7 @@ public class MainActivity extends BaseActivity implements ServerListener /*imple
                             public void run() {
                                 sabadGuid();
                             }
-                        },200);
+                        },20);
                     }
                 })
                 .setFitsSystemWindows(true)
@@ -268,7 +269,7 @@ public class MainActivity extends BaseActivity implements ServerListener /*imple
                             public void run() {
                                 history();
                             }
-                        },200);
+                        },20);
                     }
                 })
                 .setFitsSystemWindows(true)
@@ -349,7 +350,7 @@ public class MainActivity extends BaseActivity implements ServerListener /*imple
                             public void run() {
                                 moreGuide();
                             }
-                        },200);
+                        },20);
                     }
                 })
                 .setFitsSystemWindows(true)

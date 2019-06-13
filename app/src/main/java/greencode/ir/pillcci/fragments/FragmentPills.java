@@ -4,15 +4,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import androidx.core.app.ActivityOptionsCompat;
-import androidx.fragment.app.Fragment;
-import androidx.core.util.Pair;
-import androidx.appcompat.widget.AppCompatImageView;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.text.Editable;
 import android.text.Html;
 import android.text.TextWatcher;
@@ -25,8 +16,18 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.widget.AppCompatImageView;
+import androidx.core.app.ActivityOptionsCompat;
+import androidx.core.util.Pair;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.crashlytics.android.answers.Answers;
 import com.crashlytics.android.answers.CustomEvent;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.kaopiz.kprogresshud.KProgressHUD;
 
@@ -223,10 +224,8 @@ public class FragmentPills extends Fragment implements PillAdapter.PillListInter
     private void makePillList() {
         pillShelves = new ArrayList<>();
         makePillShelve();
-
-
         adapter = new PillAdapter(getActivity(), pillShelves, this);
-        list.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+        list.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
         list.setAdapter(adapter);
     }
 
@@ -434,6 +433,11 @@ public class FragmentPills extends Fragment implements PillAdapter.PillListInter
                 //masraf bar asase mizane daroo;
             }
             AppDatabase database = AppDatabase.getInMemoryDatabase(getContext());
+            for(PillUsage usage : usageList){
+                if(database.pillUsageDao().isSame(usage.getPillName(),usage.getCatNme(),usage.getSetedTime())>0){
+                    database.pillUsageDao().deleteSamePill(usage.getPillName(),usage.getCatNme(),usage.getSetedTime());
+                }
+            }
             database.pillUsageDao().insertPillList(usageList);
             pillObject.setState(1);
             pillObject.setSync(0);

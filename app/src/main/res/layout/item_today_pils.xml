@@ -97,6 +97,7 @@
                                         android:id="@+id/txtMedName"
                                         android:maxLines="1"
                                         android:lines="1"
+                                        android:gravity="center_horizontal"
                                         android:ellipsize="end"
                                         android:layout_marginRight="16dp"
                                         android:layout_marginTop="12dp"/>
@@ -106,6 +107,7 @@
                                         android:textSize="14sp"
                                         android:id="@+id/txtUnitCount"
                                         android:maxLines="1"
+                                        android:gravity="center_horizontal"
                                         android:layout_marginRight="16dp"
                                         android:layout_marginTop="4dp"/>
                                 </LinearLayout>
@@ -237,6 +239,7 @@
                                         style="@style/SmallTextGray"
                                         android:id="@+id/txtCatName"
                                         android:text=""
+                                        android:gravity="center_horizontal"
                                         />
                                 </LinearLayout>
                                 <LinearLayout
@@ -252,6 +255,7 @@
                                     <TextView
                                         style="@style/SmallTextGray"
                                         android:text=""
+                                        android:gravity="center_horizontal"
                                         android:id="@+id/txtDrName"
                                         />
                                 </LinearLayout>
@@ -269,6 +273,7 @@
                                         style="@style/SmallTextGray"
                                         android:id="@+id/txtUnitUsage"
                                         android:text=""
+                                        android:gravity="center_horizontal"
                                         />
                                 </LinearLayout>
                             </LinearLayout>
@@ -295,6 +300,7 @@
                                     <TextView
                                         style="@style/SmallTextGray"
                                         android:text=""
+                                        android:gravity="center_horizontal"
                                         android:id="@+id/txtRepeatCount"
                                         />
                                 </LinearLayout>
@@ -313,6 +319,7 @@
                                     <TextView
                                         style="@style/SmallTextGray"
                                         android:text="ویرایش مصرف"
+                                        android:gravity="center_horizontal"
                                         />
                                 </LinearLayout>
                                 <LinearLayout
@@ -331,6 +338,7 @@
                                     <TextView
                                         style="@style/SmallTextGray"
                                         android:text="انصراف از تغییرات"
+                                        android:gravity="center_horizontal"
                                         />
                                 </LinearLayout>
                             </LinearLayout>
@@ -417,6 +425,7 @@
                             android:gravity="right|center_vertical"
                             android:layout_marginRight="4dp"
                             android:textColor="@color/white"
+
                             android:text="این دوز  را مصرف نمی کنم."/>
                         <RelativeLayout
                             android:layout_width="100dp"
@@ -551,6 +560,7 @@
                         android:layout_marginBottom="8dp"
                         android:textColor="@color/gray"
                         android:textSize="12sp"
+                        android:gravity="center_horizontal"
                         android:layout_height="wrap_content"
                         android:text="@string/masraf"/>
                 </RelativeLayout>
@@ -575,6 +585,7 @@
                         android:layout_centerHorizontal="true"
                         android:layout_below="@id/close"
                         android:textSize="12sp"
+                        android:gravity="center_horizontal"
                         android:layout_height="wrap_content"
                         android:text="@string/adammasraf"
                         android:layout_marginBottom="8dp"/>
@@ -599,6 +610,7 @@
                         android:layout_centerHorizontal="true"
                         android:layout_below="@id/clocl"
                         android:textSize="12sp"
+                        android:gravity="center_horizontal"
                         android:layout_height="wrap_content"
                         android:text="تغییر زمان"
                         android:layout_marginBottom="8dp"/>

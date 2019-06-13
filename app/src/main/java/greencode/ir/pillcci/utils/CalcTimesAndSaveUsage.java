@@ -504,6 +504,7 @@ public class CalcTimesAndSaveUsage {
 
                             date = addDays(i, date);
                             PillUsage pillUsage = makepillUsage(pillObject, date.getTime(), j,++lastLocal);
+
                             usageList.add(pillUsage);
                         }
                     }

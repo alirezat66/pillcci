@@ -19,19 +19,8 @@
         android:layout_width="match_parent"
         android:layout_height="250dp"
         >
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="215dp"
-            android:background="#DBCEF2"
-            android:id="@+id/ly_one"
-            android:visibility="gone"
-            ></RelativeLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="35dp"
-            android:layout_below="@id/ly_one"
-            android:background="@color/white"
-            ></LinearLayout>
+
+
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -1,13 +1,15 @@
 package greencode.ir.pillcci.adapter;
 
 import android.content.Context;
-import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.RecyclerView;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.otaliastudios.autocomplete.RecyclerViewPresenter;
 
@@ -108,6 +110,8 @@ public class OurPillAutoCompletePresenter extends RecyclerViewPresenter<String> 
             }
             final String pill = data.get(position);
             holder.fullname.setText(pill);
+            holder.fullname.setGravity(Gravity.LEFT);
+
             holder.root.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

@@ -60,19 +60,15 @@ public class PreSplashActivity extends AwesomeSplash {
         //any color you want form colors.xml
         //Choose LOGO OR PATH; if you don't provide String value for path it's logo by default
         //Customize Logo
-        configSplash.setTitleSplash("");
-        configSplash.setTitleTextColor(R.color.white);
      //   configSplash.setTitleTextSize(20f); //float value
-        configSplash.setAnimTitleDuration(200);
-        configSplash.setAnimTitleTechnique(Techniques.FadeIn);
         configSplash.setTitleSplash("نسخه " + Utility.getVersionName());
         configSplash.setTitleTextSize(20f);
         configSplash.setTitleTextColor(R.color.white);
+
         configSplash.setLogoSplash(R.drawable.ic_splash); //or any other drawable
         configSplash.setAnimLogoSplashDuration(3000); //int ms
         configSplash.setAnimLogoSplashTechnique(Techniques.FadeIn); //choose one form Techniques (ref: https://github.com/daimajia/AndroidViewAnimations)
-        configSplash.setAnimTitleDuration(0);
-        configSplash.setAnimTitleTechnique(Techniques.FlipInX);
+
 
         /*//Customize Path
         configSplash.setPathSplash(Constants.DROID_LOGO); //set path String

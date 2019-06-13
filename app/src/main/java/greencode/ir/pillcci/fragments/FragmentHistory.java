@@ -248,7 +248,7 @@ public class FragmentHistory extends Fragment implements HistoryAdapter.UsageInt
         }
         PersianDate persianDate = new PersianDate(System.currentTimeMillis());
         pillUsages = database.pillUsageDao().getHistory(nowDate.getTime());
-        list.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+        list.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
         adapter = new HistoryAdapter(getContext(), pillUsages, this);
         list.setAdapter(adapter);
 

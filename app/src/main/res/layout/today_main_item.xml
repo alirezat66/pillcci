@@ -56,6 +56,7 @@
                         android:id="@+id/txtUseTime"/>
                     <TextView
                         style="@style/BigGray"
+
                         android:id="@+id/txtState"/>
                 </LinearLayout>
 
@@ -124,6 +125,7 @@
                         style="@style/SmallTextGray"
                         android:id="@+id/txtCatName"
                         android:text=""
+                        android:gravity="center_horizontal"
                         />
                 </LinearLayout>
                 <LinearLayout
@@ -139,6 +141,7 @@
                     <TextView
                         style="@style/SmallTextGray"
                         android:text=""
+                        android:gravity="center_horizontal"
                         android:id="@+id/txtDrName"
                         />
                 </LinearLayout>
@@ -156,6 +159,7 @@
                         style="@style/SmallTextGray"
                         android:id="@+id/txtUnitUsage"
                         android:text=""
+                        android:gravity="center_horizontal"
                         />
                 </LinearLayout>
             </LinearLayout>
@@ -182,6 +186,7 @@
                     <TextView
                         style="@style/SmallTextGray"
                         android:text=""
+                        android:gravity="center_horizontal"
                         android:id="@+id/txtRepeatCount"
                         />
                 </LinearLayout>
@@ -199,6 +204,7 @@
                     <TextView
                         style="@style/SmallTextGray"
                         android:text="ویرایش"
+                        android:gravity="center_horizontal"
                         />
                 </LinearLayout>
                 <LinearLayout
@@ -217,6 +223,7 @@
                     <TextView
                         style="@style/SmallTextGray"
                         android:text="انصراف از تغییرات"
+                        android:gravity="center_horizontal"
                         />
                 </LinearLayout>
             </LinearLayout>
